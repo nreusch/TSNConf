@@ -1,0 +1,7 @@
+__pycache__/
+testcases/output/
+.venv/
+.idea/
+.vscode/
+.venv_ubuntu/
+.venvubuntu/
