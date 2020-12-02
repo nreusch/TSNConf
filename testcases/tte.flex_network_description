@@ -1,0 +1,68 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="32" key_length="64" mac_length="22">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="n3" type="Switch"/>
+	<device name="n1" type="EndSystem" mac_exec_time="20"/>
+	<device name="n2" type="EndSystem" mac_exec_time="20"/>
+	<device name="n4" type="EndSystem" mac_exec_time="20"/>
+	<device name="n5" type="EndSystem" mac_exec_time="20"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="n3" dest="n1" speed="1.25"/>
+	<link src="n3" dest="n2" speed="1.25"/>
+	<link src="n3" dest="n4" speed="1.25"/>
+	<link src="n3" dest="n5" speed="1.25"/>
+	<link src="n1" dest="n3" speed="1.25"/>
+	<link src="n2" dest="n3" speed="1.25"/>
+	<link src="n4" dest="n3" speed="1.25"/>
+	<link src="n5" dest="n3" speed="1.25"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="App1" period="5000" type="NORMAL">
+		<tasks>
+			<task name="t1" node="n1" wcet="400" secure="True" rl="1" type="NORMAL"/>
+			<task name="t2" node="n2" wcet="750" secure="True" rl="1" type="NORMAL"/>
+			<task name="t3" node="n4" wcet="200" secure="True" rl="1" type="NORMAL"/>
+			<task name="t4" node="n5" wcet="320" secure="True" rl="1" type="NORMAL"/>
+			<task name="t5" node="n5" wcet="390" secure="True" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_App1" src="t1" dest="t3" size="8" group="t1_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s2_App1" src="t1" dest="t4" size="8" group="t1_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s3_App1" src="t2" dest="t4" size="56" group="t2_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s4_App1" src="t2" dest="t4" size="56" group="t2_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s5_App1" src="t3" dest="t5" size="16" group="t3_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s6_App1" src="t3" dest="t5" size="8" group="t3_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s7_App1" src="t3" dest="t5" size="16" group="t3_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t1_t5" deadline="5000">
+				<task name="t1"/>
+				<task name="t3"/>
+				<task name="t5"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App2" period="2500" type="NORMAL">
+		<tasks>
+			<task name="t6" node="n1" wcet="400" secure="True" rl="1" type="NORMAL"/>
+			<task name="t7" node="n4" wcet="300" secure="True" rl="1" type="NORMAL"/>
+			<task name="t8" node="n5" wcet="420" secure="True" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s8_App2" src="t6" dest="t7" size="80" group="t6_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s9_App2" src="t6" dest="t8" size="80" group="t6_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t6_t8" deadline="2500">
+				<task name="t6"/>
+				<task name="t8"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+
+
+
+</NetworkDescription>

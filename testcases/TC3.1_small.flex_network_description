@@ -1,0 +1,137 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW0" type="Switch"/>
+	<device name="SW1" type="Switch"/>
+	<device name="ES0" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="10"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="SW0" dest="ES0" speed="125.00"/>
+	<link src="SW0" dest="ES1" speed="125.00"/>
+	<link src="SW0" dest="ES2" speed="125.00"/>
+	<link src="SW0" dest="ES3" speed="125.00"/>
+	<link src="SW1" dest="ES0" speed="125.00"/>
+	<link src="SW1" dest="ES1" speed="125.00"/>
+	<link src="SW1" dest="ES2" speed="125.00"/>
+	<link src="SW1" dest="ES3" speed="125.00"/>
+	<link src="ES0" dest="SW0" speed="125.00"/>
+	<link src="ES0" dest="SW1" speed="125.00"/>
+	<link src="ES1" dest="SW0" speed="125.00"/>
+	<link src="ES1" dest="SW1" speed="125.00"/>
+	<link src="ES2" dest="SW0" speed="125.00"/>
+	<link src="ES2" dest="SW1" speed="125.00"/>
+	<link src="ES3" dest="SW0" speed="125.00"/>
+	<link src="ES3" dest="SW1" speed="125.00"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="App_free_ES0" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES0_free" node="ES0" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES0_free" node="ES0" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES1" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES1_free" node="ES1" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES1_free" node="ES1" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES2" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES2_free" node="ES2" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES2_free" node="ES2" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES3" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES3_free" node="ES3" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES3_free" node="ES3" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t3_ES3_comm" period="500" type="NORMAL">
+		<tasks>
+			<task name="t3_ES3_comm" node="ES3" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES0_comm" node="ES0" wcet="31" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t3_ES3_comm_t3_ES0_comm" src="t3_ES3_comm" dest="t3_ES0_comm" size="150" group="t3_ES3_comm_1" secure="False" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t3_ES3_comm_t3_ES0_comm" deadline="500">
+				<task name="t3_ES3_comm"/>
+				<task name="t3_ES0_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t3_ES2_comm" period="750" type="NORMAL">
+		<tasks>
+			<task name="t3_ES2_comm" node="ES2" wcet="46" secure="True" rl="2" type="NORMAL"/>
+			<task name="t3_ES1_comm" node="ES1" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES0_comm" node="ES0" wcet="46" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t3_ES2_comm_t3_ES1_comm" src="t3_ES2_comm" dest="t3_ES1_comm" size="1000" group="t3_ES2_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES2_comm_t2_ES0_comm" src="t3_ES2_comm" dest="t2_ES0_comm" size="600" group="t3_ES2_comm_1" secure="True" rl="2" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t3_ES2_comm_t3_ES1_comm" deadline="750">
+				<task name="t3_ES2_comm"/>
+				<task name="t3_ES1_comm"/>
+			</path>
+			<path name="path_t3_ES2_comm_t2_ES0_comm" deadline="750">
+				<task name="t3_ES2_comm"/>
+				<task name="t2_ES0_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t2_ES2_comm" period="750" type="NORMAL">
+		<tasks>
+			<task name="t2_ES2_comm" node="ES2" wcet="46" secure="True" rl="1" type="NORMAL"/>
+			<task name="t2_ES1_comm" node="ES1" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES3_comm" node="ES3" wcet="46" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t2_ES2_comm_t2_ES1_comm" src="t2_ES2_comm" dest="t2_ES1_comm" size="975" group="t2_ES2_comm_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s_t2_ES2_comm_t2_ES3_comm" src="t2_ES2_comm" dest="t2_ES3_comm" size="1350" group="t2_ES2_comm_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t2_ES2_comm_t2_ES1_comm" deadline="750">
+				<task name="t2_ES2_comm"/>
+				<task name="t2_ES1_comm"/>
+			</path>
+			<path name="path_t2_ES2_comm_t2_ES3_comm" deadline="750">
+				<task name="t2_ES2_comm"/>
+				<task name="t2_ES3_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+
+
+
+</NetworkDescription>

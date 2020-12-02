@@ -1,0 +1,626 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW_B1" type="Switch"/>
+	<device name="SW_B2" type="Switch"/>
+	<device name="SW_B3" type="Switch"/>
+	<device name="SW_B4" type="Switch"/>
+	<device name="SW_B5" type="Switch"/>
+	<device name="SW_B6" type="Switch"/>
+	<device name="SW_B7" type="Switch"/>
+	<device name="SW_B8" type="Switch"/>
+	<device name="SW_B9" type="Switch"/>
+	<device name="SW_B10" type="Switch"/>
+	<device name="SW_B11" type="Switch"/>
+	<device name="SW_B12" type="Switch"/>
+	<device name="SW_B13" type="Switch"/>
+	<device name="SW_B14" type="Switch"/>
+	<device name="SW_B15" type="Switch"/>
+	<device name="SW_B16" type="Switch"/>
+	<device name="SW_B17" type="Switch"/>
+	<device name="SW_B18" type="Switch"/>
+	<device name="SW_B19" type="Switch"/>
+	<device name="SW_B20" type="Switch"/>
+	<device name="SW_B1_1" type="Switch"/>
+	<device name="SW_B5_1" type="Switch"/>
+	<device name="SW_B7_1" type="Switch"/>
+	<device name="SW_B10_1" type="Switch"/>
+	<device name="SW_B11_1" type="Switch"/>
+	<device name="SW_B12_1" type="Switch"/>
+	<device name="SW_B13_1" type="Switch"/>
+	<device name="SW_B15_1" type="Switch"/>
+	<device name="SW_B17_1" type="Switch"/>
+	<device name="SW_B18_1" type="Switch"/>
+	<device name="SW_B19_1" type="Switch"/>
+	<device name="SW_B20_1" type="Switch"/>
+	<device name="FRONT_CAM" type="EndSystem" mac_exec_time="10"/>
+	<device name="REAR_CAM" type="EndSystem" mac_exec_time="10"/>
+	<device name="FRONT_SVCAM" type="EndSystem" mac_exec_time="10"/>
+	<device name="LEFT_SVCAM" type="EndSystem" mac_exec_time="10"/>
+	<device name="RIGHT_SVCAM" type="EndSystem" mac_exec_time="10"/>
+	<device name="REAR_SVCAM" type="EndSystem" mac_exec_time="10"/>
+	<device name="FRONT_RAD" type="EndSystem" mac_exec_time="10"/>
+	<device name="LEFT_FRONT_RAD" type="EndSystem" mac_exec_time="10"/>
+	<device name="RIGHT_FRONT_RAD" type="EndSystem" mac_exec_time="10"/>
+	<device name="LEFT_REAR_RAD" type="EndSystem" mac_exec_time="10"/>
+	<device name="RIGHT_REAR_RAD" type="EndSystem" mac_exec_time="10"/>
+	<device name="REAR_RAD" type="EndSystem" mac_exec_time="10"/>
+	<device name="CTRL1" type="EndSystem" mac_exec_time="10"/>
+	<device name="CTRL2" type="EndSystem" mac_exec_time="10"/>
+	<device name="ECM" type="EndSystem" mac_exec_time="10"/>
+	<device name="EBCM" type="EndSystem" mac_exec_time="10"/>
+	<device name="EPS" type="EndSystem" mac_exec_time="10"/>
+	<device name="IMU1" type="EndSystem" mac_exec_time="10"/>
+	<device name="IMU2" type="EndSystem" mac_exec_time="10"/>
+	<device name="MAPLOC" type="EndSystem" mac_exec_time="10"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="SW_B1" dest="FRONT_CAM" speed="12.50"/>
+	<link src="SW_B1" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B1" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B1" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B1" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B2" dest="FRONT_SVCAM" speed="12.50"/>
+	<link src="SW_B2" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B2" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B3" dest="LEFT_SVCAM" speed="12.50"/>
+	<link src="SW_B3" dest="SW_B4" speed="12.50"/>
+	<link src="SW_B3" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B3" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B4" dest="RIGHT_SVCAM" speed="12.50"/>
+	<link src="SW_B4" dest="SW_B3" speed="12.50"/>
+	<link src="SW_B5" dest="REAR_CAM" speed="12.50"/>
+	<link src="SW_B5" dest="SW_B13" speed="12.50"/>
+	<link src="SW_B5" dest="SW_B13_1" speed="12.50"/>
+	<link src="SW_B6" dest="REAR_SVCAM" speed="12.50"/>
+	<link src="SW_B6" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B6" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B7" dest="EPS" speed="12.50"/>
+	<link src="SW_B7" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B7" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B8" dest="IMU1" speed="12.50"/>
+	<link src="SW_B8" dest="SW_B16" speed="12.50"/>
+	<link src="SW_B9" dest="IMU2" speed="12.50"/>
+	<link src="SW_B9" dest="SW_B16" speed="12.50"/>
+	<link src="SW_B10" dest="FRONT_RAD" speed="12.50"/>
+	<link src="SW_B10" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B10" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B11" dest="LEFT_FRONT_RAD" speed="12.50"/>
+	<link src="SW_B11" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B11" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B12" dest="RIGHT_FRONT_RAD" speed="12.50"/>
+	<link src="SW_B12" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B12" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B13" dest="LEFT_REAR_RAD" speed="12.50"/>
+	<link src="SW_B13" dest="SW_B5" speed="12.50"/>
+	<link src="SW_B13" dest="SW_B15" speed="12.50"/>
+	<link src="SW_B13" dest="SW_B5_1" speed="12.50"/>
+	<link src="SW_B13" dest="SW_B15_1" speed="12.50"/>
+	<link src="SW_B13" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B13" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B14" dest="RIGHT_REAR_RAD" speed="12.50"/>
+	<link src="SW_B14" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B14" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B15" dest="REAR_RAD" speed="12.50"/>
+	<link src="SW_B15" dest="SW_B13" speed="12.50"/>
+	<link src="SW_B15" dest="SW_B13_1" speed="12.50"/>
+	<link src="SW_B16" dest="MAPLOC" speed="12.50"/>
+	<link src="SW_B16" dest="SW_B17" speed="12.50"/>
+	<link src="SW_B16" dest="SW_B17_1" speed="12.50"/>
+	<link src="SW_B16" dest="SW_B9" speed="12.50"/>
+	<link src="SW_B16" dest="SW_B8" speed="12.50"/>
+	<link src="SW_B17" dest="EBCM" speed="12.50"/>
+	<link src="SW_B17" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B17" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B17" dest="SW_B16" speed="12.50"/>
+	<link src="SW_B18" dest="CTRL1" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B2" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B3" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B11" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B11_1" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B1" speed="12.50"/>
+	<link src="SW_B18" dest="SW_B1_1" speed="12.50"/>
+	<link src="SW_B19" dest="CTRL2" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B14" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B10" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B12" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B13" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B1" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B10_1" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B12_1" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B13_1" speed="12.50"/>
+	<link src="SW_B19" dest="SW_B1_1" speed="12.50"/>
+	<link src="SW_B20" dest="ECM" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B17" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B6" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B7" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B17_1" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B7_1" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B20" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B1_1" dest="FRONT_CAM" speed="12.50"/>
+	<link src="SW_B1_1" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B1_1" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B1_1" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B1_1" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B5_1" dest="REAR_CAM" speed="12.50"/>
+	<link src="SW_B5_1" dest="SW_B13" speed="12.50"/>
+	<link src="SW_B5_1" dest="SW_B13_1" speed="12.50"/>
+	<link src="SW_B7_1" dest="EPS" speed="12.50"/>
+	<link src="SW_B7_1" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B7_1" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B10_1" dest="FRONT_RAD" speed="12.50"/>
+	<link src="SW_B10_1" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B10_1" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B11_1" dest="LEFT_FRONT_RAD" speed="12.50"/>
+	<link src="SW_B11_1" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B11_1" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B12_1" dest="RIGHT_FRONT_RAD" speed="12.50"/>
+	<link src="SW_B12_1" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B12_1" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B13_1" dest="LEFT_REAR_RAD" speed="12.50"/>
+	<link src="SW_B13_1" dest="SW_B5" speed="12.50"/>
+	<link src="SW_B13_1" dest="SW_B15" speed="12.50"/>
+	<link src="SW_B13_1" dest="SW_B5_1" speed="12.50"/>
+	<link src="SW_B13_1" dest="SW_B15_1" speed="12.50"/>
+	<link src="SW_B13_1" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B13_1" dest="SW_B19_1" speed="12.50"/>
+	<link src="SW_B15_1" dest="REAR_RAD" speed="12.50"/>
+	<link src="SW_B15_1" dest="SW_B13" speed="12.50"/>
+	<link src="SW_B15_1" dest="SW_B13_1" speed="12.50"/>
+	<link src="SW_B17_1" dest="EBCM" speed="12.50"/>
+	<link src="SW_B17_1" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B17_1" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B17_1" dest="SW_B16" speed="12.50"/>
+	<link src="SW_B18_1" dest="CTRL1" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B2" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B3" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B11" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B11_1" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B1" speed="12.50"/>
+	<link src="SW_B18_1" dest="SW_B1_1" speed="12.50"/>
+	<link src="SW_B19_1" dest="CTRL2" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B20" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B14" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B10" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B12" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B13" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B1" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B20_1" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B10_1" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B12_1" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B13_1" speed="12.50"/>
+	<link src="SW_B19_1" dest="SW_B1_1" speed="12.50"/>
+	<link src="SW_B20_1" dest="ECM" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B17" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B6" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B7" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B18" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B19" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B17_1" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B7_1" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B18_1" speed="12.50"/>
+	<link src="SW_B20_1" dest="SW_B19_1" speed="12.50"/>
+	<link src="FRONT_CAM" dest="SW_B1" speed="12.50"/>
+	<link src="FRONT_CAM" dest="SW_B1_1" speed="12.50"/>
+	<link src="REAR_CAM" dest="SW_B5" speed="12.50"/>
+	<link src="REAR_CAM" dest="SW_B5_1" speed="12.50"/>
+	<link src="FRONT_SVCAM" dest="SW_B2" speed="12.50"/>
+	<link src="LEFT_SVCAM" dest="SW_B3" speed="12.50"/>
+	<link src="RIGHT_SVCAM" dest="SW_B4" speed="12.50"/>
+	<link src="REAR_SVCAM" dest="SW_B6" speed="12.50"/>
+	<link src="FRONT_RAD" dest="SW_B10" speed="12.50"/>
+	<link src="FRONT_RAD" dest="SW_B10_1" speed="12.50"/>
+	<link src="LEFT_FRONT_RAD" dest="SW_B11" speed="12.50"/>
+	<link src="LEFT_FRONT_RAD" dest="SW_B11_1" speed="12.50"/>
+	<link src="RIGHT_FRONT_RAD" dest="SW_B12" speed="12.50"/>
+	<link src="RIGHT_FRONT_RAD" dest="SW_B12_1" speed="12.50"/>
+	<link src="LEFT_REAR_RAD" dest="SW_B13" speed="12.50"/>
+	<link src="LEFT_REAR_RAD" dest="SW_B13_1" speed="12.50"/>
+	<link src="RIGHT_REAR_RAD" dest="SW_B14" speed="12.50"/>
+	<link src="REAR_RAD" dest="SW_B15" speed="12.50"/>
+	<link src="REAR_RAD" dest="SW_B15_1" speed="12.50"/>
+	<link src="CTRL1" dest="SW_B18" speed="12.50"/>
+	<link src="CTRL1" dest="SW_B18_1" speed="12.50"/>
+	<link src="CTRL2" dest="SW_B19" speed="12.50"/>
+	<link src="CTRL2" dest="SW_B19_1" speed="12.50"/>
+	<link src="ECM" dest="SW_B20" speed="12.50"/>
+	<link src="ECM" dest="SW_B20_1" speed="12.50"/>
+	<link src="EBCM" dest="SW_B17" speed="12.50"/>
+	<link src="EBCM" dest="SW_B17_1" speed="12.50"/>
+	<link src="EPS" dest="SW_B7" speed="12.50"/>
+	<link src="EPS" dest="SW_B7_1" speed="12.50"/>
+	<link src="IMU1" dest="SW_B8" speed="12.50"/>
+	<link src="IMU2" dest="SW_B9" speed="12.50"/>
+	<link src="MAPLOC" dest="SW_B16" speed="12.50"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="App_FRONT_CAM_TO_CTRLS" period="20000" type="NORMAL">
+		<tasks>
+			<task name="t1_FRONT_CAM_TO_CTRLS" node="FRONT_CAM" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_FRONT_CAM" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_CTRL2_FROM_FRONT_CAM" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_FRONT_CAM_TO_CTRL1" src="t1_FRONT_CAM_TO_CTRLS" dest="t2_CTRL1_FROM_FRONT_CAM" size="800" group="t1_FRONT_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s2_FRONT_CAM_TO_CTRL2" src="t1_FRONT_CAM_TO_CTRLS" dest="t3_CTRL2_FROM_FRONT_CAM" size="800" group="t1_FRONT_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_FRONT_CAM" deadline="2000">
+				<task name="t1_FRONT_CAM_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_FRONT_CAM"/>
+			</path>
+			<path name="path_2_FRONT_CAM" deadline="2000">
+				<task name="t1_FRONT_CAM_TO_CTRLS"/>
+				<task name="t3_CTRL2_FROM_FRONT_CAM"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_REAR_CAM_TO_CTRLS" period="40000" type="NORMAL">
+		<tasks>
+			<task name="t1_REAR_CAM_TO_CTRLS" node="REAR_CAM" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_REAR_CAM" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_REAR_CAM" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_REAR_CAM_TO_CTRL1" src="t1_REAR_CAM_TO_CTRLS" dest="t2_CTRL1_FROM_REAR_CAM" size="600" group="t1_REAR_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s2_REAR_CAM_TO_CTRL2" src="t1_REAR_CAM_TO_CTRLS" dest="t2_CTRL2_FROM_REAR_CAM" size="600" group="t1_REAR_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_REAR_CAM" deadline="4000">
+				<task name="t1_REAR_CAM_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_REAR_CAM"/>
+			</path>
+			<path name="path_2_REAR_CAM" deadline="4000">
+				<task name="t1_REAR_CAM_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_REAR_CAM"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_SVCAMS_TO_CTRL1" period="50000" type="NORMAL">
+		<tasks>
+			<task name="t1_FRONT_SVCAM_TO_CTRL_1" node="FRONT_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_LEFT_SVCAM_TO_CTRL1" node="LEFT_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_RIGHT_SVCAM_TO_CTRL1" node="RIGHT_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_REAR_SVCAM_TO_CTRL1" node="REAR_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_SVCAMS" node="CTRL1" wcet="1000" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_FRONT_SVCAM_TO_CTRL1" src="t1_FRONT_SVCAM_TO_CTRL_1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_FRONT_SVCAM_TO_CTRL_1_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_LEFT_SVCAM_TO_CTRL1" src="t1_LEFT_SVCAM_TO_CTRL1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_LEFT_SVCAM_TO_CTRL1_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_RIGHT_SVCAM_TO_CTRL1" src="t1_RIGHT_SVCAM_TO_CTRL1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_RIGHT_SVCAM_TO_CTRL1_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_REAR_SVCAM_TO_CTRL1" src="t1_REAR_SVCAM_TO_CTRL1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_REAR_SVCAM_TO_CTRL1_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_FRONT_SVCAM" deadline="10000">
+				<task name="t1_FRONT_SVCAM_TO_CTRL_1"/>
+				<task name="t2_CTRL1_FROM_SVCAMS"/>
+			</path>
+			<path name="path_1_LEFT_SVCAM" deadline="10000">
+				<task name="t1_LEFT_SVCAM_TO_CTRL1"/>
+				<task name="t2_CTRL1_FROM_SVCAMS"/>
+			</path>
+			<path name="path_1_RIGHT_SVCAM" deadline="10000">
+				<task name="t1_RIGHT_SVCAM_TO_CTRL1"/>
+				<task name="t2_CTRL1_FROM_SVCAMS"/>
+			</path>
+			<path name="path_1_REAR_SVCAM" deadline="10000">
+				<task name="t1_REAR_SVCAM_TO_CTRL1"/>
+				<task name="t2_CTRL1_FROM_SVCAMS"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_RADARS_TO_CTRLS" period="40000" type="NORMAL">
+		<tasks>
+			<task name="t1_FRONT_RAD_TO_CTRLS" node="FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_LEFT_FRONT_RAD_TO_CTRLS" node="LEFT_FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS" node="RIGHT_FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_LEFT_REAR_RAD_TO_CTRLS" node="LEFT_REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_RIGHT_REAR_RAD_TO_CTRLS" node="RIGHT_REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_REAR_RAD_TO_CTRLS" node="REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_RADARS" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_RADARS" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_FRONT_RAD_TO_CTRL1" src="t1_FRONT_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_FRONT_RAD_TO_CTRL2" src="t1_FRONT_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_LEFT_FRONT_RAD_TO_CTRL1" src="t1_LEFT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_LEFT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_LEFT_FRONT_RAD_TO_CTRL2" src="t1_LEFT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_LEFT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_RIGHT_FRONT_RAD_TO_CTRL1" src="t1_RIGHT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_RIGHT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_RIGHT_FRONT_RAD_TO_CTRL2" src="t1_RIGHT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_RIGHT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_LEFT_REAR_RAD_TO_CTRL1" src="t1_LEFT_REAR_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_LEFT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_LEFT_REAR_RAD_TO_CTRL2" src="t1_LEFT_REAR_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_LEFT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_RIGHT_REAR_RAD_TO_CTRL1" src="t1_RIGHT_REAR_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_RIGHT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_RIGHT_REAR_RAD_TO_CTRL2" src="t1_RIGHT_REAR_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_RIGHT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_REAR_RAD_TO_CTRL1" src="t1_REAR_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_REAR_RAD_TO_CTRL2" src="t1_REAR_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_FRONT_RAD" deadline="4000">
+				<task name="t1_FRONT_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_RADARS"/>
+			</path>
+			<path name="path_1.1_FRONT_RAD" deadline="4000">
+				<task name="t1_FRONT_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_RADARS"/>
+			</path>
+			<path name="path_1_LEFT_FRONT_RAD" deadline="4000">
+				<task name="t1_LEFT_FRONT_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_RADARS"/>
+			</path>
+			<path name="path_1.1_LEFT_FRONT_RAD" deadline="4000">
+				<task name="t1_LEFT_FRONT_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_RADARS"/>
+			</path>
+			<path name="path_1_RIGHT_FRONT_RAD" deadline="4000">
+				<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_RADARS"/>
+			</path>
+			<path name="path_1.1_RIGHT_FRONT_RAD" deadline="4000">
+				<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_RADARS"/>
+			</path>
+			<path name="path_1_LEFT_REAR_RAD" deadline="4000">
+				<task name="t1_LEFT_REAR_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_RADARS"/>
+			</path>
+			<path name="path_1.1_LEFT_REAR_RAD" deadline="4000">
+				<task name="t1_LEFT_REAR_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_RADARS"/>
+			</path>
+			<path name="path_1_RIGHT_REAR_RAD" deadline="4000">
+				<task name="t1_RIGHT_REAR_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_RADARS"/>
+			</path>
+			<path name="path_1.1_RIGHT_REAR_RAD" deadline="4000">
+				<task name="t1_RIGHT_REAR_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_RADARS"/>
+			</path>
+			<path name="path_1_REAR_RAD" deadline="4000">
+				<task name="t1_REAR_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_RADARS"/>
+			</path>
+			<path name="path_1.1_REAR_RAD" deadline="4000">
+				<task name="t1_REAR_RAD_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_RADARS"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_CTRLS_TO_CAM_AND_RAD" period="20000" type="NORMAL">
+		<tasks>
+			<task name="t1_CTRL1_TO_CAM_AND_RAD" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_CTRL2_TO_CAM_AND_RAD" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_FRONT_CAM_FROM_CTRL" node="FRONT_CAM" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_FRONT_RAD_FROM_CTRL" node="FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_REAR_CAM_FROM_CTRL" node="REAR_CAM" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_REAR_RAD_FROM_CTRL" node="REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_CTRL1_SEND_TO_FRONT_CAM" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_FRONT_CAM_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL1_SEND_TO_FRONT_RAD" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_FRONT_RAD_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL1_SEND_TO_REAR_CAM" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_REAR_CAM_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL1_SEND_TO_REAR_RAD" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_REAR_RAD_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL2_SEND_TO_FRONT_CAM" src="t1_CTRL2_TO_CAM_AND_RAD" dest="t2_FRONT_CAM_FROM_CTRL" size="100" group="t1_CTRL2_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL2_SEND_TO_FRONT_RAD" src="t1_CTRL2_TO_CAM_AND_RAD" dest="t2_FRONT_RAD_FROM_CTRL" size="100" group="t1_CTRL2_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_CTRL1_FRONT_CAM" deadline="4000">
+				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+				<task name="t2_FRONT_CAM_FROM_CTRL"/>
+			</path>
+			<path name="path_1_CTRL1_FRONT_RAD" deadline="4000">
+				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+				<task name="t2_FRONT_RAD_FROM_CTRL"/>
+			</path>
+			<path name="path_1_CTRL1_REAR_CAM" deadline="4000">
+				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+				<task name="t2_REAR_CAM_FROM_CTRL"/>
+			</path>
+			<path name="path_1_CTRL1_REAR_RAD" deadline="4000">
+				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+				<task name="t2_REAR_RAD_FROM_CTRL"/>
+			</path>
+			<path name="path_1_CTRL2_FRONT_CAM" deadline="4000">
+				<task name="t1_CTRL2_TO_CAM_AND_RAD"/>
+				<task name="t2_FRONT_CAM_FROM_CTRL"/>
+			</path>
+			<path name="path_1_CTRL2_FRONT_RAD" deadline="4000">
+				<task name="t1_CTRL2_TO_CAM_AND_RAD"/>
+				<task name="t2_FRONT_RAD_FROM_CTRL"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_CTRL_TO_ECM_EBCM" period="40000" type="NORMAL">
+		<tasks>
+			<task name="t1_CTRL1_TO_ECM_EBCM" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_CTRL2_TO_ECM_EBCM" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ECM_FROM_CTRLS" node="ECM" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_EBCM_FROM_CTRLS" node="EBCM" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_CTRL1_FROM_ECM_EBCM" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_CTRL2_FROM_ECM_EBCM" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_CTRL1_SEND_ECM" src="t1_CTRL1_TO_ECM_EBCM" dest="t2_ECM_FROM_CTRLS" size="100" group="t1_CTRL1_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL1_SEND_EBCM" src="t1_CTRL1_TO_ECM_EBCM" dest="t2_EBCM_FROM_CTRLS" size="100" group="t1_CTRL1_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL2_SEND_ECM" src="t1_CTRL2_TO_ECM_EBCM" dest="t2_ECM_FROM_CTRLS" size="100" group="t1_CTRL2_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL2_SEND_EBCM" src="t1_CTRL2_TO_ECM_EBCM" dest="t2_EBCM_FROM_CTRLS" size="100" group="t1_CTRL2_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_ECM_SEND_CTRL1" src="t2_ECM_FROM_CTRLS" dest="t3_CTRL1_FROM_ECM_EBCM" size="100" group="t2_ECM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_ECM_SEND_CTRL2" src="t2_ECM_FROM_CTRLS" dest="t3_CTRL2_FROM_ECM_EBCM" size="100" group="t2_ECM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_EBCM_SEND_CTRL1" src="t2_EBCM_FROM_CTRLS" dest="t3_CTRL1_FROM_ECM_EBCM" size="100" group="t2_EBCM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_EBCM_SEND_CTRL2" src="t2_EBCM_FROM_CTRLS" dest="t3_CTRL2_FROM_ECM_EBCM" size="100" group="t2_EBCM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_CTRL1_ECM" deadline="4000">
+				<task name="t1_CTRL1_TO_ECM_EBCM"/>
+				<task name="t2_ECM_FROM_CTRLS"/>
+			</path>
+			<path name="path_1_CTRL1_EBCM" deadline="2000">
+				<task name="t1_CTRL1_TO_ECM_EBCM"/>
+				<task name="t2_EBCM_FROM_CTRLS"/>
+			</path>
+			<path name="path_1_CTRL2_ECM" deadline="4000">
+				<task name="t1_CTRL2_TO_ECM_EBCM"/>
+				<task name="t2_ECM_FROM_CTRLS"/>
+			</path>
+			<path name="path_1_CTRL2_EBCM" deadline="2000">
+				<task name="t1_CTRL2_TO_ECM_EBCM"/>
+				<task name="t2_EBCM_FROM_CTRLS"/>
+			</path>
+			<path name="path_2_ECM_CTRL1" deadline="4000">
+				<task name="t2_ECM_FROM_CTRLS"/>
+				<task name="t3_CTRL1_FROM_ECM_EBCM"/>
+			</path>
+			<path name="path_2_EBCM_CTRL1" deadline="2000">
+				<task name="t2_EBCM_FROM_CTRLS"/>
+				<task name="t3_CTRL1_FROM_ECM_EBCM"/>
+			</path>
+			<path name="path_2_ECM_CTRL2" deadline="4000">
+				<task name="t2_ECM_FROM_CTRLS"/>
+				<task name="t3_CTRL2_FROM_ECM_EBCM"/>
+			</path>
+			<path name="path_2_EBCM_CTRL2" deadline="2000">
+				<task name="t2_EBCM_FROM_CTRLS"/>
+				<task name="t3_CTRL2_FROM_ECM_EBCM"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_CTRLS_TO_EPS" period="10000" type="NORMAL">
+		<tasks>
+			<task name="t1_CTRL1_TO_EPS" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_CTRL2_TO_EPS" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_EPS_FROM_CTRLS" node="EPS" wcet="200" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_CTRL1_TO_EPS" src="t1_CTRL1_TO_EPS" dest="t2_EPS_FROM_CTRLS" size="100" group="t1_CTRL1_TO_EPS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_CTRL2_TO_EPS" src="t1_CTRL2_TO_EPS" dest="t2_EPS_FROM_CTRLS" size="100" group="t1_CTRL2_TO_EPS_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_CTRL1_TO_EPS" deadline="2000">
+				<task name="t1_CTRL1_TO_EPS"/>
+				<task name="t2_EPS_FROM_CTRLS"/>
+			</path>
+			<path name="path_1_CTRL2_TO_EPS" deadline="2000">
+				<task name="t1_CTRL2_TO_EPS"/>
+				<task name="t2_EPS_FROM_CTRLS"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_EPS_TO_CTRLS" period="20000" type="NORMAL">
+		<tasks>
+			<task name="t1_EPS_TO_CTRLS" node="EPS" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_EPS" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_EPS" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_EPS_TO_CTRL1" src="t1_EPS_TO_CTRLS" dest="t2_CTRL1_FROM_EPS" size="100" group="t1_EPS_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_EPS_TO_CTRL2" src="t1_EPS_TO_CTRLS" dest="t2_CTRL2_FROM_EPS" size="100" group="t1_EPS_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_EPS_TO_CTRL1" deadline="2000">
+				<task name="t1_EPS_TO_CTRLS"/>
+				<task name="t2_CTRL1_FROM_EPS"/>
+			</path>
+			<path name="path_1_EPS_TO_CTRL2" deadline="2000">
+				<task name="t1_EPS_TO_CTRLS"/>
+				<task name="t2_CTRL2_FROM_EPS"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_IMUS_TO_CTRLS_AND_MAPLOC" period="50000" type="NORMAL">
+		<tasks>
+			<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC" node="IMU1" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC" node="IMU2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_IMUS" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_IMUS" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_MAPLOC_FROM_IMUS" node="MAPLOC" wcet="400" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_IMU1_TO_CTRL1" src="t1_IMU1_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL1_FROM_IMUS" size="200" group="t1_IMU1_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_IMU1_TO_CTRL2" src="t1_IMU1_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL2_FROM_IMUS" size="200" group="t1_IMU1_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_IMU1_TO_MAPLOC" src="t1_IMU1_TO_CTRLS_AND_MAPLOC" dest="t2_MAPLOC_FROM_IMUS" size="200" group="t1_IMU1_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_IMU2_TO_CTRL1" src="t1_IMU2_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL1_FROM_IMUS" size="200" group="t1_IMU2_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_IMU2_TO_CTRL2" src="t1_IMU2_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL2_FROM_IMUS" size="200" group="t1_IMU2_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_IMU2_TO_MAPLOC" src="t1_IMU2_TO_CTRLS_AND_MAPLOC" dest="t2_MAPLOC_FROM_IMUS" size="200" group="t1_IMU2_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_IMU1_TO_CTRL1" deadline="4000">
+				<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
+				<task name="t2_CTRL1_FROM_IMUS"/>
+			</path>
+			<path name="path_1_IMU1_TO_CTRL2" deadline="4000">
+				<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
+				<task name="t2_CTRL2_FROM_IMUS"/>
+			</path>
+			<path name="path_1_IMU1_TO_MAPLOC" deadline="4000">
+				<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
+				<task name="t2_MAPLOC_FROM_IMUS"/>
+			</path>
+			<path name="path_1_IMU2_TO_CTRL1" deadline="4000">
+				<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
+				<task name="t2_CTRL1_FROM_IMUS"/>
+			</path>
+			<path name="path_1_IMU2_TO_CTRL2" deadline="4000">
+				<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
+				<task name="t2_CTRL2_FROM_IMUS"/>
+			</path>
+			<path name="path_1_IMU2_TO_MAPLOC" deadline="4000">
+				<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
+				<task name="t2_MAPLOC_FROM_IMUS"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_MAPLOC_TO_CTRLS_AND_FRONT_CAM" period="100000" type="NORMAL">
+		<tasks>
+			<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" node="MAPLOC" wcet="500" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_MAPLOC" node="CTRL1" wcet="500" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_MAPLOC" node="CTRL2" wcet="500" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_FRONT_CAM_FROM_MAPLOC" node="FRONT_CAM" wcet="500" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_MAPLOC_FROM_FRONT_CAM" node="MAPLOC" wcet="500" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s1_MAPLOC_TO_CTRL1" src="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" dest="t2_CTRL1_FROM_MAPLOC" size="100" group="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_MAPLOC_TO_CTRL2" src="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" dest="t2_CTRL2_FROM_MAPLOC" size="100" group="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_MAPLOC_TO_FRONT_CAM" src="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" dest="t2_FRONT_CAM_FROM_MAPLOC" size="100" group="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM_1" secure="True" rl="1" type="NORMAL"/>
+			<signal name="s1_FRONT_CAM_TO_MAPLOC" src="t2_FRONT_CAM_FROM_MAPLOC" dest="t3_MAPLOC_FROM_FRONT_CAM" size="200" group="t2_FRONT_CAM_FROM_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_1_MAPLOC_TO_CTRL1" deadline="5000">
+				<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
+				<task name="t2_CTRL1_FROM_MAPLOC"/>
+			</path>
+			<path name="path_1_MAPLOC_TO_CTRL2" deadline="5000">
+				<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
+				<task name="t2_CTRL2_FROM_MAPLOC"/>
+			</path>
+			<path name="path_1_MAPLOC_TO_FRONT_CAM" deadline="5000">
+				<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
+				<task name="t2_FRONT_CAM_FROM_MAPLOC"/>
+			</path>
+			<path name="path_2_FRONT_CAM_TO_MAPLOC" deadline="5000">
+				<task name="t2_FRONT_CAM_FROM_MAPLOC"/>
+				<task name="t3_MAPLOC_FROM_FRONT_CAM"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+
+
+
+</NetworkDescription>
