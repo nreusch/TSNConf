@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!-- mtu, overhead, mac_length in Byte. All times in us-->
 <NetworkDescription mtu="1500" frame_overhead="32" key_length="64" mac_length="22">
 	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
@@ -41,48 +40,4 @@
 
 
 
-=======
-<!-- mtu, overhead, mac_length in Byte. All times in us-->
-<NetworkDescription mtu="1500" frame_overhead="32" key_length="64" mac_length="22">
-	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
-	<device name="SW1" type="Switch"/>
-	<device name="ES1" type="EndSystem" mac_exec_time="20"/>
-	<device name="ES2" type="EndSystem" mac_exec_time="20"/>
-	<device name="ES3" type="EndSystem" mac_exec_time="20"/>
-
-	<!-- Links are directional. speed = byte/us -->
-	<link src="SW1" dest="ES1" speed="1.25"/>
-	<link src="SW1" dest="ES2" speed="1.25"/>
-	<link src="SW1" dest="ES3" speed="1.25"/>
-	<link src="ES1" dest="SW1" speed="1.25"/>
-	<link src="ES2" dest="SW1" speed="1.25"/>
-	<link src="ES3" dest="SW1" speed="1.25"/>
-
-	<!-- period&wcet is in us, size in Byte-->
-	<application name="App1" period="1000" type="NORMAL">
-		<tasks>
-			<task name="t1" node="ES1" wcet="100" secure="True" rl="1" type="NORMAL"/>
-			<task name="t2" node="ES2" wcet="100" secure="True" rl="1" type="NORMAL"/>
-			<task name="t3" node="ES3" wcet="100" secure="True" rl="1" type="NORMAL"/>
-		</tasks>
-		<signals>
-			<signal name="s1" src="t1" dest="t3" size="50" group="t1_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s2" src="t2" dest="t3" size="50" group="t2_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t1_t3" deadline="1000">
-				<task name="t1"/>
-				<task name="t3"/>
-			</path>
-			<path name="path_t2_t3" deadline="1000">
-				<task name="t2"/>
-				<task name="t3"/>
-			</path>
-		</functionpaths>
-	</application>
-	
-
-
-
->>>>>>> d0ef51724e3e61cce9e2f3fd620358723f13e8ed
 </NetworkDescription>

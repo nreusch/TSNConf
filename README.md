@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # TSNConf
 
 Try the online [DEMO](https://tsnconf-demo.herokuapp.com/).
@@ -12,7 +11,6 @@ Many thanks to my supervisor Paul Pop and Silviu S. Craciunas for their feedback
 ## Requirements
 - Python 3.9
 - [GraphViz](https://graphviz.org/download/)
-  - Add to PATH
 - On Windows: 
     - Build Tools for Visual Studio: https://visualstudio.microsoft.com/downloads/ (required for some libraries) 
         - Only default C++ build tools necessary
