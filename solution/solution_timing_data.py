@@ -11,13 +11,17 @@ class TimingData:
         self.time_creating_vars_routing: float = 0
         self.time_creating_vars_pint: float = 0
         self.time_creating_vars_scheduling: float = 0
+        self.time_creating_vars_simulated_annealing: float = 0
+
 
         self.time_creating_constraints_routing: float = 0
         self.time_creating_constraints_pint: float = 0
         self.time_creating_constraints_scheduling: float = 0
+
         self.time_optimizing_routing: float = 0
         self.time_optimizing_pint: float = 0
         self.time_optimizing_scheduling: float = 0
+        self.time_optimizing_simulated_annealing: float = 0
 
         self.time_serializing_solution: float = 0
 
@@ -35,10 +39,12 @@ class TimingData:
             self.time_creating_vars_routing
             + self.time_creating_vars_scheduling
             + self.time_creating_vars_pint
+            + self.time_creating_vars_simulated_annealing
             + self.time_creating_constraints_pint
             + self.time_creating_constraints_scheduling
             + self.time_creating_constraints_routing
             + self.time_optimizing_routing
             + self.time_optimizing_pint
             + self.time_optimizing_scheduling
+            + self.time_optimizing_simulated_annealing
         )

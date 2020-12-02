@@ -38,6 +38,13 @@ def optstatus_table(id: str, df: DataFrame) -> dash_table.DataTable:
             },
             {
                 "if": {
+                    "filter_query": '{Routing} contains "INFEASIBLE"',
+                    "column_id": "Routing",
+                },
+                "backgroundColor": "rgb(255, 0, 0)",
+            },
+            {
+                "if": {
                     "filter_query": '{Scheduling} contains "OPTIMAL"',
                     "column_id": "Scheduling",
                 },
@@ -52,6 +59,13 @@ def optstatus_table(id: str, df: DataFrame) -> dash_table.DataTable:
             },
             {
                 "if": {
+                    "filter_query": '{Scheduling} contains "INFEASIBLE"',
+                    "column_id": "Scheduling",
+                },
+                "backgroundColor": "rgb(255, 0, 0)",
+            },
+            {
+                "if": {
                     "filter_query": '{Pint} contains "OPTIMAL"',
                     "column_id": "Pint",
                 },
@@ -63,6 +77,13 @@ def optstatus_table(id: str, df: DataFrame) -> dash_table.DataTable:
                     "column_id": "Pint",
                 },
                 "backgroundColor": "rgb(255, 255, 0)",
+            },
+            {
+                "if": {
+                    "filter_query": '{Pint} contains "INFEASIBLE"',
+                    "column_id": "Pint",
+                },
+                "backgroundColor": "rgb(255, 0, 0)",
             },
         ],
         style_cell={

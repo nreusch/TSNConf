@@ -394,6 +394,7 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
         "Creating Variables - Routing (ms)", "Creating Constraints - Routing (ms)", "Optimizing - Routing (ms)",
         "Creating Variables - Pint (ms)", "Creating Constraints - Pint (ms)", "Optimizing - Pint (ms)",
         "Creating Variables - Scheduling (ms)", "Creating Constraints - Scheduling (ms)", "Optimizing - Scheduling (ms)",
+        "Creating Variables - Simulated Annealing (ms)", "Optimizing - Simulated Annealing (ms)",
         "Serializing Solution (ms)"]
     """
     columns = []
@@ -416,6 +417,9 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
     )
     row.append("{:.2f}".format(solution.timing_object.time_optimizing_scheduling))
 
+    row.append("{:.2f}".format(solution.timing_object.time_creating_vars_simulated_annealing))
+    row.append("{:.2f}".format(solution.timing_object.time_optimizing_simulated_annealing))
+
     row.append("{:.2f}".format(solution.timing_object.time_serializing_solution))
 
     columns.append(row)
@@ -433,6 +437,8 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Creating Variables - Scheduling (ms)",
             "Creating Constraints - Scheduling (ms)",
             "Optimizing - Scheduling (ms)",
+            "Creating Variables - Simulated Annealing (ms)",
+            "Optimizing - Simulated Annealing (ms)",
             "Serializing Solution (ms)",
         ],
     )

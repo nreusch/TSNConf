@@ -5,7 +5,7 @@ from ortools.sat.python import cp_model
 from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          OPTIMAL, UNKNOWN, CpModel, CpSolver,
                                          IntVar)
-from optimization.models.scheduling import (scheduling_model_constraints, scheduling_model_goals,
+from scheduling import (scheduling_model_constraints, scheduling_model_goals,
                         scheduling_model_variables)
 
 from input.model.schedule import schedule
@@ -16,7 +16,7 @@ from solution.solution_timing_data import TimingData
 from utils.utilities import Timer, print_model_stats, report_exception
 
 
-class SchedulingModel:
+class CPSchedulingSolver:
     def __init__(
         self,
         tc: Testcase,

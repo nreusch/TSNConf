@@ -125,6 +125,7 @@ def run(solution: Solution):
     solution_timing_info_pint = table("table_solution_timing_info_pint", df[["Creating Variables - Pint (ms)", "Creating Constraints - Pint (ms)", "Optimizing - Pint (ms)"]])
     solution_timing_info_routing = table("table_solution_timing_info_routing", df[["Creating Variables - Routing (ms)", "Creating Constraints - Routing (ms)", "Optimizing - Routing (ms)"]])
     solution_timing_info_scheduling = table("table_solution_timing_info_scheduling", df[["Creating Variables - Scheduling (ms)", "Creating Constraints - Scheduling (ms)", "Optimizing - Scheduling (ms)"]])
+    solution_timing_info_sa = table("table_solution_timing_info_sa", df[["Creating Variables - Simulated Annealing (ms)", "Optimizing - Simulated Annealing (ms)"]])
     solution_timing_info_other = table("table_solution_timing_info_other", df[["Testcase Parsing (ms)"]])
 
     descr = solution_parser.get_solution_mode_description(solution)
@@ -326,6 +327,7 @@ def run(solution: Solution):
                                                                         inner_element(solution_timing_info_pint),
                                                                         inner_element(solution_timing_info_routing),
                                                                         inner_element(solution_timing_info_scheduling),
+                                                                        inner_element(solution_timing_info_sa),
                                                                         inner_element(solution_timing_info_other)
                                                                     ]
                                                                 )

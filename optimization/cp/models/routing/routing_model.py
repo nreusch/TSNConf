@@ -4,7 +4,7 @@ from ortools.sat.python import cp_model
 from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          OPTIMAL, UNKNOWN, CpModel, CpSolver,
                                          IntVar)
-from optimization.models.routing import routing_model_goals, routing_model_results, routing_model_variables, routing_model_constraints
+from routing import routing_model_variables, routing_model_results, routing_model_goals, routing_model_constraints
 
 from input.model.route import route
 from input.testcase import Testcase
@@ -22,7 +22,7 @@ def weight(v_int, x_v_val):
         return 1
 
 
-class RoutingModel:
+class CPRoutingSolver:
     def __init__(self, tc: Testcase, timing_object: TimingData):
         self.tc = tc
         # Create the model

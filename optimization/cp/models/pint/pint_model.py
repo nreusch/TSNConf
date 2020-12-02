@@ -10,7 +10,7 @@ from solution.solution_timing_data import TimingData
 from utils.utilities import Timer, list_gcd, print_model_stats
 
 
-class PintModel:
+class CPPintSolver:
     def __init__(self, tc: Testcase, timing_object: TimingData):
         self.tc = tc
 
@@ -68,7 +68,7 @@ class PintModel:
         self.model.Maximize(self.Pint_var)
 
     def optimize(
-        self, tc: Testcase, input_params: InputParameters, timing_object: TimingData
+        self, input_params: InputParameters, timing_object: TimingData
     ) -> Tuple[Testcase, EOptimizationStatus]:
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_pint
@@ -104,5 +104,5 @@ class PintModel:
             raise ValueError(
                 "CPSolver returned invalid status for Pint model: " + str(status)
             )
-        tc.Pint = Pint
-        return tc, status
+        self.tc.Pint = Pint
+        return self.tc, status

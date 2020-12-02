@@ -29,6 +29,7 @@ class EMode(Enum):
     VIEW = 0
     ALL_CP_ROUTING_AND_SECURITY = 1
     ONLY_CP_SCHEDULING = 2
+    ALL_SA_ROUTING_AND_SECURITY = 3
 
     def describe(self) -> str:
         if self.value == 0:
@@ -37,6 +38,8 @@ class EMode(Enum):
             return "Mode 1: Generate Security Applications, Generate Stream, CP Routing, CP Scheduling"
         elif self.value == 2:
             return "Mode 2: CP Scheduling"
+        elif self.value == 3:
+            return "Mode 3: Generate Security Applications, Generate Stream, SA Routing, SA Scheduling"
         return ""
 
     @classmethod
