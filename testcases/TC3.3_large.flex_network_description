@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- mtu, overhead, mac_length in Byte. All times in us-->
 <NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
 	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
@@ -532,4 +533,540 @@
 
 
 
+=======
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW0" type="Switch"/>
+	<device name="SW1" type="Switch"/>
+	<device name="SW2" type="Switch"/>
+	<device name="SW3" type="Switch"/>
+	<device name="SW4" type="Switch"/>
+	<device name="SW5" type="Switch"/>
+	<device name="SW6" type="Switch"/>
+	<device name="SW7" type="Switch"/>
+	<device name="ES0" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES4" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES5" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES6" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES7" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES8" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES9" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES10" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES11" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES12" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES13" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES14" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES15" type="EndSystem" mac_exec_time="10"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="SW0" dest="ES0" speed="125.00"/>
+	<link src="SW0" dest="ES1" speed="125.00"/>
+	<link src="SW0" dest="ES2" speed="125.00"/>
+	<link src="SW0" dest="ES3" speed="125.00"/>
+	<link src="SW0" dest="SW2" speed="125.00"/>
+	<link src="SW0" dest="SW3" speed="125.00"/>
+	<link src="SW0" dest="SW4" speed="125.00"/>
+	<link src="SW0" dest="SW5" speed="125.00"/>
+	<link src="SW0" dest="SW6" speed="125.00"/>
+	<link src="SW0" dest="SW7" speed="125.00"/>
+	<link src="SW1" dest="ES0" speed="125.00"/>
+	<link src="SW1" dest="ES1" speed="125.00"/>
+	<link src="SW1" dest="ES2" speed="125.00"/>
+	<link src="SW1" dest="ES3" speed="125.00"/>
+	<link src="SW1" dest="SW2" speed="125.00"/>
+	<link src="SW1" dest="SW3" speed="125.00"/>
+	<link src="SW1" dest="SW4" speed="125.00"/>
+	<link src="SW1" dest="SW5" speed="125.00"/>
+	<link src="SW1" dest="SW6" speed="125.00"/>
+	<link src="SW1" dest="SW7" speed="125.00"/>
+	<link src="SW2" dest="ES4" speed="125.00"/>
+	<link src="SW2" dest="ES5" speed="125.00"/>
+	<link src="SW2" dest="ES6" speed="125.00"/>
+	<link src="SW2" dest="ES7" speed="125.00"/>
+	<link src="SW2" dest="SW0" speed="125.00"/>
+	<link src="SW2" dest="SW3" speed="125.00"/>
+	<link src="SW2" dest="SW4" speed="125.00"/>
+	<link src="SW2" dest="SW5" speed="125.00"/>
+	<link src="SW2" dest="SW6" speed="125.00"/>
+	<link src="SW2" dest="SW7" speed="125.00"/>
+	<link src="SW3" dest="ES4" speed="125.00"/>
+	<link src="SW3" dest="ES5" speed="125.00"/>
+	<link src="SW3" dest="ES6" speed="125.00"/>
+	<link src="SW3" dest="ES7" speed="125.00"/>
+	<link src="SW3" dest="SW0" speed="125.00"/>
+	<link src="SW3" dest="SW3" speed="125.00"/>
+	<link src="SW3" dest="SW4" speed="125.00"/>
+	<link src="SW3" dest="SW5" speed="125.00"/>
+	<link src="SW3" dest="SW6" speed="125.00"/>
+	<link src="SW3" dest="SW7" speed="125.00"/>
+	<link src="SW4" dest="ES8" speed="125.00"/>
+	<link src="SW4" dest="ES9" speed="125.00"/>
+	<link src="SW4" dest="ES10" speed="125.00"/>
+	<link src="SW4" dest="ES11" speed="125.00"/>
+	<link src="SW4" dest="SW0" speed="125.00"/>
+	<link src="SW4" dest="SW1" speed="125.00"/>
+	<link src="SW4" dest="SW4" speed="125.00"/>
+	<link src="SW4" dest="SW5" speed="125.00"/>
+	<link src="SW4" dest="SW6" speed="125.00"/>
+	<link src="SW4" dest="SW7" speed="125.00"/>
+	<link src="SW5" dest="ES8" speed="125.00"/>
+	<link src="SW5" dest="ES9" speed="125.00"/>
+	<link src="SW5" dest="ES10" speed="125.00"/>
+	<link src="SW5" dest="ES11" speed="125.00"/>
+	<link src="SW5" dest="SW0" speed="125.00"/>
+	<link src="SW5" dest="SW1" speed="125.00"/>
+	<link src="SW5" dest="SW4" speed="125.00"/>
+	<link src="SW5" dest="SW5" speed="125.00"/>
+	<link src="SW5" dest="SW6" speed="125.00"/>
+	<link src="SW5" dest="SW7" speed="125.00"/>
+	<link src="SW6" dest="ES12" speed="125.00"/>
+	<link src="SW6" dest="ES13" speed="125.00"/>
+	<link src="SW6" dest="ES14" speed="125.00"/>
+	<link src="SW6" dest="ES15" speed="125.00"/>
+	<link src="SW6" dest="SW0" speed="125.00"/>
+	<link src="SW6" dest="SW1" speed="125.00"/>
+	<link src="SW6" dest="SW2" speed="125.00"/>
+	<link src="SW6" dest="SW5" speed="125.00"/>
+	<link src="SW6" dest="SW6" speed="125.00"/>
+	<link src="SW6" dest="SW7" speed="125.00"/>
+	<link src="SW7" dest="ES12" speed="125.00"/>
+	<link src="SW7" dest="ES13" speed="125.00"/>
+	<link src="SW7" dest="ES14" speed="125.00"/>
+	<link src="SW7" dest="ES15" speed="125.00"/>
+	<link src="SW7" dest="SW0" speed="125.00"/>
+	<link src="SW7" dest="SW1" speed="125.00"/>
+	<link src="SW7" dest="SW2" speed="125.00"/>
+	<link src="SW7" dest="SW5" speed="125.00"/>
+	<link src="SW7" dest="SW6" speed="125.00"/>
+	<link src="SW7" dest="SW7" speed="125.00"/>
+	<link src="ES0" dest="SW0" speed="125.00"/>
+	<link src="ES0" dest="SW1" speed="125.00"/>
+	<link src="ES1" dest="SW0" speed="125.00"/>
+	<link src="ES1" dest="SW1" speed="125.00"/>
+	<link src="ES2" dest="SW0" speed="125.00"/>
+	<link src="ES2" dest="SW1" speed="125.00"/>
+	<link src="ES3" dest="SW0" speed="125.00"/>
+	<link src="ES3" dest="SW1" speed="125.00"/>
+	<link src="ES4" dest="SW2" speed="125.00"/>
+	<link src="ES4" dest="SW3" speed="125.00"/>
+	<link src="ES5" dest="SW2" speed="125.00"/>
+	<link src="ES5" dest="SW3" speed="125.00"/>
+	<link src="ES6" dest="SW2" speed="125.00"/>
+	<link src="ES6" dest="SW3" speed="125.00"/>
+	<link src="ES7" dest="SW2" speed="125.00"/>
+	<link src="ES7" dest="SW3" speed="125.00"/>
+	<link src="ES8" dest="SW4" speed="125.00"/>
+	<link src="ES8" dest="SW5" speed="125.00"/>
+	<link src="ES9" dest="SW4" speed="125.00"/>
+	<link src="ES9" dest="SW5" speed="125.00"/>
+	<link src="ES10" dest="SW4" speed="125.00"/>
+	<link src="ES10" dest="SW5" speed="125.00"/>
+	<link src="ES11" dest="SW4" speed="125.00"/>
+	<link src="ES11" dest="SW5" speed="125.00"/>
+	<link src="ES12" dest="SW6" speed="125.00"/>
+	<link src="ES12" dest="SW7" speed="125.00"/>
+	<link src="ES13" dest="SW6" speed="125.00"/>
+	<link src="ES13" dest="SW7" speed="125.00"/>
+	<link src="ES14" dest="SW6" speed="125.00"/>
+	<link src="ES14" dest="SW7" speed="125.00"/>
+	<link src="ES15" dest="SW6" speed="125.00"/>
+	<link src="ES15" dest="SW7" speed="125.00"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="App_free_ES0" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES0_free" node="ES0" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES0_free" node="ES0" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES1" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES1_free" node="ES1" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES1_free" node="ES1" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES2" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES2_free" node="ES2" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES2_free" node="ES2" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES3" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES3_free" node="ES3" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES3_free" node="ES3" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES4" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES4_free" node="ES4" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES4_free" node="ES4" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES5" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES5_free" node="ES5" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES5_free" node="ES5" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES6" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES6_free" node="ES6" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES6_free" node="ES6" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES7" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES7_free" node="ES7" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES7_free" node="ES7" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES8" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES8_free" node="ES8" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES8_free" node="ES8" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES9" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES9_free" node="ES9" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES9_free" node="ES9" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES10" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES10_free" node="ES10" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES10_free" node="ES10" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES11" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES11_free" node="ES11" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES11_free" node="ES11" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES12" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES12_free" node="ES12" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES12_free" node="ES12" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES13" period="750" type="NORMAL">
+		<tasks>
+			<task name="t0_ES13_free" node="ES13" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES13_free" node="ES13" wcet="140" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES14" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES14_free" node="ES14" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES14_free" node="ES14" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_free_ES15" period="500" type="NORMAL">
+		<tasks>
+			<task name="t0_ES15_free" node="ES15" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_ES15_free" node="ES15" wcet="93" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+		</signals>
+		<functionpaths>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t2_ES15_comm" period="750" type="NORMAL">
+		<tasks>
+			<task name="t2_ES15_comm" node="ES15" wcet="46" secure="True" rl="2" type="NORMAL"/>
+			<task name="t3_ES3_comm" node="ES3" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES9_comm" node="ES9" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES13_comm" node="ES13" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES10_comm" node="ES10" wcet="46" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t2_ES15_comm_t3_ES3_comm" src="t2_ES15_comm" dest="t3_ES3_comm" size="450" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t2_ES15_comm_t2_ES9_comm" src="t2_ES15_comm" dest="t2_ES9_comm" size="1125" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t2_ES15_comm_t2_ES13_comm" src="t2_ES15_comm" dest="t2_ES13_comm" size="875" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t2_ES15_comm_t3_ES10_comm" src="t2_ES15_comm" dest="t3_ES10_comm" size="625" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t2_ES15_comm_t3_ES3_comm" deadline="750">
+				<task name="t2_ES15_comm"/>
+				<task name="t3_ES3_comm"/>
+			</path>
+			<path name="path_t2_ES15_comm_t2_ES9_comm" deadline="750">
+				<task name="t2_ES15_comm"/>
+				<task name="t2_ES9_comm"/>
+			</path>
+			<path name="path_t2_ES15_comm_t2_ES13_comm" deadline="750">
+				<task name="t2_ES15_comm"/>
+				<task name="t2_ES13_comm"/>
+			</path>
+			<path name="path_t2_ES15_comm_t3_ES10_comm" deadline="750">
+				<task name="t2_ES15_comm"/>
+				<task name="t3_ES10_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t2_ES8_comm" period="750" type="NORMAL">
+		<tasks>
+			<task name="t2_ES8_comm" node="ES8" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES5_comm" node="ES5" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES11_comm" node="ES11" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES4_comm" node="ES4" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES1_comm" node="ES1" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES3_comm" node="ES3" wcet="46" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t2_ES8_comm_t3_ES5_comm" src="t2_ES8_comm" dest="t3_ES5_comm" size="950" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t2_ES8_comm_t2_ES11_comm" src="t2_ES8_comm" dest="t2_ES11_comm" size="1275" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t2_ES8_comm_t2_ES4_comm" src="t2_ES8_comm" dest="t2_ES4_comm" size="1225" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t2_ES8_comm_t2_ES1_comm" src="t2_ES8_comm" dest="t2_ES1_comm" size="1400" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t2_ES8_comm_t2_ES3_comm" src="t2_ES8_comm" dest="t2_ES3_comm" size="900" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t2_ES8_comm_t3_ES5_comm" deadline="750">
+				<task name="t2_ES8_comm"/>
+				<task name="t3_ES5_comm"/>
+			</path>
+			<path name="path_t2_ES8_comm_t2_ES11_comm" deadline="750">
+				<task name="t2_ES8_comm"/>
+				<task name="t2_ES11_comm"/>
+			</path>
+			<path name="path_t2_ES8_comm_t2_ES4_comm" deadline="750">
+				<task name="t2_ES8_comm"/>
+				<task name="t2_ES4_comm"/>
+			</path>
+			<path name="path_t2_ES8_comm_t2_ES1_comm" deadline="750">
+				<task name="t2_ES8_comm"/>
+				<task name="t2_ES1_comm"/>
+			</path>
+			<path name="path_t2_ES8_comm_t2_ES3_comm" deadline="750">
+				<task name="t2_ES8_comm"/>
+				<task name="t2_ES3_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t3_ES4_comm" period="500" type="NORMAL">
+		<tasks>
+			<task name="t3_ES4_comm" node="ES4" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES11_comm" node="ES11" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES15_comm" node="ES15" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES8_comm" node="ES8" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES6_comm" node="ES6" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES10_comm" node="ES10" wcet="31" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t3_ES4_comm_t3_ES11_comm" src="t3_ES4_comm" dest="t3_ES11_comm" size="450" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t3_ES4_comm_t3_ES15_comm" src="t3_ES4_comm" dest="t3_ES15_comm" size="925" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t3_ES4_comm_t3_ES8_comm" src="t3_ES4_comm" dest="t3_ES8_comm" size="975" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t3_ES4_comm_t2_ES6_comm" src="t3_ES4_comm" dest="t2_ES6_comm" size="1475" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
+			<signal name="s_t3_ES4_comm_t2_ES10_comm" src="t3_ES4_comm" dest="t2_ES10_comm" size="125" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t3_ES4_comm_t3_ES11_comm" deadline="500">
+				<task name="t3_ES4_comm"/>
+				<task name="t3_ES11_comm"/>
+			</path>
+			<path name="path_t3_ES4_comm_t3_ES15_comm" deadline="500">
+				<task name="t3_ES4_comm"/>
+				<task name="t3_ES15_comm"/>
+			</path>
+			<path name="path_t3_ES4_comm_t3_ES8_comm" deadline="500">
+				<task name="t3_ES4_comm"/>
+				<task name="t3_ES8_comm"/>
+			</path>
+			<path name="path_t3_ES4_comm_t2_ES6_comm" deadline="500">
+				<task name="t3_ES4_comm"/>
+				<task name="t2_ES6_comm"/>
+			</path>
+			<path name="path_t3_ES4_comm_t2_ES10_comm" deadline="500">
+				<task name="t3_ES4_comm"/>
+				<task name="t2_ES10_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t3_ES12_comm" period="750" type="NORMAL">
+		<tasks>
+			<task name="t3_ES12_comm" node="ES12" wcet="46" secure="True" rl="2" type="NORMAL"/>
+			<task name="t2_ES5_comm" node="ES5" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES14_comm" node="ES14" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES9_comm" node="ES9" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES2_comm" node="ES2" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES0_comm" node="ES0" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES0_comm" node="ES0" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES2_comm" node="ES2" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES12_comm" node="ES12" wcet="46" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t3_ES12_comm_t2_ES5_comm" src="t3_ES12_comm" dest="t2_ES5_comm" size="1475" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t3_ES14_comm" src="t3_ES12_comm" dest="t3_ES14_comm" size="750" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t3_ES9_comm" src="t3_ES12_comm" dest="t3_ES9_comm" size="1350" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t3_ES2_comm" src="t3_ES12_comm" dest="t3_ES2_comm" size="625" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t3_ES0_comm" src="t3_ES12_comm" dest="t3_ES0_comm" size="25" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t2_ES0_comm" src="t3_ES12_comm" dest="t2_ES0_comm" size="1300" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t2_ES2_comm" src="t3_ES12_comm" dest="t2_ES2_comm" size="800" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES12_comm_t2_ES12_comm" src="t3_ES12_comm" dest="t2_ES12_comm" size="1175" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t3_ES12_comm_t2_ES5_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t2_ES5_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t3_ES14_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t3_ES14_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t3_ES9_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t3_ES9_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t3_ES2_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t3_ES2_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t3_ES0_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t3_ES0_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t2_ES0_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t2_ES0_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t2_ES2_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t2_ES2_comm"/>
+			</path>
+			<path name="path_t3_ES12_comm_t2_ES12_comm" deadline="750">
+				<task name="t3_ES12_comm"/>
+				<task name="t2_ES12_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+	<application name="App_comm_t3_ES13_comm" period="750" type="NORMAL">
+		<tasks>
+			<task name="t3_ES13_comm" node="ES13" wcet="46" secure="True" rl="2" type="NORMAL"/>
+			<task name="t3_ES6_comm" node="ES6" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES1_comm" node="ES1" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES14_comm" node="ES14" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES7_comm" node="ES7" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES7_comm" node="ES7" wcet="46" secure="False" rl="1" type="NORMAL"/>
+		</tasks>
+		<signals>
+			<signal name="s_t3_ES13_comm_t3_ES6_comm" src="t3_ES13_comm" dest="t3_ES6_comm" size="1025" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES13_comm_t3_ES1_comm" src="t3_ES13_comm" dest="t3_ES1_comm" size="175" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES13_comm_t2_ES14_comm" src="t3_ES13_comm" dest="t2_ES14_comm" size="1275" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES13_comm_t3_ES7_comm" src="t3_ES13_comm" dest="t3_ES7_comm" size="425" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
+			<signal name="s_t3_ES13_comm_t2_ES7_comm" src="t3_ES13_comm" dest="t2_ES7_comm" size="375" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
+		</signals>
+		<functionpaths>
+			<path name="path_t3_ES13_comm_t3_ES6_comm" deadline="750">
+				<task name="t3_ES13_comm"/>
+				<task name="t3_ES6_comm"/>
+			</path>
+			<path name="path_t3_ES13_comm_t3_ES1_comm" deadline="750">
+				<task name="t3_ES13_comm"/>
+				<task name="t3_ES1_comm"/>
+			</path>
+			<path name="path_t3_ES13_comm_t2_ES14_comm" deadline="750">
+				<task name="t3_ES13_comm"/>
+				<task name="t2_ES14_comm"/>
+			</path>
+			<path name="path_t3_ES13_comm_t3_ES7_comm" deadline="750">
+				<task name="t3_ES13_comm"/>
+				<task name="t3_ES7_comm"/>
+			</path>
+			<path name="path_t3_ES13_comm_t2_ES7_comm" deadline="750">
+				<task name="t3_ES13_comm"/>
+				<task name="t2_ES7_comm"/>
+			</path>
+		</functionpaths>
+	</application>
+	
+
+
+
+>>>>>>> d0ef51724e3e61cce9e2f3fd620358723f13e8ed
 </NetworkDescription>
