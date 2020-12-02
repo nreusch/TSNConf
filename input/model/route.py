@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from typing import Dict
+from typing import Dict, List, Tuple, Set
 
 
 class route:
@@ -8,13 +8,23 @@ class route:
         self._struct = {}  # es_or_l.id => set(successor es_or_l.id)
         self._struct_inv = {}  # es_or_l.id => set(predecessor es_or_l.id)
 
+    def init_from_node_mapping(self, node_mapping: Set[Tuple[str, str]], tc_L_from_nodes: Dict):
+        """
+        node_mapping: List of tuples which map node.id to successor node.id in route
+        """
+        x_res = {}
+        for tpl in node_mapping:
+            x_res[tpl[1]] = tpl[0]
+
+        x_res[self.stream.sender_es_id] = self.stream.sender_es_id
+
+        self.init_from_x_res_vector(x_res, tc_L_from_nodes)
+
     def init_from_x_res_vector(
         self, x_res_vector: Dict[str, str], tc_L_from_nodes: Dict
     ):
         """
-
-        :param x_res_vector: Maps node.id to "successor" node.id
-        :param tc_L_from_nodes:
+        x_res_vector: Maps node.id to predecessor node.id in route
         """
         f = self.stream
 
