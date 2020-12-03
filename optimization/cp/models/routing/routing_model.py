@@ -6,7 +6,7 @@ from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          IntVar)
 from routing import routing_model_variables, routing_model_results, routing_model_goals, routing_model_constraints
 
-from input.model.route import route
+from input.model.route import route, route_info
 from input.testcase import Testcase
 from input.input_parameters import InputParameters
 from solution.solution_optimization_status import EOptimizationStatus
@@ -144,20 +144,15 @@ class CPRoutingSolver:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            (
-                _,
-                x_res,
-                __,
-                ___,
-                ____,
-                _____,
-                ______,
-            ) = routing_model_results.generate_result_structures(self, solver)
+            x_res, costs, route_lens, overlap_amounts, overlap_links = routing_model_results.generate_result_structures(self, solver)
 
             for f in self.tc.F.values():
                 mt = route(f)
                 mt.init_from_x_res_vector(x_res[f.id], self.tc.L_from_nodes)
                 self.tc.add_to_datastructures(mt)
+
+                r_info = route_info(mt, costs[f.id], route_lens[f.id], overlap_amounts[f.id], overlap_links[f.id])
+                self.tc.add_to_datastructures(r_info)
         else:
             raise ValueError(
                 "CPSolver in RoutingModel returned invalid status for routing model: "

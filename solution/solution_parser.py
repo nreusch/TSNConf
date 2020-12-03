@@ -12,7 +12,7 @@ from input.model.stream import EStreamType
 from input.model.task import key_verification_task
 from input.testcase import ETaskType
 from solution.solution import Solution
-from utils.utilities import flatten
+from utils.utilities import flatten, set_to_string
 
 
 def get_testcase_application_graphs(solution: Solution) -> Dict[str, str]:
@@ -440,6 +440,35 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Creating Variables - Simulated Annealing (ms)",
             "Optimizing - Simulated Annealing (ms)",
             "Serializing Solution (ms)",
+        ],
+    )
+
+def get_solution_routing_info_dataframe(solution: Solution) -> pd.DataFrame:
+    """
+    Returns a dataframe with route information: columns=["Stream ID","Cost","Route Length","Overlap Amount","Overlap Links"]
+    """
+    columns = []
+
+    for r_info in solution.tc.R_info.values():
+        row = []
+
+        row.append(r_info.route.stream.id)
+        row.append(r_info.cost)
+        row.append(r_info.route_len)
+
+        row.append(r_info.overlap_number)
+        row.append(set_to_string(r_info.overlap_links))
+
+        columns.append(row)
+
+    return pd.DataFrame(
+        columns,
+        columns=[
+            "Stream ID",
+            "Cost",
+            "Route Length",
+            "Overlap Amount",
+            "Overlap Links"
         ],
     )
 

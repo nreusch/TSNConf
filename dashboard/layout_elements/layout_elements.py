@@ -135,10 +135,7 @@ def stream_checklist(tc_F: Dict) -> dcc.Checklist:
             {"label": f_id, "value": f_id}
             for f_id in tc_F.keys()
         ],
-        value=[
-            f_id
-            for f_id in tc_F.keys()
-        ],
+        value=[],
         labelStyle={"font-size": "32px"},
         inputStyle={"width": "2em", "height": "2em"},
         className="checkmark",

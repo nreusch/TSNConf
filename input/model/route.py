@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
+from dataclasses import dataclass
 from typing import Dict, List, Tuple, Set
-
 
 class route:
     def __init__(self, f):
@@ -138,3 +138,13 @@ class route:
             x_res_vec[dest_id] = src_id
         r.init_from_x_res_vector(x_res_vec, tc_L_from_nodes)
         return r
+
+
+@dataclass
+class route_info:
+    def __init__(self, r: route, cost: float, route_len: int, overlap_number: int, overlap_links: set):
+        self.route = r
+        self.cost = cost
+        self.route_len = route_len
+        self.overlap_number = overlap_number
+        self.overlap_links = overlap_links

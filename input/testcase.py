@@ -4,7 +4,7 @@ from input.model.application import (EApplicationType, application)
 from input.model.function_path import function_path
 from input.model.link import link
 from input.model.nodes import end_system, node, switch
-from input.model.route import route
+from input.model.route import route, route_info
 from input.model.schedule import schedule
 from input.model.signal import ESignalType, signal
 from input.model.stream import EStreamType, stream
@@ -48,6 +48,7 @@ class Testcase:
         ] = {}  # task.id => (groupid => List[stream + redundant copies])
 
         self.R: Dict[str, route] = {}  # All routes. stream.id => route
+        self.R_info: Dict[str, route_info] = {}  # All routes. stream.id => route_info
 
         self.N: Dict[str, node] = {}  # All nodes. node.id => nodes
         self.N_conn: Dict[
@@ -141,6 +142,8 @@ class Testcase:
                 self.F_sec[x.id] = x
         elif isinstance(x, route):
             self.R[x.stream.id] = x
+        elif isinstance(x, route_info):
+            self.R_info[x.route.stream.id] = x
         elif isinstance(x, schedule):
             self.schedule = x
         elif isinstance(x, node):

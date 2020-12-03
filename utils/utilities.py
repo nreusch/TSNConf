@@ -73,6 +73,8 @@ def print_model_stats(model_stats_string: str):
     # print("Variables: {}; Constraints:\n {}".format(nr_vars, "\n".join(model_stats_string.split("\n")[6:])))
     # print("Variables: {}".format(nr_vars))
 
+def set_to_string(s: set):
+    return ", ".join([str(x) for x in s])
 
 class Timer:
     elapsed_time = 0

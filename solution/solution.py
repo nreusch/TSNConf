@@ -26,7 +26,12 @@ class Solution:
         self.bandwidth_used_percentage_total: int = -1
         self.cpu_used_percentage_total: int = -1
 
+        self.total_cost_routing: float = -1
         # Populate variables
+        if self.is_feasible_routing():
+            self.total_cost_routing = 0
+            for r_info in self.tc.R_info.values():
+                self.total_cost_routing += r_info.cost
         if self.is_feasible_scheduling():
             for dct in self.tc.schedule.laxities_val.values():
                 for v in dct.values():

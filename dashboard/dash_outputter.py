@@ -153,8 +153,11 @@ def run(solution: Solution):
         solution_routing = solution_parser.get_solution_routing_cytoscape(
             solution
         )
+        solution_routing_info_table = table("table_solution_routing_info", solution_parser.get_solution_routing_info_dataframe(solution))
+        routing_total_cost = solution.total_cost_routing
     else:
         solution_routing = html.P("No feasible route found")
+        solution_routing_info_table = html.P("No feasible route found")
 
     # ------- Schedule
     if solution.is_feasible_all():
@@ -265,10 +268,15 @@ def run(solution: Solution):
                                         [
                                             column(
                                                 [
-                                                    html.H5("Layout:"),
-                                                    cytoscape_layout_dropdown(),
-                                                    html.H5("Streams:"),
-                                                    stream_checklist(solution.tc.F),
+                                                    row(
+                                                        [
+                                                            html.H5("Layout:"),
+                                                            cytoscape_layout_dropdown(),
+                                                            html.H5("Streams:"),
+                                                            stream_checklist(solution.tc.F),
+                                                        ]
+                                                    )
+
                                                 ],
                                                 size="one-third"
                                             ),
@@ -276,12 +284,16 @@ def run(solution: Solution):
                                                 [
                                                     row(
                                                         [
-                                                            solution_routing
+                                                            html.H5("Cytoscape:"),
+                                                            solution_routing,
+                                                            html.H5("Routing Information:"),
+                                                            html.H6(f"Total Cost: {routing_total_cost}"),
+                                                            solution_routing_info_table
                                                         ]
                                                     )
                                                 ],
                                                 size="two-thirds"
-                                            ),
+                                            )
                                         ]
                                     ),
                                 ]
