@@ -4,7 +4,7 @@ from ortools.sat.python import cp_model
 from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          OPTIMAL, UNKNOWN, CpModel, CpSolver,
                                          IntVar)
-from routing import routing_model_variables, routing_model_results, routing_model_goals, routing_model_constraints
+from optimization.cp.models.routing import routing_model_variables, routing_model_results, routing_model_goals, routing_model_constraints
 
 from input.model.route import route, route_info
 from input.testcase import Testcase

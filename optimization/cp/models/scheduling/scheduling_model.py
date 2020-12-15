@@ -5,7 +5,7 @@ from ortools.sat.python import cp_model
 from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          OPTIMAL, UNKNOWN, CpModel, CpSolver,
                                          IntVar)
-from scheduling import (scheduling_model_constraints, scheduling_model_goals,
+from optimization.cp.models.scheduling import (scheduling_model_constraints, scheduling_model_goals,
                         scheduling_model_variables)
 
 from input.model.schedule import schedule
