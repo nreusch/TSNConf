@@ -5,8 +5,11 @@ from ortools.sat.python import cp_model
 from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          OPTIMAL, UNKNOWN, CpModel, CpSolver,
                                          IntVar)
-from optimization.models.scheduling import (scheduling_model_constraints, scheduling_model_goals,
-                        scheduling_model_variables)
+
+from input import testcase
+from input.model.route import route
+from optimization.cp.models.scheduling import (scheduling_model_constraints, scheduling_model_variables)
+from optimization.cp.models.scheduling import scheduling_model_goals
 
 from input.model.schedule import schedule
 from input.testcase import Testcase
@@ -16,7 +19,7 @@ from solution.solution_timing_data import TimingData
 from utils.utilities import Timer, print_model_stats, report_exception
 
 
-class SchedulingModel:
+class CPSchedulingSolver:
     def __init__(
         self,
         tc: Testcase,
@@ -24,21 +27,21 @@ class SchedulingModel:
         input_params: InputParameters,
         do_simple_scheduling: bool = False,
     ):
-        self.tc = tc
+        self.tc: testcase = tc
         self.Pint = tc.Pint
-        self.mtrees = tc.R  # stream.id -> MulticastTree
+        self.mtrees: Dict[str, route] = tc.R  # stream.id -> Route
 
-        # Create the self.model
+        # Create the CP model
         self.model = CpModel()
 
         # Create variables
         t = Timer()
         with t:
             self._create_variables()
-            scheduling_model_variables.init_variables(self)
+            scheduling_model_variables.init_variables(self, input_params)
         timing_object.time_creating_vars_scheduling = t.elapsed_time
 
-        # Add constraints to self.model
+        # Add constraints to CP model
         t = Timer()
         with t:
             if do_simple_scheduling:
@@ -127,11 +130,11 @@ class SchedulingModel:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            schdl = schedule.from_solver(solver, self)
+            schdl = schedule.from_cp_solver(solver, self)
             self.tc.add_to_datastructures(schdl)
             return self.tc, status
         else:
             report_exception(
-                "CPSolver returned invalid status for scheduling model: " + str(status)
+                "CPSolver returned invalid status for scheduling model_old: " + str(status)
             )
             return self.tc, status

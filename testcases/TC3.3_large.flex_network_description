@@ -1,5 +1,5 @@
 <!-- mtu, overhead, mac_length in Byte. All times in us-->
-<NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
 	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
 	<device name="SW0" type="Switch"/>
 	<device name="SW1" type="Switch"/>
@@ -143,393 +143,328 @@
 	<!-- period&wcet is in us, size in Byte-->
 	<application name="App_free_ES0" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES0_free" node="ES0" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES0_free" node="ES0" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES0_free" node="ES0" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES0_free" node="ES0" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES1" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES1_free" node="ES1" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES1_free" node="ES1" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES1_free" node="ES1" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES1_free" node="ES1" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES2" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES2_free" node="ES2" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES2_free" node="ES2" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES2_free" node="ES2" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES2_free" node="ES2" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES3" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES3_free" node="ES3" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES3_free" node="ES3" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES3_free" node="ES3" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES3_free" node="ES3" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES4" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES4_free" node="ES4" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES4_free" node="ES4" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES4_free" node="ES4" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES4_free" node="ES4" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES5" period="750" type="NORMAL">
 		<tasks>
-			<task name="t0_ES5_free" node="ES5" wcet="140" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES5_free" node="ES5" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES5_free" node="ES5" wcet="140" period="750" type="NORMAL"/>
+			<task name="t1_ES5_free" node="ES5" wcet="140" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES6" period="750" type="NORMAL">
 		<tasks>
-			<task name="t0_ES6_free" node="ES6" wcet="140" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES6_free" node="ES6" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES6_free" node="ES6" wcet="140" period="750" type="NORMAL"/>
+			<task name="t1_ES6_free" node="ES6" wcet="140" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES7" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES7_free" node="ES7" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES7_free" node="ES7" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES7_free" node="ES7" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES7_free" node="ES7" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES8" period="750" type="NORMAL">
 		<tasks>
-			<task name="t0_ES8_free" node="ES8" wcet="140" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES8_free" node="ES8" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES8_free" node="ES8" wcet="140" period="750" type="NORMAL"/>
+			<task name="t1_ES8_free" node="ES8" wcet="140" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES9" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES9_free" node="ES9" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES9_free" node="ES9" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES9_free" node="ES9" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES9_free" node="ES9" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES10" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES10_free" node="ES10" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES10_free" node="ES10" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES10_free" node="ES10" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES10_free" node="ES10" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES11" period="750" type="NORMAL">
 		<tasks>
-			<task name="t0_ES11_free" node="ES11" wcet="140" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES11_free" node="ES11" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES11_free" node="ES11" wcet="140" period="750" type="NORMAL"/>
+			<task name="t1_ES11_free" node="ES11" wcet="140" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES12" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES12_free" node="ES12" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES12_free" node="ES12" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES12_free" node="ES12" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES12_free" node="ES12" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES13" period="750" type="NORMAL">
 		<tasks>
-			<task name="t0_ES13_free" node="ES13" wcet="140" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES13_free" node="ES13" wcet="140" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES13_free" node="ES13" wcet="140" period="750" type="NORMAL"/>
+			<task name="t1_ES13_free" node="ES13" wcet="140" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES14" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES14_free" node="ES14" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES14_free" node="ES14" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES14_free" node="ES14" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES14_free" node="ES14" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_free_ES15" period="500" type="NORMAL">
 		<tasks>
-			<task name="t0_ES15_free" node="ES15" wcet="93" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_ES15_free" node="ES15" wcet="93" secure="False" rl="1" type="NORMAL"/>
+			<task name="t0_ES15_free" node="ES15" wcet="93" period="500" type="NORMAL"/>
+			<task name="t1_ES15_free" node="ES15" wcet="93" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-		</signals>
-		<functionpaths>
-		</functionpaths>
+		<streams>
+		</streams>
 	</application>
 	
 	<application name="App_comm_t2_ES15_comm" period="750" type="NORMAL">
 		<tasks>
-			<task name="t2_ES15_comm" node="ES15" wcet="46" secure="True" rl="2" type="NORMAL"/>
-			<task name="t3_ES3_comm" node="ES3" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES9_comm" node="ES9" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES13_comm" node="ES13" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES10_comm" node="ES10" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES15_comm" node="ES15" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES3_comm" node="ES3" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES9_comm" node="ES9" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES13_comm" node="ES13" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES10_comm" node="ES10" wcet="46" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s_t2_ES15_comm_t3_ES3_comm" src="t2_ES15_comm" dest="t3_ES3_comm" size="450" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t2_ES15_comm_t2_ES9_comm" src="t2_ES15_comm" dest="t2_ES9_comm" size="1125" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t2_ES15_comm_t2_ES13_comm" src="t2_ES15_comm" dest="t2_ES13_comm" size="875" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t2_ES15_comm_t3_ES10_comm" src="t2_ES15_comm" dest="t3_ES10_comm" size="625" group="t2_ES15_comm_1" secure="True" rl="2" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t2_ES15_comm_t3_ES3_comm" deadline="750">
-				<task name="t2_ES15_comm"/>
-				<task name="t3_ES3_comm"/>
-			</path>
-			<path name="path_t2_ES15_comm_t2_ES9_comm" deadline="750">
-				<task name="t2_ES15_comm"/>
-				<task name="t2_ES9_comm"/>
-			</path>
-			<path name="path_t2_ES15_comm_t2_ES13_comm" deadline="750">
-				<task name="t2_ES15_comm"/>
-				<task name="t2_ES13_comm"/>
-			</path>
-			<path name="path_t2_ES15_comm_t3_ES10_comm" deadline="750">
-				<task name="t2_ES15_comm"/>
-				<task name="t3_ES10_comm"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s_t2_ES15_comm_t3_ES3" src="ES15" dest="ES10,ES3,ES13,ES9" sender_task="t2_ES15_comm" receiver_tasks="t2_ES9_comm,t2_ES13_comm,t3_ES10_comm,t3_ES3_comm" size="450" period="750" rl="2" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_comm_t2_ES8_comm" period="750" type="NORMAL">
 		<tasks>
-			<task name="t2_ES8_comm" node="ES8" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES5_comm" node="ES5" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES11_comm" node="ES11" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES4_comm" node="ES4" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES1_comm" node="ES1" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES3_comm" node="ES3" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t2_ES8_comm" node="ES8" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES5_comm" node="ES5" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES11_comm" node="ES11" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES4_comm" node="ES4" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES1_comm" node="ES1" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES3_comm" node="ES3" wcet="46" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s_t2_ES8_comm_t3_ES5_comm" src="t2_ES8_comm" dest="t3_ES5_comm" size="950" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t2_ES8_comm_t2_ES11_comm" src="t2_ES8_comm" dest="t2_ES11_comm" size="1275" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t2_ES8_comm_t2_ES4_comm" src="t2_ES8_comm" dest="t2_ES4_comm" size="1225" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t2_ES8_comm_t2_ES1_comm" src="t2_ES8_comm" dest="t2_ES1_comm" size="1400" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t2_ES8_comm_t2_ES3_comm" src="t2_ES8_comm" dest="t2_ES3_comm" size="900" group="t2_ES8_comm_1" secure="False" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t2_ES8_comm_t3_ES5_comm" deadline="750">
-				<task name="t2_ES8_comm"/>
-				<task name="t3_ES5_comm"/>
-			</path>
-			<path name="path_t2_ES8_comm_t2_ES11_comm" deadline="750">
-				<task name="t2_ES8_comm"/>
-				<task name="t2_ES11_comm"/>
-			</path>
-			<path name="path_t2_ES8_comm_t2_ES4_comm" deadline="750">
-				<task name="t2_ES8_comm"/>
-				<task name="t2_ES4_comm"/>
-			</path>
-			<path name="path_t2_ES8_comm_t2_ES1_comm" deadline="750">
-				<task name="t2_ES8_comm"/>
-				<task name="t2_ES1_comm"/>
-			</path>
-			<path name="path_t2_ES8_comm_t2_ES3_comm" deadline="750">
-				<task name="t2_ES8_comm"/>
-				<task name="t2_ES3_comm"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s_t2_ES8_comm_t3_ES5" src="ES8" dest="ES1,ES4,ES3,ES5,ES11" sender_task="t2_ES8_comm" receiver_tasks="t3_ES5_comm,t2_ES3_comm,t2_ES1_comm,t2_ES11_comm,t2_ES4_comm" size="950" period="750" rl="1" secure="False" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_comm_t3_ES4_comm" period="500" type="NORMAL">
 		<tasks>
-			<task name="t3_ES4_comm" node="ES4" wcet="31" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES11_comm" node="ES11" wcet="31" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES15_comm" node="ES15" wcet="31" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES8_comm" node="ES8" wcet="31" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES6_comm" node="ES6" wcet="31" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES10_comm" node="ES10" wcet="31" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES4_comm" node="ES4" wcet="31" period="500" type="NORMAL"/>
+			<task name="t3_ES11_comm" node="ES11" wcet="31" period="500" type="NORMAL"/>
+			<task name="t3_ES15_comm" node="ES15" wcet="31" period="500" type="NORMAL"/>
+			<task name="t3_ES8_comm" node="ES8" wcet="31" period="500" type="NORMAL"/>
+			<task name="t2_ES6_comm" node="ES6" wcet="31" period="500" type="NORMAL"/>
+			<task name="t2_ES10_comm" node="ES10" wcet="31" period="500" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s_t3_ES4_comm_t3_ES11_comm" src="t3_ES4_comm" dest="t3_ES11_comm" size="450" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t3_ES4_comm_t3_ES15_comm" src="t3_ES4_comm" dest="t3_ES15_comm" size="925" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t3_ES4_comm_t3_ES8_comm" src="t3_ES4_comm" dest="t3_ES8_comm" size="975" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t3_ES4_comm_t2_ES6_comm" src="t3_ES4_comm" dest="t2_ES6_comm" size="1475" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
-			<signal name="s_t3_ES4_comm_t2_ES10_comm" src="t3_ES4_comm" dest="t2_ES10_comm" size="125" group="t3_ES4_comm_1" secure="False" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t3_ES4_comm_t3_ES11_comm" deadline="500">
-				<task name="t3_ES4_comm"/>
-				<task name="t3_ES11_comm"/>
-			</path>
-			<path name="path_t3_ES4_comm_t3_ES15_comm" deadline="500">
-				<task name="t3_ES4_comm"/>
-				<task name="t3_ES15_comm"/>
-			</path>
-			<path name="path_t3_ES4_comm_t3_ES8_comm" deadline="500">
-				<task name="t3_ES4_comm"/>
-				<task name="t3_ES8_comm"/>
-			</path>
-			<path name="path_t3_ES4_comm_t2_ES6_comm" deadline="500">
-				<task name="t3_ES4_comm"/>
-				<task name="t2_ES6_comm"/>
-			</path>
-			<path name="path_t3_ES4_comm_t2_ES10_comm" deadline="500">
-				<task name="t3_ES4_comm"/>
-				<task name="t2_ES10_comm"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s_t3_ES4_comm_t3_ES11" src="ES4" dest="ES11,ES10,ES6,ES8,ES15" sender_task="t3_ES4_comm" receiver_tasks="t2_ES6_comm,t3_ES15_comm,t3_ES11_comm,t2_ES10_comm,t3_ES8_comm" size="450" period="500" rl="1" secure="False" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_comm_t3_ES12_comm" period="750" type="NORMAL">
 		<tasks>
-			<task name="t3_ES12_comm" node="ES12" wcet="46" secure="True" rl="2" type="NORMAL"/>
-			<task name="t2_ES5_comm" node="ES5" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES14_comm" node="ES14" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES9_comm" node="ES9" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES2_comm" node="ES2" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES0_comm" node="ES0" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES0_comm" node="ES0" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES2_comm" node="ES2" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES12_comm" node="ES12" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES12_comm" node="ES12" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES5_comm" node="ES5" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES14_comm" node="ES14" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES9_comm" node="ES9" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES2_comm" node="ES2" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES0_comm" node="ES0" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES0_comm" node="ES0" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES2_comm" node="ES2" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES12_comm" node="ES12" wcet="46" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s_t3_ES12_comm_t2_ES5_comm" src="t3_ES12_comm" dest="t2_ES5_comm" size="1475" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t3_ES14_comm" src="t3_ES12_comm" dest="t3_ES14_comm" size="750" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t3_ES9_comm" src="t3_ES12_comm" dest="t3_ES9_comm" size="1350" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t3_ES2_comm" src="t3_ES12_comm" dest="t3_ES2_comm" size="625" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t3_ES0_comm" src="t3_ES12_comm" dest="t3_ES0_comm" size="25" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t2_ES0_comm" src="t3_ES12_comm" dest="t2_ES0_comm" size="1300" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t2_ES2_comm" src="t3_ES12_comm" dest="t2_ES2_comm" size="800" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES12_comm_t2_ES12_comm" src="t3_ES12_comm" dest="t2_ES12_comm" size="1175" group="t3_ES12_comm_1" secure="True" rl="2" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t3_ES12_comm_t2_ES5_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t2_ES5_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t3_ES14_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t3_ES14_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t3_ES9_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t3_ES9_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t3_ES2_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t3_ES2_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t3_ES0_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t3_ES0_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t2_ES0_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t2_ES0_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t2_ES2_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t2_ES2_comm"/>
-			</path>
-			<path name="path_t3_ES12_comm_t2_ES12_comm" deadline="750">
-				<task name="t3_ES12_comm"/>
-				<task name="t2_ES12_comm"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s_t3_ES12_comm_t2_ES5" src="ES12" dest="ES2,ES0,ES14,ES9,ES5,ES12" sender_task="t3_ES12_comm" receiver_tasks="t2_ES2_comm,t3_ES14_comm,t2_ES5_comm,t3_ES0_comm,t3_ES9_comm,t2_ES12_comm,t2_ES0_comm,t3_ES2_comm" size="1475" period="750" rl="2" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_comm_t3_ES13_comm" period="750" type="NORMAL">
 		<tasks>
-			<task name="t3_ES13_comm" node="ES13" wcet="46" secure="True" rl="2" type="NORMAL"/>
-			<task name="t3_ES6_comm" node="ES6" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES1_comm" node="ES1" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES14_comm" node="ES14" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_ES7_comm" node="ES7" wcet="46" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ES7_comm" node="ES7" wcet="46" secure="False" rl="1" type="NORMAL"/>
+			<task name="t3_ES13_comm" node="ES13" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES6_comm" node="ES6" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES1_comm" node="ES1" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES14_comm" node="ES14" wcet="46" period="750" type="NORMAL"/>
+			<task name="t3_ES7_comm" node="ES7" wcet="46" period="750" type="NORMAL"/>
+			<task name="t2_ES7_comm" node="ES7" wcet="46" period="750" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s_t3_ES13_comm_t3_ES6_comm" src="t3_ES13_comm" dest="t3_ES6_comm" size="1025" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES13_comm_t3_ES1_comm" src="t3_ES13_comm" dest="t3_ES1_comm" size="175" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES13_comm_t2_ES14_comm" src="t3_ES13_comm" dest="t2_ES14_comm" size="1275" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES13_comm_t3_ES7_comm" src="t3_ES13_comm" dest="t3_ES7_comm" size="425" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
-			<signal name="s_t3_ES13_comm_t2_ES7_comm" src="t3_ES13_comm" dest="t2_ES7_comm" size="375" group="t3_ES13_comm_1" secure="True" rl="2" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t3_ES13_comm_t3_ES6_comm" deadline="750">
-				<task name="t3_ES13_comm"/>
-				<task name="t3_ES6_comm"/>
-			</path>
-			<path name="path_t3_ES13_comm_t3_ES1_comm" deadline="750">
-				<task name="t3_ES13_comm"/>
-				<task name="t3_ES1_comm"/>
-			</path>
-			<path name="path_t3_ES13_comm_t2_ES14_comm" deadline="750">
-				<task name="t3_ES13_comm"/>
-				<task name="t2_ES14_comm"/>
-			</path>
-			<path name="path_t3_ES13_comm_t3_ES7_comm" deadline="750">
-				<task name="t3_ES13_comm"/>
-				<task name="t3_ES7_comm"/>
-			</path>
-			<path name="path_t3_ES13_comm_t2_ES7_comm" deadline="750">
-				<task name="t3_ES13_comm"/>
-				<task name="t2_ES7_comm"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s_t3_ES13_comm_t3_ES6" src="ES13" dest="ES1,ES6,ES14,ES7" sender_task="t3_ES13_comm" receiver_tasks="t3_ES1_comm,t3_ES6_comm,t3_ES7_comm,t2_ES14_comm,t2_ES7_comm" size="1025" period="750" rl="2" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 
-
+	<path name="path_t2_ES15_comm_t3_ES3_comm" deadline="750">
+		<task name="t2_ES15_comm"/>
+		<task name="t3_ES3_comm"/>
+	</path>
+	<path name="path_t2_ES15_comm_t2_ES9_comm" deadline="750">
+		<task name="t2_ES15_comm"/>
+		<task name="t2_ES9_comm"/>
+	</path>
+	<path name="path_t2_ES15_comm_t2_ES13_comm" deadline="750">
+		<task name="t2_ES15_comm"/>
+		<task name="t2_ES13_comm"/>
+	</path>
+	<path name="path_t2_ES15_comm_t3_ES10_comm" deadline="750">
+		<task name="t2_ES15_comm"/>
+		<task name="t3_ES10_comm"/>
+	</path>
+	<path name="path_t2_ES8_comm_t3_ES5_comm" deadline="750">
+		<task name="t2_ES8_comm"/>
+		<task name="t3_ES5_comm"/>
+	</path>
+	<path name="path_t2_ES8_comm_t2_ES11_comm" deadline="750">
+		<task name="t2_ES8_comm"/>
+		<task name="t2_ES11_comm"/>
+	</path>
+	<path name="path_t2_ES8_comm_t2_ES4_comm" deadline="750">
+		<task name="t2_ES8_comm"/>
+		<task name="t2_ES4_comm"/>
+	</path>
+	<path name="path_t2_ES8_comm_t2_ES1_comm" deadline="750">
+		<task name="t2_ES8_comm"/>
+		<task name="t2_ES1_comm"/>
+	</path>
+	<path name="path_t2_ES8_comm_t2_ES3_comm" deadline="750">
+		<task name="t2_ES8_comm"/>
+		<task name="t2_ES3_comm"/>
+	</path>
+	<path name="path_t3_ES4_comm_t3_ES11_comm" deadline="500">
+		<task name="t3_ES4_comm"/>
+		<task name="t3_ES11_comm"/>
+	</path>
+	<path name="path_t3_ES4_comm_t3_ES15_comm" deadline="500">
+		<task name="t3_ES4_comm"/>
+		<task name="t3_ES15_comm"/>
+	</path>
+	<path name="path_t3_ES4_comm_t3_ES8_comm" deadline="500">
+		<task name="t3_ES4_comm"/>
+		<task name="t3_ES8_comm"/>
+	</path>
+	<path name="path_t3_ES4_comm_t2_ES6_comm" deadline="500">
+		<task name="t3_ES4_comm"/>
+		<task name="t2_ES6_comm"/>
+	</path>
+	<path name="path_t3_ES4_comm_t2_ES10_comm" deadline="500">
+		<task name="t3_ES4_comm"/>
+		<task name="t2_ES10_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t2_ES5_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t2_ES5_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t3_ES14_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t3_ES14_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t3_ES9_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t3_ES9_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t3_ES2_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t3_ES2_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t3_ES0_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t3_ES0_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t2_ES0_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t2_ES0_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t2_ES2_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t2_ES2_comm"/>
+	</path>
+	<path name="path_t3_ES12_comm_t2_ES12_comm" deadline="750">
+		<task name="t3_ES12_comm"/>
+		<task name="t2_ES12_comm"/>
+	</path>
+	<path name="path_t3_ES13_comm_t3_ES6_comm" deadline="750">
+		<task name="t3_ES13_comm"/>
+		<task name="t3_ES6_comm"/>
+	</path>
+	<path name="path_t3_ES13_comm_t3_ES1_comm" deadline="750">
+		<task name="t3_ES13_comm"/>
+		<task name="t3_ES1_comm"/>
+	</path>
+	<path name="path_t3_ES13_comm_t2_ES14_comm" deadline="750">
+		<task name="t3_ES13_comm"/>
+		<task name="t2_ES14_comm"/>
+	</path>
+	<path name="path_t3_ES13_comm_t3_ES7_comm" deadline="750">
+		<task name="t3_ES13_comm"/>
+		<task name="t3_ES7_comm"/>
+	</path>
+	<path name="path_t3_ES13_comm_t2_ES7_comm" deadline="750">
+		<task name="t3_ES13_comm"/>
+		<task name="t2_ES7_comm"/>
+	</path>
 
 </NetworkDescription>

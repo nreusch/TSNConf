@@ -1,5 +1,4 @@
 import itertools
-import math
 
 from input.model.link import link
 from input.model.nodes import end_system, switch
@@ -11,37 +10,34 @@ from utils.utilities import lcm
 def add_constraints(model):
     # Streams
     # For each stream
-    for f in model.tc.F.values():
+    for f in model.tc.F_routed.values():
         # For each link and node
-        for l_or_es_id in model.mtrees[f.id].get_all_es_and_links():
-            l_or_es = helper_link_or_node_from_id(model, l_or_es_id)
-            assert l_or_es != None
-
-            constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es_id)
+        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc.N, model.tc.L_from_nodes):
+            constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es.id)
 
             if isinstance(l_or_es, link):
                 constrain_stream_exec_time_based_on_link_speed(
-                    model, f, l_or_es, l_or_es_id
+                    model, f, l_or_es, l_or_es.id
                 )
-                constrain_stream_MAC_key_release_interval(model, f, l_or_es_id)
+                constrain_stream_MAC_key_release_interval(model, f, l_or_es)
             elif isinstance(l_or_es, end_system) and f.type != EStreamType.KEY:
                 # Key streams are not executed on ES
-                constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es_id)
+                constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es.id)
 
-                if l_or_es_id in f.receiver_es_ids:
-                    constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es_id)
+                if l_or_es.id in f.receiver_es_ids:
+                    constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es.id)
 
             constrain_stream_instance_dependency_between_links_on_route(
-                model, f, l_or_es_id
+                model, f, l_or_es
             )
 
             # For each other stream, for which link or ES is on route
-            for f2 in model.tc.F.values():
+            for f2 in model.tc.F_routed.values():
                 if f.id != f2.id:
-                    if model.mtrees[f2.id].is_in_tree(l_or_es_id):
-                        constraint_streams_do_not_overlap(model, f, f2, l_or_es_id)
+                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc.N, model.tc.L):
+                        constraint_streams_do_not_overlap(model, f, f2, l_or_es.id)
                         constrain_stream_tsn_frame_isolation(
-                            model, f, f2, l_or_es, l_or_es_id
+                            model, f, f2, l_or_es, l_or_es.id
                         )
 
     # Tasks
@@ -63,37 +59,35 @@ def add_constraints(model):
 def add_simple_constraints(model):
     # Streams
     # For each stream
-    for f in model.tc.F.values():
+    for f in model.tc.F_routed.values():
         # For each link and node
-        for l_or_es_id in model.mtrees[f.id].get_all_es_and_links():
-            l_or_es = helper_link_or_node_from_id(model, l_or_es_id)
-            assert l_or_es != None
+        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc.N, model.tc.L_from_nodes):
 
-            constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es_id)
+            constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es.id)
 
             if isinstance(l_or_es, link):
                 constrain_stream_exec_time_based_on_link_speed(
-                    model, f, l_or_es, l_or_es_id
+                    model, f, l_or_es, l_or_es.id
                 )
-                constrain_stream_MAC_key_release_interval(model, f, l_or_es_id)
+                constrain_stream_MAC_key_release_interval(model, f, l_or_es)
             elif isinstance(l_or_es, end_system) and f.type != EStreamType.KEY:
                 # Key streams are not executed on ES
-                constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es_id)
+                constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es.id)
 
-                if l_or_es_id in f.receiver_es_ids:
-                    constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es_id)
+                if l_or_es.id in f.receiver_es_ids:
+                    constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es.id)
 
             constrain_stream_instance_dependency_between_links_on_route(
-                model, f, l_or_es_id
+                model, f, l_or_es
             )
 
             # For each other stream, for which link or ES is on route
-            for f2 in model.tc.F.values():
+            for f2 in model.tc.F_routed.values():
                 if f.id != f2.id:
-                    if model.mtrees[f2.id].is_in_tree(l_or_es_id):
-                        constraint_streams_do_not_overlap(model, f, f2, l_or_es_id)
+                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc.N, model.tc.L):
+                        constraint_streams_do_not_overlap(model, f, f2, l_or_es.id)
                         constrain_stream_tsn_frame_isolation(
-                            model, f, f2, l_or_es, l_or_es_id
+                            model, f, f2, l_or_es, l_or_es.id
                         )
 
     # Tasks
@@ -120,17 +114,18 @@ def constrain_stream_tsn_frame_isolation(model, f, f2, l_or_n, l_or_n_id):
     if isinstance(l_or_n, link):
         if isinstance(l_or_n.src, switch):
             if f2.id != f.id:
-                for l_prev_id in model.mtrees[f.id].get_predeccessor_links(l_or_n_id):
-                    for l_prev2_id in model.mtrees[f2.id].get_predeccessor_links(
-                        l_or_n_id
+                for l_prev in model.mtrees[f.id].get_predeccessor_links(l_or_n_id, model.tc.N, model.tc.L, model.tc.L_from_nodes):
+                    for l_prev2 in model.mtrees[f2.id].get_predeccessor_links(
+                        l_or_n_id, model.tc.N, model.tc.L, model.tc.L_from_nodes
                     ):
-                        if l_prev_id != l_prev2_id:
+
+                        if l_prev.id != l_prev2.id:
                             o_m_g = model.o_f[l_or_n_id][f.id]
-                            o_m_g_prev = model.o_f[l_prev_id][f.id]
+                            o_m_g_prev = model.o_f[l_prev.id][f.id]
                             P_m = f.period
 
                             o_m2_g = model.o_f[l_or_n_id][f2.id]
-                            o_m2_g_prev2 = model.o_f[l_prev2_id][f2.id]
+                            o_m2_g_prev2 = model.o_f[l_prev2.id][f2.id]
                             P_m2 = f2.period
 
                             rg_a = range(int(lcm([P_m, P_m2]) / P_m))
@@ -172,8 +167,8 @@ def constrain_task_does_not_overlap_with_stream_MAC_operations(model, t):
     for f in itertools.chain(
         model.tc.F_g_in[t.src_es_id], model.tc.F_g_out[t.src_es_id]
     ):
-        P_f_m = model.tc.F[f.id].period
-        P_t_i = model.tc.T[t.id].app_period
+        P_f_m = model.tc.F_routed[f.id].period
+        P_t_i = model.tc.T[t.id].period
 
         rg_a = range(int(lcm([P_t_i, P_f_m]) / P_t_i))
         rg_b = range(int(lcm([P_t_i, P_f_m]) / P_f_m))
@@ -204,29 +199,32 @@ def constrain_task_does_not_overlap_with_stream_MAC_operations(model, t):
 def constrain_task_incoming_stream_dependency(model, t):
     # Constraint 3.2: incoming dependency between stream and task
     for f in model.tc.F_t_in[t.id]:
-        model.model.Add(model.a_f[t.src_es_id][f.id] <= model.o_t[t.id])
+        if f.id in model.tc.F_routed.keys():
+            model.model.Add(model.a_f[t.src_es_id][f.id] <= model.o_t[t.id])
 
 
 def constrain_task_outgoing_stream_dependency(model, t):
     # Constraint 3.1: outgoing dependency between task and stream
     for f in model.tc.F_t_out[t.id]:
-        model.model.Add(model.a_t[t.id] <= model.o_f[t.src_es_id][f.id])
+        if f.id in model.tc.F_routed.keys():
+            model.model.Add(model.a_t[t.id] <= model.o_f[t.src_es_id][f.id])
 
 
 def constrain_task_task_dependency(model, t):
     # Constraint 3.2 dependency between tasks, modeled by signals
-    for group_id in t.groups:
-        for s in model.tc.S_group[group_id]:
-            assert t.id == s.src_task_id
-            model.model.Add(model.a_t[t.id] <= model.o_t[s.dest_task_id])
+    # This is the only place where also non-routed/scheduled streams are taken into account
+    for f in model.tc.F_t_out[t.id]:
+        assert t.id == f.sender_task_id
+        for rec_task_id in f.receiver_task_ids:
+            model.model.Add(model.a_t[t.id] <= model.o_t[rec_task_id])
 
 
 def constrain_task_do_not_overlap(model, t):
     # Constraint 2: tasks do not overlap with other tasks
     for t2 in model.tc.T_g[t.src_es_id]:
         if t.id != t2.id:
-            P_i = t.app_period
-            P_i2 = t2.app_period
+            P_i = t.period
+            P_i2 = t2.period
 
             rg_a = range(int(lcm([P_i, P_i2]) / P_i))
             rg_b = range(int(lcm([P_i, P_i2]) / P_i2))
@@ -234,17 +232,20 @@ def constrain_task_do_not_overlap(model, t):
             a_i = model.a_t[t.id]
             a_i2 = model.a_t[t2.id]
 
+            o_i = model.o_t[t.id]
+            o_i2 = model.o_t[t2.id]
+
             for alph in rg_a:
                 for beta in rg_b:
                     bl = model.model.NewBoolVar(
                         "bl_{}_{}_{}_{}".format(t.id, alph, t2.id, beta)
                     )
                     model.model.Add(
-                        alph * P_i + a_i <= beta * P_i2 + a_i2
+                        alph * P_i + a_i <= beta * P_i2 + o_i2
                     ).OnlyEnforceIf(bl)
 
                     model.model.Add(
-                        beta * P_i2 + a_i2 <= alph * P_i + a_i
+                        beta * P_i2 + a_i2 <= alph * P_i + o_i
                     ).OnlyEnforceIf(bl.Not())
 
 
@@ -273,8 +274,8 @@ def constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_n_id):
 def constraint_streams_do_not_overlap(model, f, f2, l_or_n_id):
     # Constraint 5: streams do not overlap on link or node (23,24)
     if f.id != f2.id:
-        P_f_m = model.tc.F[f.id].period
-        P_f_m2 = model.tc.F[f2.id].period
+        P_f_m = model.tc.F_routed[f.id].period
+        P_f_m2 = model.tc.F_routed[f2.id].period
 
         rg_a = range(int(lcm([P_f_m, P_f_m2]) / P_f_m))
         rg_b = range(int(lcm([P_f_m, P_f_m2]) / P_f_m2))
@@ -299,12 +300,21 @@ def constraint_streams_do_not_overlap(model, f, f2, l_or_n_id):
                 ).OnlyEnforceIf(bl.Not())
 
 
-def constrain_stream_instance_dependency_between_links_on_route(model, f, l_or_n_id):
+def constrain_stream_instance_dependency_between_links_on_route(model, f, l_or_n):
     # Constraint 4: a_f_l1 < o_f_l2 if l2 is after l1 on route (22)
-    successor_links = model.mtrees[f.id].get_successor_links(l_or_n_id)
-    for l2_id in successor_links:
-        model.model.Add(model.a_f[l_or_n_id][f.id] <= model.o_f[l2_id][f.id])
+    successors = []
+    if isinstance(l_or_n, end_system):
+        if l_or_n.id == f.sender_es_id:
+            successors = model.mtrees[f.id].get_successor_links(l_or_n.id, model.tc.N, model.tc.L, model.tc.L_from_nodes)
+    elif isinstance(l_or_n, link):
+        successors = model.mtrees[f.id].get_successor_links(l_or_n.id, model.tc.N, model.tc.L, model.tc.L_from_nodes)
 
+        if len(successors) == 0:
+            # Last link on route: successor = receiver ES
+            successors = [l_or_n.dest]
+
+    for l_or_es in successors:
+        model.model.Add(model.a_f[l_or_n.id][f.id] <= model.o_f[l_or_es.id][f.id])
 
 def constrain_stream_MAC_verify_after_key_verify(model, f, l_or_n_id):
     # Constraint 6: stream MAC verification starts after key verification
@@ -323,32 +333,36 @@ def constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_n_id):
         model.model.Add(
             model.c_f[l_or_n_id][f.id] == model.tc.ES[l_or_n_id].mac_exec_time
         )
-
-
-def constrain_stream_MAC_key_release_interval(model, f, l_or_n_id):
-    # Constraint 7: MAC release interval is after the interval where the steam is transmitted to the receiver ES (38)
-    if (
-        next(iter(model.mtrees[f.id].get_successor_links(l_or_n_id)))
-        in f.receiver_es_ids
-        and f.is_secure
-    ):
-        a_m_g = model.a_f[l_or_n_id][f.id]
-        div = model.model.NewIntVar(
-            0,
-            int(model.tc.hyperperiod / model.Pint),
-            "div_{}_{}".format(f.id, l_or_n_id),
+    else:
+        model.model.Add(
+            model.c_f[l_or_n_id][f.id] == 0
         )
-        model.model.AddDivisionEquality(div, a_m_g, model.Pint)
 
-        model.model.Add(div < model.phi_f[f.id])
+
+def constrain_stream_MAC_key_release_interval(model, f, l_or_n):
+    # Constraint 7: MAC release interval is after the interval where the steam is transmitted to the receiver ES (38)
+    # TODO: double check that this is working
+    if isinstance(l_or_n, link):
+        if (
+            l_or_n.dest.id
+            in f.receiver_es_ids
+            and f.is_secure
+        ):
+            if model.mtrees[f.id].is_link_in_tree(l_or_n.src.id, l_or_n.dest.id):
+                a_m_g = model.a_f[l_or_n.id][f.id]
+                div = model.model.NewIntVar(
+                    0,
+                    int(model.tc.hyperperiod / model.Pint),
+                    "div_{}_{}".format(f.id, l_or_n.id),
+                )
+                model.model.AddDivisionEquality(div, a_m_g, model.Pint)
+
+                model.model.Add(div < model.phi_f[f.id])
 
 
 def constrain_stream_exec_time_based_on_link_speed(model, f, l_or_n, l_or_n_id):
     # Constraint 2: c_f = f.size/l.speed (18,19)
-    f_size_times_1000 = f.size * 1000
-    l_speed_times_1000 = int(l_or_n.speed * 1000)
-
-    div = math.ceil(f_size_times_1000 / l_speed_times_1000)
+    div = l_or_n.transmission_length(f.size)
     model.model.Add(model.c_f[l_or_n_id][f.id] == div)
 
 

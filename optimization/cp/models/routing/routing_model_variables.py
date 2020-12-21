@@ -43,7 +43,7 @@ def init_optimization_variables(model):
 
     # x,y, ...
     for f_int in range(model.max_stream_int):
-        f = model.tc.F[model._IntToStreamIDMap[f_int]]
+        f = model.tc.F_routed[model._IntToStreamIDMap[f_int]]
         model.x.append([])
         model.y.append([])
         model.x_v_has_successor.append([])
@@ -115,7 +115,7 @@ def init_optimization_variables(model):
 
 def init_helper_variables(model):
     int_id = 0
-    for f_id in model.tc.F.keys():
+    for f_id in model.tc.F_routed.keys():
         model._StreamIDToIntMap[f_id] = int_id
         model._IntToStreamIDMap[int_id] = f_id
         int_id += 1

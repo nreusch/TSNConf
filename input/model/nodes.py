@@ -32,7 +32,11 @@ class end_system(node):
 
     @classmethod
     def from_xml_node(cls, n: ET.Element):
-        return cls(n.attrib["name"], int(n.attrib["mac_exec_time"]))
+        if "mac_exec_time" in n.attrib:
+            met = int(n.attrib["mac_exec_time"])
+        else:
+            met = 10
+        return cls(n.attrib["name"], met)
 
 
 @dataclass(frozen=True)

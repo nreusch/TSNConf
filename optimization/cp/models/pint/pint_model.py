@@ -10,11 +10,11 @@ from solution.solution_timing_data import TimingData
 from utils.utilities import Timer, list_gcd, print_model_stats
 
 
-class PintModel:
+class CPPintSolver:
     def __init__(self, tc: Testcase, timing_object: TimingData):
         self.tc = tc
 
-        # Create the model
+        # Create the model_old
         self.model = CpModel()
 
         # Create variables
@@ -23,7 +23,7 @@ class PintModel:
             self._create_variables()
         timing_object.time_creating_vars_pint = t.elapsed_time
 
-        # Add constraints to model
+        # Add constraints to model_old
         t = Timer()
         with t:
             self._add_constraints()
@@ -36,20 +36,18 @@ class PintModel:
         self.Pint_var = self.model.NewIntVar(0, self.tc.hyperperiod, "Pint")
 
     def _add_constraints(self):
-        app_period_list = []
+        period_set = set()
+        for t in self.tc.T.values():
+            period_set.add(t.period)
+        period_list = list(period_set)
 
-        for app in self.tc.A_app.values():
-            # Constraint 1: Pint * fp.C <= fp.D
-            for fp in app.function_paths.values():
-                self.model.Add(self.Pint_var * fp.signal_level <= fp.deadline)
+        # Constraint 1: Pint * fp.C <= fp.D for each fp
+        for fp in self.tc.FP.values():
+            self.model.Add(self.Pint_var * fp.signal_level <= fp.deadline)
 
-            # Constraint 2: Pint <= app.T
-            self.model.Add(self.Pint_var <= app.period)
-
-            app_period_list.append(app.period)
 
         # Constraint 3: Pint mod gcd(all app periods) = 0 OR Pint * n = gcd(all app periods)
-        gcd = list_gcd(app_period_list)
+        gcd = list_gcd(period_list)
         PintIsMultiple = self.model.NewBoolVar("PintIsMultiple")
         PintIsFactor = self.model.NewBoolVar("PintIsFactor")
 
@@ -68,7 +66,7 @@ class PintModel:
         self.model.Maximize(self.Pint_var)
 
     def optimize(
-        self, tc: Testcase, input_params: InputParameters, timing_object: TimingData
+        self, input_params: InputParameters, timing_object: TimingData
     ) -> Tuple[Testcase, EOptimizationStatus]:
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_pint
@@ -104,5 +102,5 @@ class PintModel:
             raise ValueError(
                 "CPSolver returned invalid status for Pint model: " + str(status)
             )
-        tc.Pint = Pint
-        return tc, status
+        self.tc.Pint = Pint
+        return self.tc, status

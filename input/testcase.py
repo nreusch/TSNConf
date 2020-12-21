@@ -4,9 +4,8 @@ from input.model.application import (EApplicationType, application)
 from input.model.function_path import function_path
 from input.model.link import link
 from input.model.nodes import end_system, node, switch
-from input.model.route import route
+from input.model.route import route, route_info
 from input.model.schedule import schedule
-from input.model.signal import ESignalType, signal
 from input.model.stream import EStreamType, stream
 from input.model.task import ETaskType, task
 from utils.utilities import lcm
@@ -26,6 +25,7 @@ class Testcase:
         self.key_length: int = -1  # TESLA key length
 
         self.F: Dict[str, stream] = {}  # All streams. stream.id => stream
+        self.F_routed: Dict[str, stream] = {} # All routed/scheduled streams. stream-id => stream
         self.F_red: Dict[
             str, List[stream]
         ] = (
@@ -43,11 +43,9 @@ class Testcase:
         self.F_t_in: Dict[
             str, List[stream]
         ] = {}  # Mapping task to incoming streams. task.id => [stream]
-        self.F_t_group: Dict[
-            str, Dict[str, List[stream]]
-        ] = {}  # task.id => (groupid => List[stream + redundant copies])
 
         self.R: Dict[str, route] = {}  # All routes. stream.id => route
+        self.R_info: Dict[str, route_info] = {}  # All routes. stream.id => route_info
 
         self.N: Dict[str, node] = {}  # All nodes. node.id => nodes
         self.N_conn: Dict[
@@ -74,7 +72,7 @@ class Testcase:
         ] = {}  # All function paths. fp.id => function_path
 
         self.T: Dict[str, task] = {}  # All tasks. task.id => task
-        self.T_app: Dict[
+        self.T_normal: Dict[
             str, List[task]
         ] = (
             {}
@@ -82,24 +80,9 @@ class Testcase:
         self.T_g: Dict[
             str, List[task]
         ] = {}  # Mapping ES to its tasks. node.id => [task]
+        self.T_standalone: Dict[str, task] = {} # All tasks outside applications
 
-        self.S_all: Dict[str, signal] = {}  # All signals. signal.id => signal
-        self.S_app: Dict[
-            str, List[signal]
-        ] = (
-            {}
-        )  # All signals from normal applications. normal_application.id => [signal]
-        self.S_group: Dict[
-            str, List[signal]
-        ] = {}  # All signals from group. group id ("taskid_groupnr")=> [signal]
-        self.S_g: Dict[str, List[signal]] = {}  # All signals from ES. es.id -> [signal]
-
-        self.F_sec: Dict[str, stream] = {}
-        self.S_sec: Dict[
-            str, List[signal]
-        ] = (
-            {}
-        )  # All signals from security applications. security_application.id => [signal]
+        self.F_sec: Dict[str, stream] = {} # All streams from security applications. security_application.id => [stream]
         self.T_sec: Dict[str, task] = {}  # All key tasks. task.id -> task
         self.T_sec_g: Dict[str, List[task]] = {}  # All key tasks. node.id => [task]
         self.A_sec: Dict[
@@ -107,40 +90,42 @@ class Testcase:
         ] = {}  # All security applications. security_application.id => application
 
     def finalize(self):
-        for s in self.S_all.values():
-            # 1. Add group to tasks
-            self.T[s.src_task_id].groups.add(s.group)
-
-        self.hyperperiod = lcm([app.period for app in self.A_app.values()])
+        self.hyperperiod = lcm([t.period for t in self.T.values()])
 
     def add_to_datastructures(self, x: Any):
         """
-        Adds any object which is part of the model to the testcase and all its datastructures
+        Adds any object which is part of the model_old to the testcase and all its datastructures
         """
         if isinstance(x, stream):
             self.F[x.id] = x
-            self.F_g_out[x.sender_es_id].append(x)
-            for es_id in x.receiver_es_ids:
-                self.F_g_in[es_id].append(x)
+
+            if x.app_id != "":
+                self.A[x.app_id].add_edges(x)
 
             self.F_t_out[x.sender_task_id].append(x)
             for task_id in x.receiver_task_ids:
                 self.F_t_in[task_id].append(x)
 
-            if x.group_id in self.F_t_group[x.sender_task_id]:
-                self.F_t_group[x.sender_task_id][x.group_id].append(x)
-            else:
-                self.F_t_group[x.sender_task_id][x.group_id] = [x]
+            # if x is a routed/scheduled stream
+            if len(x.receiver_es_ids) > 1 or list(x.receiver_es_ids)[0] != x.sender_es_id:
+                self.F_routed[x.id] = x
 
-            if x.get_id_prefix() in self.F_red:
-                self.F_red[x.get_id_prefix()].append(x)
-            else:
-                self.F_red[x.get_id_prefix()] = [x]
+                self.F_g_out[x.sender_es_id].append(x)
+                for es_id in x.receiver_es_ids:
+                    self.F_g_in[es_id].append(x)
 
-            if x.type == EStreamType.KEY:
-                self.F_sec[x.id] = x
+
+                if x.get_id_prefix() in self.F_red:
+                    self.F_red[x.get_id_prefix()].append(x)
+                else:
+                    self.F_red[x.get_id_prefix()] = [x]
+
+                if x.type == EStreamType.KEY:
+                    self.F_sec[x.id] = x
         elif isinstance(x, route):
             self.R[x.stream.id] = x
+        elif isinstance(x, route_info):
+            self.R_info[x.route.stream.id] = x
         elif isinstance(x, schedule):
             self.schedule = x
         elif isinstance(x, node):
@@ -157,7 +142,6 @@ class Testcase:
                 self.F_g_out[x.id] = []
                 self.T_g[x.id] = []
                 self.T_sec_g[x.id] = []
-                self.S_g[x.id] = []
             elif isinstance(x, switch):
                 self.SW[x.id] = x
         elif isinstance(x, link):
@@ -170,49 +154,27 @@ class Testcase:
             if x.type == EApplicationType.NORMAL:
                 self.A_app[x.id] = x
                 #
-                self.T_app[x.id] = []
-                self.S_app[x.id] = []
+                self.T_normal[x.id] = []
             elif x.type == EApplicationType.KEY:
                 self.A_sec[x.id] = x
-                self.S_sec[x.id] = []
         elif isinstance(x, function_path):
             self.FP[x.id] = x
-
-            App = self.A[x.app_id]
-            App.function_paths[x.id] = x
         elif isinstance(x, task):
             self.T[x.id] = x
             self.T_g[x.src_es_id].append(x)
             self.F_t_out[x.id] = []
             self.F_t_in[x.id] = []
-            self.F_t_group[x.id] = {}
 
-            App = self.A[x.app_id]
-            App.verticies[x.id] = x
+            if x.app_id == "":
+                self.T_standalone[x.id] = x
+            else:
+                self.A[x.app_id].add_vertex(x)
+                if x.type == ETaskType.NORMAL:
+                    self.T_normal[x.app_id].append(x)
 
-            if x.type == ETaskType.NORMAL and App.type == EApplicationType.NORMAL:
-                self.T_app[x.app_id].append(x)
-            elif x.type == ETaskType.KEY_VERIFICATION or x.type == ETaskType.KEY_RELEASE:
+            if x.type == ETaskType.KEY_VERIFICATION or x.type == ETaskType.KEY_RELEASE:
                 self.T_sec[x.id] = x
                 self.T_sec_g[x.src_es_id].append(x)
-        elif isinstance(x, signal):
-            self.S_all[x.id] = x
-            self.S_g[x.sender_es_id].append(x)
-
-            App = self.A[x.app_id]
-            App.edges[x.id] = (x.src_task_id, x.dest_task_id)
-
-            # tc.S_app
-            if x.type == ESignalType.NORMAL:
-                self.S_app[x.app_id].append(x)
-            elif x.type == ESignalType.KEY:
-                self.S_sec[x.app_id].append(x)
-
-            # tc.S_group
-            if x.group not in self.S_group:
-                self.S_group[x.group] = [x]
-            else:
-                self.S_group[x.group].append(x)
 
     def to_flex_network_description(self):
         s = ""
@@ -240,19 +202,23 @@ class Testcase:
         s += "\n\t<!-- period&wcet is in us, size in Byte-->\n"
 
         for app in self.A.values():
-            strs = app.xml_string(self.S_all).split("\n")
+            strs = app.xml_string(self.F).split("\n")
             for st in strs:
                 s += "\t" + st + "\n"
 
         s += "\n"
-        # Streams
-        for stream in self.F.values():
-            s += "\t" + stream.xml_string() + "\n"
+
+        # Function Paths
+        for fp in self.FP.values():
+            strs = fp.xml_string().split("\n")
+            for st in strs:
+                s += "\t" + st + "\n"
 
         s += "\n"
+
         # Routes
         for route in self.R.values():
-            strs = route.xml_string(self.L).split("\n")
+            strs = route.xml_string(self.L_from_nodes).split("\n")
             for st in strs:
                 s += "\t" + st + "\n"
 

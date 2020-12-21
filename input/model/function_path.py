@@ -4,12 +4,11 @@ from typing import Dict, List
 
 from input.model.task import task
 
-
-def calculate_signal_level(path_n: ET.Element, _vertices):
+def calculate_signal_level(path_n: ET.Element, tc_T):
     signal_level = 0
-    previous_pe = _vertices[path_n[0].attrib["name"]].src_es_id
+    previous_pe = tc_T[path_n[0].attrib["name"]].src_es_id
     for task_n in path_n:
-        pe = _vertices[task_n.attrib["name"]].src_es_id
+        pe = tc_T[task_n.attrib["name"]].src_es_id
         if pe != previous_pe:
             signal_level += 1
         previous_pe = pe
@@ -21,7 +20,6 @@ def calculate_signal_level(path_n: ET.Element, _vertices):
 @dataclass
 class function_path:
     id: str
-    app_id: str
     path: List[task]
     deadline: int
     signal_level: int  # number of tasks that receive signals
@@ -34,13 +32,14 @@ class function_path:
         return s
 
     @classmethod
-    def from_xml_node(cls, n: ET.Element, app_id: str, app_verticies: Dict):
-        signal_level = calculate_signal_level(n, app_verticies)
+    def from_xml_node(cls, n: ET.Element, tc_T: Dict):
+        signal_level = calculate_signal_level(n, tc_T)
         # Create path
         __tasks = []
         for path_task_n in n:
-            __tasks.append(app_verticies[path_task_n.attrib["name"]])
+            __tasks.append(tc_T[path_task_n.attrib["name"]])
 
         return cls(
-            n.attrib["name"], app_id, __tasks, int(n.attrib["deadline"]), signal_level
+            n.attrib["name"],  __tasks, int(n.attrib["deadline"]), signal_level
         )
+

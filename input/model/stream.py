@@ -1,7 +1,9 @@
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Set
+
+from input.model.task import task
 
 
 class EStreamType(Enum):
@@ -14,52 +16,83 @@ class EStreamType(Enum):
 @dataclass
 class stream:
     id: str
+    app_id: str
+
     sender_es_id: str
-    receiver_es_ids: set
+    receiver_es_ids: Set[str]
+
     sender_task_id: str
-    receiver_task_ids: set
-    group_id: str
-    size: int  # = size of ONE signal for multicast
-    period: int  # =Pint for security frames
-    rl: int  # = rl of sending task
+    receiver_task_ids: Set[str]
+
+    size: int
+    period: int  # =Pint for security streams
+    rl: int
     is_secure: bool
+
     message_size: int
     mac_size: int
     frame_overhead_size: int
-    signal_sizes: List[Tuple[str, int]]  # "s1,s2" -> 20
+
     type: EStreamType
 
+    def is_self_stream(self):
+        if len(self.receiver_es_ids) > 1:
+            return False
+        else:
+            return list(self.receiver_es_ids)[0] == self.sender_es_id
+
     def get_id_prefix(self):
-        return "_".join(self.id.split("_")[:-1])
+        spl = self.id.split("_")
+        if len(spl) == 1:
+            return spl[0]
+        else:
+            return "_".join(spl[:-1])
 
     def xml_string(self):
-        return '<stream name="{}" src="{}" dest="{}" sender_task="{}" receiver_tasks="{}" group="{}" size="{}" period="{}" rl="{}" type="{}" secure="{}" mac_size="{}"/>'.format(
-            self.id,
+        return '<stream name="{}" src="{}" dest="{}" sender_task="{}" receiver_tasks="{}" size="{}" period="{}" rl="{}" secure="{}" type="{}" />\n'.format(
+            self.get_id_prefix(),
             self.sender_es_id,
             ",".join([r_es_id for r_es_id in self.receiver_es_ids]),
             self.sender_task_id,
             ",".join([t_id for t_id in self.receiver_task_ids]),
-            self.group_id,
             self.size,
             self.period,
             self.rl,
-            self.type.name,
             self.is_secure,
-            self.mac_size,
+            self.type.name,
         )
 
     @classmethod
-    def from_xml_node(cls, n: ET.Element, tc_OH: int, tc_S_group: Dict):
-        id = n.attrib["name"]
-        src_es_id = n.attrib["src"]
-        receiver_es_ids = set(n.attrib["dest"].split(","))
+    def list_from_xml_node(cls, n: ET.Element, tc_T: Dict[str, task], tc_W_mac: int, tc_OH: int, app_id: str = ""):
+        ret_list = []
+
+        if "rl" in n.attrib:
+            rl = int(n.attrib["rl"])
+        else:
+            rl = 1
+
         sender_task_id = n.attrib["sender_task"]
         receiver_task_ids = set(n.attrib["receiver_tasks"].split(","))
-        group_id = n.attrib["group"]
-        size = int(n.attrib["size"])
-        period = int(n.attrib["period"])
-        rl = int(n.attrib["rl"])
-        type = EStreamType[n.attrib["type"]]
+
+        if "src" in n.attrib:
+            src_es_id = n.attrib["src"]
+        else:
+            src_es_id = tc_T[sender_task_id].src_es_id
+
+        if "dest" in n.attrib:
+            receiver_es_ids = set(n.attrib["dest"].split(","))
+        else:
+            receiver_es_ids = set([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
+
+        message_size = int(n.attrib["size"])
+
+        period = tc_T[sender_task_id].period
+
+        if "type" in n.attrib:
+            type = EStreamType[n.attrib["type"]]
+        else:
+            type = EStreamType["NORMAL"]
+
 
         if "secure" in n.attrib:
             if n.attrib["secure"] == "true" or n.attrib["secure"] == "True":
@@ -67,26 +100,32 @@ class stream:
             else:
                 is_secure = False
 
-        mac_size = 0
-        if "mac_size" in n.attrib:
-            mac_size = int(n.attrib["mac_size"])
+            mac_size = tc_W_mac
+        else:
+            is_secure = False
+            mac_size = 0
 
-        some_signal = tc_S_group[group_id][0]
 
-        return cls(
-            id,
-            src_es_id,
-            receiver_es_ids,
-            sender_task_id,
-            receiver_task_ids,
-            group_id,
-            size,
-            period,
-            rl,
-            is_secure,
-            size,
-            mac_size,
-            tc_OH,
-            [(",".join(s.id for s in tc_S_group[group_id]), some_signal.size)],
-            type,
-        )
+        size = message_size + mac_size + tc_OH
+
+        for i in range(rl):
+            id = n.attrib["name"] + f"_{i}"
+
+            ret_list.append(cls(
+                id,
+                app_id,
+                src_es_id,
+                receiver_es_ids,
+                sender_task_id,
+                receiver_task_ids,
+                size,
+                period,
+                rl,
+                is_secure,
+                message_size,
+                mac_size,
+                tc_OH,
+                type,
+            ))
+
+        return ret_list

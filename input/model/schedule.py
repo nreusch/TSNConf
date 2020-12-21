@@ -5,7 +5,7 @@ from typing import Dict
 
 class schedule:
     @classmethod
-    def from_solver(cls, solver, scheduling_model):
+    def from_cp_solver(cls, solver, scheduling_model):
         c = cls()
 
         for l_or_n_id in itertools.chain(
@@ -14,8 +14,9 @@ class schedule:
             c.o_f_val[l_or_n_id] = {}
             c.c_f_val[l_or_n_id] = {}
             c.a_f_val[l_or_n_id] = {}
-            for f in scheduling_model.tc.F.values():
-                c.phi_f_val[f.id] = solver.Value(scheduling_model.phi_f[f.id])
+            for f in scheduling_model.tc.F_routed.values():
+                if f.id in scheduling_model.phi_f:
+                    c.phi_f_val[f.id] = solver.Value(scheduling_model.phi_f[f.id])
                 c.o_f_val[l_or_n_id][f.id] = solver.Value(
                     scheduling_model.o_f[l_or_n_id][f.id]
                 )
@@ -31,12 +32,8 @@ class schedule:
             c.a_t_val[t.id] = solver.Value(scheduling_model.a_t[t.id])
 
         for fp in scheduling_model.tc.FP.values():
-            app_id = fp.app_id
-            if app_id not in c.laxities_val:
-                c.laxities_val[app_id] = {}
-
-            c.laxities_val[app_id][fp.id] = solver.Value(
-                scheduling_model.laxities[app_id][fp.id]
+            c.laxities_val[fp.id] = solver.Value(
+                scheduling_model.laxities[fp.id]
             )
 
         return c
@@ -54,8 +51,8 @@ class schedule:
         self.a_t_val: Dict[str, int] = {}
 
         self.laxities_val: Dict[
-            str, Dict[str, int]
-        ] = {}  # app.id -> Dict(fp.id -> val)
+            str, int
+        ] = {}  # Dict(fp.id -> val)
 
     def is_stream_using_link_or_node(self, f_id, l_or_n_id):
         return self.c_f_val[l_or_n_id][f_id] != 0
@@ -83,7 +80,7 @@ class schedule:
                 )
             elif l_or_n_id in tc_N:
                 l_or_n = tc_N[l_or_n_id]
-                s += '\t<link src="{}" dest="{}">\n'.format(l_or_n.id, l_or_n.id)
+                s += '\t<node src="{}" dest="{}">\n'.format(l_or_n.id, l_or_n.id)
             else:
                 raise ValueError(
                     f"{l_or_n_id} is neither node or link in the given testcase"
@@ -112,7 +109,11 @@ class schedule:
                         )
 
             # Link Footer
-            s += "\t</link>\n"
+            if l_or_n_id in tc_L:
+                s += "\t</link>\n"
+            elif l_or_n_id in tc_N:
+                s += "\t</node>\n"
+
 
         # Phi
         s += "\t<key_release_intervals>\n"
@@ -126,11 +127,10 @@ class schedule:
 
         # Laxities
         s += "\t<laxities>\n"
-        for app_id, fp_dict in self.laxities_val.items():
-            for fp_id, fp_val in fp_dict.items():
-                s += '\t\t<lax app_id="{}" fp_id="{}" value="{}"/>\n'.format(
-                    app_id, fp_id, fp_val
-                )
+        for fp_id, fp_val in self.laxities_val.items():
+            s += '\t\t<lax fp_id="{}" value="{}"/>\n'.format(
+                fp_id, fp_val
+            )
         s += "\t</laxities>\n"
 
         s += "</schedule>"
@@ -197,11 +197,7 @@ class schedule:
                     c.phi_f_val[stream_id] = value
             elif n_child.tag == "laxities":
                 for n_lax in n_child:
-                    app_id = n_lax.attrib["app_id"]
                     fp_id = n_lax.attrib["fp_id"]
                     value = int(n_lax.attrib["value"])
 
-                    if app_id not in c.laxities_val:
-                        c.laxities_val[app_id] = {}
-
-                    c.laxities_val[app_id][fp_id] = value
+                    c.laxities_val[fp_id] = value

@@ -4,9 +4,10 @@ from ortools.sat.python import cp_model
 from ortools.sat.python.cp_model import (FEASIBLE, INFEASIBLE, MODEL_INVALID,
                                          OPTIMAL, UNKNOWN, CpModel, CpSolver,
                                          IntVar)
-from optimization.models.routing import routing_model_goals, routing_model_results, routing_model_variables, routing_model_constraints
+from optimization.cp.models.routing import routing_model_variables, routing_model_constraints, routing_model_goals
+from optimization.cp.models.routing import routing_model_results
 
-from input.model.route import route
+from input.model.route import route, route_info
 from input.testcase import Testcase
 from input.input_parameters import InputParameters
 from solution.solution_optimization_status import EOptimizationStatus
@@ -22,10 +23,10 @@ def weight(v_int, x_v_val):
         return 1
 
 
-class RoutingModel:
+class CPRoutingSolver:
     def __init__(self, tc: Testcase, timing_object: TimingData):
         self.tc = tc
-        # Create the model
+        # Create the model_old
         self.model = CpModel()
 
         # Create variables
@@ -38,7 +39,7 @@ class RoutingModel:
 
         timing_object.time_creating_vars_routing = t.elapsed_time
 
-        # Add constraints to model
+        # Add constraints to model_old
         t = Timer()
         with t:
             routing_model_constraints.add_constraints(self)
@@ -144,23 +145,18 @@ class RoutingModel:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            (
-                _,
-                x_res,
-                __,
-                ___,
-                ____,
-                _____,
-                ______,
-            ) = routing_model_results.generate_result_structures(self, solver)
+            x_res, costs, route_lens, overlap_amounts, overlap_links = routing_model_results.generate_result_structures(self, solver)
 
-            for f in self.tc.F.values():
+            for f in self.tc.F_routed.values():
                 mt = route(f)
                 mt.init_from_x_res_vector(x_res[f.id], self.tc.L_from_nodes)
                 self.tc.add_to_datastructures(mt)
+
+                r_info = route_info(mt, costs[f.id], route_lens[f.id], overlap_amounts[f.id], overlap_links[f.id])
+                self.tc.add_to_datastructures(r_info)
         else:
             raise ValueError(
-                "CPSolver in RoutingModel returned invalid status for routing model: "
+                "CPSolver in RoutingModel returned invalid status for routing model:"
                 + str(status)
             )
 

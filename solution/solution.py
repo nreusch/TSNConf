@@ -26,20 +26,24 @@ class Solution:
         self.bandwidth_used_percentage_total: int = -1
         self.cpu_used_percentage_total: int = -1
 
+        self.total_cost_routing: float = -1
         # Populate variables
+        if self.is_feasible_routing():
+            self.total_cost_routing = 0
+            for r_info in self.tc.R_info.values():
+                self.total_cost_routing += r_info.cost
         if self.is_feasible_scheduling():
-            for dct in self.tc.schedule.laxities_val.values():
-                for v in dct.values():
-                    self.total_deadlines += 1
-                    if v < 0:
-                        self.missed_deadlines += 1
-                    self.laxity_total += v
+            for v in self.tc.schedule.laxities_val.values():
+                self.total_deadlines += 1
+                if v < 0:
+                    self.missed_deadlines += 1
+                self.laxity_total += v
 
             perc_sum = 0
             for l in self.tc.L.values():
                 bw_used = 0
-                for f in self.tc.F.values():
-                    if self.tc.R[f.id].is_in_tree(l.id):
+                for f in self.tc.F_routed.values():
+                    if self.tc.R[f.id].is_in_tree(l.id, self.tc.N, self.tc.L):
                         bw_used += f.size / f.period  # B/us
                 perc = bw_used / l.speed
                 assert perc <= 1
@@ -51,7 +55,7 @@ class Solution:
             for es in self.tc.ES.values():
                 cpu_used = 0
                 for t in self.tc.T_g[es.id]:
-                    cpu_used += t.exec_time / t.app_period
+                    cpu_used += t.exec_time / t.period
 
                 for f in self.tc.F_g_out[es.id]:
                     if f.is_secure:
@@ -98,12 +102,12 @@ class Solution:
         """
         Returns a string containing all important results
         """
-        return "{}: {} ES, {} SW, {} Tasks, {} Signals, {} Laxity, {:.2f}% Bandwidth , {:.2f}% CPU , {:.2f}ms Optimization Time, Missed Deadlines {}/{}, Routing {}, Scheduling {}".format(
+        return "{}: {} ES, {} SW, {} Tasks, {} Streams, {} Laxity, {:.2f}% Bandwidth , {:.2f}% CPU , {:.2f}ms Optimization Time, Missed Deadlines {}/{}, Routing {}, Scheduling {}".format(
             self.input_params.tc_name,
             len(self.tc.ES),
             len(self.tc.SW),
             len(self.tc.T),
-            len(self.tc.S_all),
+            len(self.tc.F),
             self.laxity_total,
             self.bandwidth_used_percentage_total * 100,
             self.cpu_used_percentage_total * 100,

@@ -1,5 +1,5 @@
 <!-- mtu, overhead, mac_length in Byte. All times in us-->
-<NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
 	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
 	<device name="SW_B1" type="Switch"/>
 	<device name="SW_B2" type="Switch"/>
@@ -245,382 +245,338 @@
 	<!-- period&wcet is in us, size in Byte-->
 	<application name="App_FRONT_CAM_TO_CTRLS" period="20000" type="NORMAL">
 		<tasks>
-			<task name="t1_FRONT_CAM_TO_CTRLS" node="FRONT_CAM" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_FRONT_CAM" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_CTRL2_FROM_FRONT_CAM" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_FRONT_CAM_TO_CTRLS" node="FRONT_CAM" wcet="200" period="20000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_FRONT_CAM" node="CTRL1" wcet="200" period="20000" type="NORMAL"/>
+			<task name="t3_CTRL2_FROM_FRONT_CAM" node="CTRL2" wcet="200" period="20000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_FRONT_CAM_TO_CTRL1" src="t1_FRONT_CAM_TO_CTRLS" dest="t2_CTRL1_FROM_FRONT_CAM" size="800" group="t1_FRONT_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s2_FRONT_CAM_TO_CTRL2" src="t1_FRONT_CAM_TO_CTRLS" dest="t3_CTRL2_FROM_FRONT_CAM" size="800" group="t1_FRONT_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_FRONT_CAM" deadline="2000">
-				<task name="t1_FRONT_CAM_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_FRONT_CAM"/>
-			</path>
-			<path name="path_2_FRONT_CAM" deadline="2000">
-				<task name="t1_FRONT_CAM_TO_CTRLS"/>
-				<task name="t3_CTRL2_FROM_FRONT_CAM"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_FRONT_CAM_TO" src="FRONT_CAM" dest="CTRL2,CTRL1" sender_task="t1_FRONT_CAM_TO_CTRLS" receiver_tasks="t3_CTRL2_FROM_FRONT_CAM,t2_CTRL1_FROM_FRONT_CAM" size="800" period="20000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_REAR_CAM_TO_CTRLS" period="40000" type="NORMAL">
 		<tasks>
-			<task name="t1_REAR_CAM_TO_CTRLS" node="REAR_CAM" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_REAR_CAM" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL2_FROM_REAR_CAM" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_REAR_CAM_TO_CTRLS" node="REAR_CAM" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_REAR_CAM" node="CTRL1" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_REAR_CAM" node="CTRL2" wcet="400" period="40000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_REAR_CAM_TO_CTRL1" src="t1_REAR_CAM_TO_CTRLS" dest="t2_CTRL1_FROM_REAR_CAM" size="600" group="t1_REAR_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s2_REAR_CAM_TO_CTRL2" src="t1_REAR_CAM_TO_CTRLS" dest="t2_CTRL2_FROM_REAR_CAM" size="600" group="t1_REAR_CAM_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_REAR_CAM" deadline="4000">
-				<task name="t1_REAR_CAM_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_REAR_CAM"/>
-			</path>
-			<path name="path_2_REAR_CAM" deadline="4000">
-				<task name="t1_REAR_CAM_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_REAR_CAM"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_REAR_CAM_TO" src="REAR_CAM" dest="CTRL2,CTRL1" sender_task="t1_REAR_CAM_TO_CTRLS" receiver_tasks="t2_CTRL1_FROM_REAR_CAM,t2_CTRL2_FROM_REAR_CAM" size="600" period="40000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_SVCAMS_TO_CTRL1" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t1_FRONT_SVCAM_TO_CTRL_1" node="FRONT_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_LEFT_SVCAM_TO_CTRL1" node="LEFT_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_RIGHT_SVCAM_TO_CTRL1" node="RIGHT_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_REAR_SVCAM_TO_CTRL1" node="REAR_SVCAM" wcet="1000" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_SVCAMS" node="CTRL1" wcet="1000" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_FRONT_SVCAM_TO_CTRL_1" node="FRONT_SVCAM" wcet="1000" period="50000" type="NORMAL"/>
+			<task name="t1_LEFT_SVCAM_TO_CTRL1" node="LEFT_SVCAM" wcet="1000" period="50000" type="NORMAL"/>
+			<task name="t1_RIGHT_SVCAM_TO_CTRL1" node="RIGHT_SVCAM" wcet="1000" period="50000" type="NORMAL"/>
+			<task name="t1_REAR_SVCAM_TO_CTRL1" node="REAR_SVCAM" wcet="1000" period="50000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_SVCAMS" node="CTRL1" wcet="1000" period="50000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_FRONT_SVCAM_TO_CTRL1" src="t1_FRONT_SVCAM_TO_CTRL_1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_FRONT_SVCAM_TO_CTRL_1_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_LEFT_SVCAM_TO_CTRL1" src="t1_LEFT_SVCAM_TO_CTRL1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_LEFT_SVCAM_TO_CTRL1_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_RIGHT_SVCAM_TO_CTRL1" src="t1_RIGHT_SVCAM_TO_CTRL1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_RIGHT_SVCAM_TO_CTRL1_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_REAR_SVCAM_TO_CTRL1" src="t1_REAR_SVCAM_TO_CTRL1" dest="t2_CTRL1_FROM_SVCAMS" size="1500" group="t1_REAR_SVCAM_TO_CTRL1_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_FRONT_SVCAM" deadline="10000">
-				<task name="t1_FRONT_SVCAM_TO_CTRL_1"/>
-				<task name="t2_CTRL1_FROM_SVCAMS"/>
-			</path>
-			<path name="path_1_LEFT_SVCAM" deadline="10000">
-				<task name="t1_LEFT_SVCAM_TO_CTRL1"/>
-				<task name="t2_CTRL1_FROM_SVCAMS"/>
-			</path>
-			<path name="path_1_RIGHT_SVCAM" deadline="10000">
-				<task name="t1_RIGHT_SVCAM_TO_CTRL1"/>
-				<task name="t2_CTRL1_FROM_SVCAMS"/>
-			</path>
-			<path name="path_1_REAR_SVCAM" deadline="10000">
-				<task name="t1_REAR_SVCAM_TO_CTRL1"/>
-				<task name="t2_CTRL1_FROM_SVCAMS"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_FRONT_SVCAM_TO" src="FRONT_SVCAM" dest="CTRL1" sender_task="t1_FRONT_SVCAM_TO_CTRL_1" receiver_tasks="t2_CTRL1_FROM_SVCAMS" size="1500" period="50000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_LEFT_SVCAM_TO" src="LEFT_SVCAM" dest="CTRL1" sender_task="t1_LEFT_SVCAM_TO_CTRL1" receiver_tasks="t2_CTRL1_FROM_SVCAMS" size="1500" period="50000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_RIGHT_SVCAM_TO" src="RIGHT_SVCAM" dest="CTRL1" sender_task="t1_RIGHT_SVCAM_TO_CTRL1" receiver_tasks="t2_CTRL1_FROM_SVCAMS" size="1500" period="50000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_REAR_SVCAM_TO" src="REAR_SVCAM" dest="CTRL1" sender_task="t1_REAR_SVCAM_TO_CTRL1" receiver_tasks="t2_CTRL1_FROM_SVCAMS" size="1500" period="50000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_RADARS_TO_CTRLS" period="40000" type="NORMAL">
 		<tasks>
-			<task name="t1_FRONT_RAD_TO_CTRLS" node="FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_LEFT_FRONT_RAD_TO_CTRLS" node="LEFT_FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS" node="RIGHT_FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_LEFT_REAR_RAD_TO_CTRLS" node="LEFT_REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_RIGHT_REAR_RAD_TO_CTRLS" node="RIGHT_REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_REAR_RAD_TO_CTRLS" node="REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_RADARS" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL2_FROM_RADARS" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_FRONT_RAD_TO_CTRLS" node="FRONT_RAD" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t1_LEFT_FRONT_RAD_TO_CTRLS" node="LEFT_FRONT_RAD" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS" node="RIGHT_FRONT_RAD" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t1_LEFT_REAR_RAD_TO_CTRLS" node="LEFT_REAR_RAD" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t1_RIGHT_REAR_RAD_TO_CTRLS" node="RIGHT_REAR_RAD" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t1_REAR_RAD_TO_CTRLS" node="REAR_RAD" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_RADARS" node="CTRL1" wcet="400" period="40000" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_RADARS" node="CTRL2" wcet="400" period="40000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_FRONT_RAD_TO_CTRL1" src="t1_FRONT_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_FRONT_RAD_TO_CTRL2" src="t1_FRONT_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_LEFT_FRONT_RAD_TO_CTRL1" src="t1_LEFT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_LEFT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_LEFT_FRONT_RAD_TO_CTRL2" src="t1_LEFT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_LEFT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_RIGHT_FRONT_RAD_TO_CTRL1" src="t1_RIGHT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_RIGHT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_RIGHT_FRONT_RAD_TO_CTRL2" src="t1_RIGHT_FRONT_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_RIGHT_FRONT_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_LEFT_REAR_RAD_TO_CTRL1" src="t1_LEFT_REAR_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_LEFT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_LEFT_REAR_RAD_TO_CTRL2" src="t1_LEFT_REAR_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_LEFT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_RIGHT_REAR_RAD_TO_CTRL1" src="t1_RIGHT_REAR_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_RIGHT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_RIGHT_REAR_RAD_TO_CTRL2" src="t1_RIGHT_REAR_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_RIGHT_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_REAR_RAD_TO_CTRL1" src="t1_REAR_RAD_TO_CTRLS" dest="t2_CTRL1_FROM_RADARS" size="400" group="t1_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_REAR_RAD_TO_CTRL2" src="t1_REAR_RAD_TO_CTRLS" dest="t2_CTRL2_FROM_RADARS" size="400" group="t1_REAR_RAD_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_FRONT_RAD" deadline="4000">
-				<task name="t1_FRONT_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_RADARS"/>
-			</path>
-			<path name="path_1.1_FRONT_RAD" deadline="4000">
-				<task name="t1_FRONT_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_RADARS"/>
-			</path>
-			<path name="path_1_LEFT_FRONT_RAD" deadline="4000">
-				<task name="t1_LEFT_FRONT_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_RADARS"/>
-			</path>
-			<path name="path_1.1_LEFT_FRONT_RAD" deadline="4000">
-				<task name="t1_LEFT_FRONT_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_RADARS"/>
-			</path>
-			<path name="path_1_RIGHT_FRONT_RAD" deadline="4000">
-				<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_RADARS"/>
-			</path>
-			<path name="path_1.1_RIGHT_FRONT_RAD" deadline="4000">
-				<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_RADARS"/>
-			</path>
-			<path name="path_1_LEFT_REAR_RAD" deadline="4000">
-				<task name="t1_LEFT_REAR_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_RADARS"/>
-			</path>
-			<path name="path_1.1_LEFT_REAR_RAD" deadline="4000">
-				<task name="t1_LEFT_REAR_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_RADARS"/>
-			</path>
-			<path name="path_1_RIGHT_REAR_RAD" deadline="4000">
-				<task name="t1_RIGHT_REAR_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_RADARS"/>
-			</path>
-			<path name="path_1.1_RIGHT_REAR_RAD" deadline="4000">
-				<task name="t1_RIGHT_REAR_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_RADARS"/>
-			</path>
-			<path name="path_1_REAR_RAD" deadline="4000">
-				<task name="t1_REAR_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_RADARS"/>
-			</path>
-			<path name="path_1.1_REAR_RAD" deadline="4000">
-				<task name="t1_REAR_RAD_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_RADARS"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_FRONT_RAD_TO" src="FRONT_RAD" dest="CTRL2,CTRL1" sender_task="t1_FRONT_RAD_TO_CTRLS" receiver_tasks="t2_CTRL2_FROM_RADARS,t2_CTRL1_FROM_RADARS" size="400" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_LEFT_FRONT_RAD_TO" src="LEFT_FRONT_RAD" dest="CTRL2,CTRL1" sender_task="t1_LEFT_FRONT_RAD_TO_CTRLS" receiver_tasks="t2_CTRL2_FROM_RADARS,t2_CTRL1_FROM_RADARS" size="400" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_RIGHT_FRONT_RAD_TO" src="RIGHT_FRONT_RAD" dest="CTRL2,CTRL1" sender_task="t1_RIGHT_FRONT_RAD_TO_CTRLS" receiver_tasks="t2_CTRL2_FROM_RADARS,t2_CTRL1_FROM_RADARS" size="400" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_LEFT_REAR_RAD_TO" src="LEFT_REAR_RAD" dest="CTRL2,CTRL1" sender_task="t1_LEFT_REAR_RAD_TO_CTRLS" receiver_tasks="t2_CTRL2_FROM_RADARS,t2_CTRL1_FROM_RADARS" size="400" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_RIGHT_REAR_RAD_TO" src="RIGHT_REAR_RAD" dest="CTRL2,CTRL1" sender_task="t1_RIGHT_REAR_RAD_TO_CTRLS" receiver_tasks="t2_CTRL2_FROM_RADARS,t2_CTRL1_FROM_RADARS" size="400" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_REAR_RAD_TO" src="REAR_RAD" dest="CTRL2,CTRL1" sender_task="t1_REAR_RAD_TO_CTRLS" receiver_tasks="t2_CTRL2_FROM_RADARS,t2_CTRL1_FROM_RADARS" size="400" period="40000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_CTRLS_TO_CAM_AND_RAD" period="20000" type="NORMAL">
 		<tasks>
-			<task name="t1_CTRL1_TO_CAM_AND_RAD" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_CTRL2_TO_CAM_AND_RAD" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_FRONT_CAM_FROM_CTRL" node="FRONT_CAM" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_FRONT_RAD_FROM_CTRL" node="FRONT_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_REAR_CAM_FROM_CTRL" node="REAR_CAM" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_REAR_RAD_FROM_CTRL" node="REAR_RAD" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_CTRL1_TO_CAM_AND_RAD" node="CTRL1" wcet="400" period="20000" type="NORMAL"/>
+			<task name="t1_CTRL2_TO_CAM_AND_RAD" node="CTRL2" wcet="400" period="20000" type="NORMAL"/>
+			<task name="t2_FRONT_CAM_FROM_CTRL" node="FRONT_CAM" wcet="400" period="20000" type="NORMAL"/>
+			<task name="t2_FRONT_RAD_FROM_CTRL" node="FRONT_RAD" wcet="400" period="20000" type="NORMAL"/>
+			<task name="t2_REAR_CAM_FROM_CTRL" node="REAR_CAM" wcet="400" period="20000" type="NORMAL"/>
+			<task name="t2_REAR_RAD_FROM_CTRL" node="REAR_RAD" wcet="400" period="20000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_CTRL1_SEND_TO_FRONT_CAM" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_FRONT_CAM_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL1_SEND_TO_FRONT_RAD" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_FRONT_RAD_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL1_SEND_TO_REAR_CAM" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_REAR_CAM_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL1_SEND_TO_REAR_RAD" src="t1_CTRL1_TO_CAM_AND_RAD" dest="t2_REAR_RAD_FROM_CTRL" size="100" group="t1_CTRL1_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL2_SEND_TO_FRONT_CAM" src="t1_CTRL2_TO_CAM_AND_RAD" dest="t2_FRONT_CAM_FROM_CTRL" size="100" group="t1_CTRL2_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL2_SEND_TO_FRONT_RAD" src="t1_CTRL2_TO_CAM_AND_RAD" dest="t2_FRONT_RAD_FROM_CTRL" size="100" group="t1_CTRL2_TO_CAM_AND_RAD_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_CTRL1_FRONT_CAM" deadline="4000">
-				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
-				<task name="t2_FRONT_CAM_FROM_CTRL"/>
-			</path>
-			<path name="path_1_CTRL1_FRONT_RAD" deadline="4000">
-				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
-				<task name="t2_FRONT_RAD_FROM_CTRL"/>
-			</path>
-			<path name="path_1_CTRL1_REAR_CAM" deadline="4000">
-				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
-				<task name="t2_REAR_CAM_FROM_CTRL"/>
-			</path>
-			<path name="path_1_CTRL1_REAR_RAD" deadline="4000">
-				<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
-				<task name="t2_REAR_RAD_FROM_CTRL"/>
-			</path>
-			<path name="path_1_CTRL2_FRONT_CAM" deadline="4000">
-				<task name="t1_CTRL2_TO_CAM_AND_RAD"/>
-				<task name="t2_FRONT_CAM_FROM_CTRL"/>
-			</path>
-			<path name="path_1_CTRL2_FRONT_RAD" deadline="4000">
-				<task name="t1_CTRL2_TO_CAM_AND_RAD"/>
-				<task name="t2_FRONT_RAD_FROM_CTRL"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_CTRL1_SEND_TO_FRONT" src="CTRL1" dest="REAR_RAD,FRONT_RAD,FRONT_CAM,REAR_CAM" sender_task="t1_CTRL1_TO_CAM_AND_RAD" receiver_tasks="t2_FRONT_CAM_FROM_CTRL,t2_FRONT_RAD_FROM_CTRL,t2_REAR_RAD_FROM_CTRL,t2_REAR_CAM_FROM_CTRL" size="100" period="20000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_CTRL2_SEND_TO_FRONT" src="CTRL2" dest="FRONT_RAD,FRONT_CAM" sender_task="t1_CTRL2_TO_CAM_AND_RAD" receiver_tasks="t2_FRONT_CAM_FROM_CTRL,t2_FRONT_RAD_FROM_CTRL" size="100" period="20000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_CTRL_TO_ECM_EBCM" period="40000" type="NORMAL">
 		<tasks>
-			<task name="t1_CTRL1_TO_ECM_EBCM" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_CTRL2_TO_ECM_EBCM" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_ECM_FROM_CTRLS" node="ECM" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_EBCM_FROM_CTRLS" node="EBCM" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_CTRL1_FROM_ECM_EBCM" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_CTRL2_FROM_ECM_EBCM" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_CTRL1_TO_ECM_EBCM" node="CTRL1" wcet="200" period="40000" type="NORMAL"/>
+			<task name="t1_CTRL2_TO_ECM_EBCM" node="CTRL2" wcet="200" period="40000" type="NORMAL"/>
+			<task name="t2_ECM_FROM_CTRLS" node="ECM" wcet="200" period="40000" type="NORMAL"/>
+			<task name="t2_EBCM_FROM_CTRLS" node="EBCM" wcet="200" period="40000" type="NORMAL"/>
+			<task name="t3_CTRL1_FROM_ECM_EBCM" node="CTRL1" wcet="200" period="40000" type="NORMAL"/>
+			<task name="t3_CTRL2_FROM_ECM_EBCM" node="CTRL2" wcet="200" period="40000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_CTRL1_SEND_ECM" src="t1_CTRL1_TO_ECM_EBCM" dest="t2_ECM_FROM_CTRLS" size="100" group="t1_CTRL1_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL1_SEND_EBCM" src="t1_CTRL1_TO_ECM_EBCM" dest="t2_EBCM_FROM_CTRLS" size="100" group="t1_CTRL1_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL2_SEND_ECM" src="t1_CTRL2_TO_ECM_EBCM" dest="t2_ECM_FROM_CTRLS" size="100" group="t1_CTRL2_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL2_SEND_EBCM" src="t1_CTRL2_TO_ECM_EBCM" dest="t2_EBCM_FROM_CTRLS" size="100" group="t1_CTRL2_TO_ECM_EBCM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_ECM_SEND_CTRL1" src="t2_ECM_FROM_CTRLS" dest="t3_CTRL1_FROM_ECM_EBCM" size="100" group="t2_ECM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_ECM_SEND_CTRL2" src="t2_ECM_FROM_CTRLS" dest="t3_CTRL2_FROM_ECM_EBCM" size="100" group="t2_ECM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_EBCM_SEND_CTRL1" src="t2_EBCM_FROM_CTRLS" dest="t3_CTRL1_FROM_ECM_EBCM" size="100" group="t2_EBCM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_EBCM_SEND_CTRL2" src="t2_EBCM_FROM_CTRLS" dest="t3_CTRL2_FROM_ECM_EBCM" size="100" group="t2_EBCM_FROM_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_CTRL1_ECM" deadline="4000">
-				<task name="t1_CTRL1_TO_ECM_EBCM"/>
-				<task name="t2_ECM_FROM_CTRLS"/>
-			</path>
-			<path name="path_1_CTRL1_EBCM" deadline="2000">
-				<task name="t1_CTRL1_TO_ECM_EBCM"/>
-				<task name="t2_EBCM_FROM_CTRLS"/>
-			</path>
-			<path name="path_1_CTRL2_ECM" deadline="4000">
-				<task name="t1_CTRL2_TO_ECM_EBCM"/>
-				<task name="t2_ECM_FROM_CTRLS"/>
-			</path>
-			<path name="path_1_CTRL2_EBCM" deadline="2000">
-				<task name="t1_CTRL2_TO_ECM_EBCM"/>
-				<task name="t2_EBCM_FROM_CTRLS"/>
-			</path>
-			<path name="path_2_ECM_CTRL1" deadline="4000">
-				<task name="t2_ECM_FROM_CTRLS"/>
-				<task name="t3_CTRL1_FROM_ECM_EBCM"/>
-			</path>
-			<path name="path_2_EBCM_CTRL1" deadline="2000">
-				<task name="t2_EBCM_FROM_CTRLS"/>
-				<task name="t3_CTRL1_FROM_ECM_EBCM"/>
-			</path>
-			<path name="path_2_ECM_CTRL2" deadline="4000">
-				<task name="t2_ECM_FROM_CTRLS"/>
-				<task name="t3_CTRL2_FROM_ECM_EBCM"/>
-			</path>
-			<path name="path_2_EBCM_CTRL2" deadline="2000">
-				<task name="t2_EBCM_FROM_CTRLS"/>
-				<task name="t3_CTRL2_FROM_ECM_EBCM"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_CTRL1_SEND" src="CTRL1" dest="ECM,EBCM" sender_task="t1_CTRL1_TO_ECM_EBCM" receiver_tasks="t2_ECM_FROM_CTRLS,t2_EBCM_FROM_CTRLS" size="100" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_CTRL2_SEND" src="CTRL2" dest="ECM,EBCM" sender_task="t1_CTRL2_TO_ECM_EBCM" receiver_tasks="t2_ECM_FROM_CTRLS,t2_EBCM_FROM_CTRLS" size="100" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_ECM_SEND" src="ECM" dest="CTRL2,CTRL1" sender_task="t2_ECM_FROM_CTRLS" receiver_tasks="t3_CTRL1_FROM_ECM_EBCM,t3_CTRL2_FROM_ECM_EBCM" size="100" period="40000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_EBCM_SEND" src="EBCM" dest="CTRL2,CTRL1" sender_task="t2_EBCM_FROM_CTRLS" receiver_tasks="t3_CTRL1_FROM_ECM_EBCM,t3_CTRL2_FROM_ECM_EBCM" size="100" period="40000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_CTRLS_TO_EPS" period="10000" type="NORMAL">
 		<tasks>
-			<task name="t1_CTRL1_TO_EPS" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_CTRL2_TO_EPS" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_EPS_FROM_CTRLS" node="EPS" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_CTRL1_TO_EPS" node="CTRL1" wcet="200" period="10000" type="NORMAL"/>
+			<task name="t1_CTRL2_TO_EPS" node="CTRL2" wcet="200" period="10000" type="NORMAL"/>
+			<task name="t2_EPS_FROM_CTRLS" node="EPS" wcet="200" period="10000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_CTRL1_TO_EPS" src="t1_CTRL1_TO_EPS" dest="t2_EPS_FROM_CTRLS" size="100" group="t1_CTRL1_TO_EPS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_CTRL2_TO_EPS" src="t1_CTRL2_TO_EPS" dest="t2_EPS_FROM_CTRLS" size="100" group="t1_CTRL2_TO_EPS_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_CTRL1_TO_EPS" deadline="2000">
-				<task name="t1_CTRL1_TO_EPS"/>
-				<task name="t2_EPS_FROM_CTRLS"/>
-			</path>
-			<path name="path_1_CTRL2_TO_EPS" deadline="2000">
-				<task name="t1_CTRL2_TO_EPS"/>
-				<task name="t2_EPS_FROM_CTRLS"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_CTRL1_TO" src="CTRL1" dest="EPS" sender_task="t1_CTRL1_TO_EPS" receiver_tasks="t2_EPS_FROM_CTRLS" size="100" period="10000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_CTRL2_TO" src="CTRL2" dest="EPS" sender_task="t1_CTRL2_TO_EPS" receiver_tasks="t2_EPS_FROM_CTRLS" size="100" period="10000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_EPS_TO_CTRLS" period="20000" type="NORMAL">
 		<tasks>
-			<task name="t1_EPS_TO_CTRLS" node="EPS" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_EPS" node="CTRL1" wcet="200" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL2_FROM_EPS" node="CTRL2" wcet="200" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_EPS_TO_CTRLS" node="EPS" wcet="200" period="20000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_EPS" node="CTRL1" wcet="200" period="20000" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_EPS" node="CTRL2" wcet="200" period="20000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_EPS_TO_CTRL1" src="t1_EPS_TO_CTRLS" dest="t2_CTRL1_FROM_EPS" size="100" group="t1_EPS_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_EPS_TO_CTRL2" src="t1_EPS_TO_CTRLS" dest="t2_CTRL2_FROM_EPS" size="100" group="t1_EPS_TO_CTRLS_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_EPS_TO_CTRL1" deadline="2000">
-				<task name="t1_EPS_TO_CTRLS"/>
-				<task name="t2_CTRL1_FROM_EPS"/>
-			</path>
-			<path name="path_1_EPS_TO_CTRL2" deadline="2000">
-				<task name="t1_EPS_TO_CTRLS"/>
-				<task name="t2_CTRL2_FROM_EPS"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_EPS_TO" src="EPS" dest="CTRL2,CTRL1" sender_task="t1_EPS_TO_CTRLS" receiver_tasks="t2_CTRL1_FROM_EPS,t2_CTRL2_FROM_EPS" size="100" period="20000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_IMUS_TO_CTRLS_AND_MAPLOC" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC" node="IMU1" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC" node="IMU2" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_IMUS" node="CTRL1" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL2_FROM_IMUS" node="CTRL2" wcet="400" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_MAPLOC_FROM_IMUS" node="MAPLOC" wcet="400" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC" node="IMU1" wcet="400" period="50000" type="NORMAL"/>
+			<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC" node="IMU2" wcet="400" period="50000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_IMUS" node="CTRL1" wcet="400" period="50000" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_IMUS" node="CTRL2" wcet="400" period="50000" type="NORMAL"/>
+			<task name="t2_MAPLOC_FROM_IMUS" node="MAPLOC" wcet="400" period="50000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_IMU1_TO_CTRL1" src="t1_IMU1_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL1_FROM_IMUS" size="200" group="t1_IMU1_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_IMU1_TO_CTRL2" src="t1_IMU1_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL2_FROM_IMUS" size="200" group="t1_IMU1_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_IMU1_TO_MAPLOC" src="t1_IMU1_TO_CTRLS_AND_MAPLOC" dest="t2_MAPLOC_FROM_IMUS" size="200" group="t1_IMU1_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_IMU2_TO_CTRL1" src="t1_IMU2_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL1_FROM_IMUS" size="200" group="t1_IMU2_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_IMU2_TO_CTRL2" src="t1_IMU2_TO_CTRLS_AND_MAPLOC" dest="t2_CTRL2_FROM_IMUS" size="200" group="t1_IMU2_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_IMU2_TO_MAPLOC" src="t1_IMU2_TO_CTRLS_AND_MAPLOC" dest="t2_MAPLOC_FROM_IMUS" size="200" group="t1_IMU2_TO_CTRLS_AND_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_IMU1_TO_CTRL1" deadline="4000">
-				<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
-				<task name="t2_CTRL1_FROM_IMUS"/>
-			</path>
-			<path name="path_1_IMU1_TO_CTRL2" deadline="4000">
-				<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
-				<task name="t2_CTRL2_FROM_IMUS"/>
-			</path>
-			<path name="path_1_IMU1_TO_MAPLOC" deadline="4000">
-				<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
-				<task name="t2_MAPLOC_FROM_IMUS"/>
-			</path>
-			<path name="path_1_IMU2_TO_CTRL1" deadline="4000">
-				<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
-				<task name="t2_CTRL1_FROM_IMUS"/>
-			</path>
-			<path name="path_1_IMU2_TO_CTRL2" deadline="4000">
-				<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
-				<task name="t2_CTRL2_FROM_IMUS"/>
-			</path>
-			<path name="path_1_IMU2_TO_MAPLOC" deadline="4000">
-				<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
-				<task name="t2_MAPLOC_FROM_IMUS"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_IMU1_TO" src="IMU1" dest="CTRL2,MAPLOC,CTRL1" sender_task="t1_IMU1_TO_CTRLS_AND_MAPLOC" receiver_tasks="t2_CTRL2_FROM_IMUS,t2_CTRL1_FROM_IMUS,t2_MAPLOC_FROM_IMUS" size="200" period="50000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_IMU2_TO" src="IMU2" dest="CTRL2,MAPLOC,CTRL1" sender_task="t1_IMU2_TO_CTRLS_AND_MAPLOC" receiver_tasks="t2_CTRL2_FROM_IMUS,t2_CTRL1_FROM_IMUS,t2_MAPLOC_FROM_IMUS" size="200" period="50000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 	<application name="App_MAPLOC_TO_CTRLS_AND_FRONT_CAM" period="100000" type="NORMAL">
 		<tasks>
-			<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" node="MAPLOC" wcet="500" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL1_FROM_MAPLOC" node="CTRL1" wcet="500" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_CTRL2_FROM_MAPLOC" node="CTRL2" wcet="500" secure="False" rl="1" type="NORMAL"/>
-			<task name="t2_FRONT_CAM_FROM_MAPLOC" node="FRONT_CAM" wcet="500" secure="False" rl="1" type="NORMAL"/>
-			<task name="t3_MAPLOC_FROM_FRONT_CAM" node="MAPLOC" wcet="500" secure="False" rl="1" type="NORMAL"/>
+			<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" node="MAPLOC" wcet="500" period="100000" type="NORMAL"/>
+			<task name="t2_CTRL1_FROM_MAPLOC" node="CTRL1" wcet="500" period="100000" type="NORMAL"/>
+			<task name="t2_CTRL2_FROM_MAPLOC" node="CTRL2" wcet="500" period="100000" type="NORMAL"/>
+			<task name="t2_FRONT_CAM_FROM_MAPLOC" node="FRONT_CAM" wcet="500" period="100000" type="NORMAL"/>
+			<task name="t3_MAPLOC_FROM_FRONT_CAM" node="MAPLOC" wcet="500" period="100000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1_MAPLOC_TO_CTRL1" src="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" dest="t2_CTRL1_FROM_MAPLOC" size="100" group="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_MAPLOC_TO_CTRL2" src="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" dest="t2_CTRL2_FROM_MAPLOC" size="100" group="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_MAPLOC_TO_FRONT_CAM" src="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" dest="t2_FRONT_CAM_FROM_MAPLOC" size="100" group="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s1_FRONT_CAM_TO_MAPLOC" src="t2_FRONT_CAM_FROM_MAPLOC" dest="t3_MAPLOC_FROM_FRONT_CAM" size="200" group="t2_FRONT_CAM_FROM_MAPLOC_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_1_MAPLOC_TO_CTRL1" deadline="5000">
-				<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
-				<task name="t2_CTRL1_FROM_MAPLOC"/>
-			</path>
-			<path name="path_1_MAPLOC_TO_CTRL2" deadline="5000">
-				<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
-				<task name="t2_CTRL2_FROM_MAPLOC"/>
-			</path>
-			<path name="path_1_MAPLOC_TO_FRONT_CAM" deadline="5000">
-				<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
-				<task name="t2_FRONT_CAM_FROM_MAPLOC"/>
-			</path>
-			<path name="path_2_FRONT_CAM_TO_MAPLOC" deadline="5000">
-				<task name="t2_FRONT_CAM_FROM_MAPLOC"/>
-				<task name="t3_MAPLOC_FROM_FRONT_CAM"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1_MAPLOC_TO" src="MAPLOC" dest="CTRL2,CTRL1,FRONT_CAM" sender_task="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM" receiver_tasks="t2_FRONT_CAM_FROM_MAPLOC,t2_CTRL1_FROM_MAPLOC,t2_CTRL2_FROM_MAPLOC" size="100" period="100000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s1_FRONT_CAM_TO" src="FRONT_CAM" dest="MAPLOC" sender_task="t2_FRONT_CAM_FROM_MAPLOC" receiver_tasks="t3_MAPLOC_FROM_FRONT_CAM" size="200" period="100000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 
-
+	<path name="path_1_FRONT_CAM" deadline="2000">
+		<task name="t1_FRONT_CAM_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_FRONT_CAM"/>
+	</path>
+	<path name="path_2_FRONT_CAM" deadline="2000">
+		<task name="t1_FRONT_CAM_TO_CTRLS"/>
+		<task name="t3_CTRL2_FROM_FRONT_CAM"/>
+	</path>
+	<path name="path_1_REAR_CAM" deadline="4000">
+		<task name="t1_REAR_CAM_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_REAR_CAM"/>
+	</path>
+	<path name="path_2_REAR_CAM" deadline="4000">
+		<task name="t1_REAR_CAM_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_REAR_CAM"/>
+	</path>
+	<path name="path_1_FRONT_SVCAM" deadline="10000">
+		<task name="t1_FRONT_SVCAM_TO_CTRL_1"/>
+		<task name="t2_CTRL1_FROM_SVCAMS"/>
+	</path>
+	<path name="path_1_LEFT_SVCAM" deadline="10000">
+		<task name="t1_LEFT_SVCAM_TO_CTRL1"/>
+		<task name="t2_CTRL1_FROM_SVCAMS"/>
+	</path>
+	<path name="path_1_RIGHT_SVCAM" deadline="10000">
+		<task name="t1_RIGHT_SVCAM_TO_CTRL1"/>
+		<task name="t2_CTRL1_FROM_SVCAMS"/>
+	</path>
+	<path name="path_1_REAR_SVCAM" deadline="10000">
+		<task name="t1_REAR_SVCAM_TO_CTRL1"/>
+		<task name="t2_CTRL1_FROM_SVCAMS"/>
+	</path>
+	<path name="path_1_FRONT_RAD" deadline="4000">
+		<task name="t1_FRONT_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_RADARS"/>
+	</path>
+	<path name="path_1.1_FRONT_RAD" deadline="4000">
+		<task name="t1_FRONT_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_RADARS"/>
+	</path>
+	<path name="path_1_LEFT_FRONT_RAD" deadline="4000">
+		<task name="t1_LEFT_FRONT_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_RADARS"/>
+	</path>
+	<path name="path_1.1_LEFT_FRONT_RAD" deadline="4000">
+		<task name="t1_LEFT_FRONT_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_RADARS"/>
+	</path>
+	<path name="path_1_RIGHT_FRONT_RAD" deadline="4000">
+		<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_RADARS"/>
+	</path>
+	<path name="path_1.1_RIGHT_FRONT_RAD" deadline="4000">
+		<task name="t1_RIGHT_FRONT_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_RADARS"/>
+	</path>
+	<path name="path_1_LEFT_REAR_RAD" deadline="4000">
+		<task name="t1_LEFT_REAR_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_RADARS"/>
+	</path>
+	<path name="path_1.1_LEFT_REAR_RAD" deadline="4000">
+		<task name="t1_LEFT_REAR_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_RADARS"/>
+	</path>
+	<path name="path_1_RIGHT_REAR_RAD" deadline="4000">
+		<task name="t1_RIGHT_REAR_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_RADARS"/>
+	</path>
+	<path name="path_1.1_RIGHT_REAR_RAD" deadline="4000">
+		<task name="t1_RIGHT_REAR_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_RADARS"/>
+	</path>
+	<path name="path_1_REAR_RAD" deadline="4000">
+		<task name="t1_REAR_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_RADARS"/>
+	</path>
+	<path name="path_1.1_REAR_RAD" deadline="4000">
+		<task name="t1_REAR_RAD_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_RADARS"/>
+	</path>
+	<path name="path_1_CTRL1_FRONT_CAM" deadline="4000">
+		<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+		<task name="t2_FRONT_CAM_FROM_CTRL"/>
+	</path>
+	<path name="path_1_CTRL1_FRONT_RAD" deadline="4000">
+		<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+		<task name="t2_FRONT_RAD_FROM_CTRL"/>
+	</path>
+	<path name="path_1_CTRL1_REAR_CAM" deadline="4000">
+		<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+		<task name="t2_REAR_CAM_FROM_CTRL"/>
+	</path>
+	<path name="path_1_CTRL1_REAR_RAD" deadline="4000">
+		<task name="t1_CTRL1_TO_CAM_AND_RAD"/>
+		<task name="t2_REAR_RAD_FROM_CTRL"/>
+	</path>
+	<path name="path_1_CTRL2_FRONT_CAM" deadline="4000">
+		<task name="t1_CTRL2_TO_CAM_AND_RAD"/>
+		<task name="t2_FRONT_CAM_FROM_CTRL"/>
+	</path>
+	<path name="path_1_CTRL2_FRONT_RAD" deadline="4000">
+		<task name="t1_CTRL2_TO_CAM_AND_RAD"/>
+		<task name="t2_FRONT_RAD_FROM_CTRL"/>
+	</path>
+	<path name="path_1_CTRL1_ECM" deadline="4000">
+		<task name="t1_CTRL1_TO_ECM_EBCM"/>
+		<task name="t2_ECM_FROM_CTRLS"/>
+	</path>
+	<path name="path_1_CTRL1_EBCM" deadline="2000">
+		<task name="t1_CTRL1_TO_ECM_EBCM"/>
+		<task name="t2_EBCM_FROM_CTRLS"/>
+	</path>
+	<path name="path_1_CTRL2_ECM" deadline="4000">
+		<task name="t1_CTRL2_TO_ECM_EBCM"/>
+		<task name="t2_ECM_FROM_CTRLS"/>
+	</path>
+	<path name="path_1_CTRL2_EBCM" deadline="2000">
+		<task name="t1_CTRL2_TO_ECM_EBCM"/>
+		<task name="t2_EBCM_FROM_CTRLS"/>
+	</path>
+	<path name="path_2_ECM_CTRL1" deadline="4000">
+		<task name="t2_ECM_FROM_CTRLS"/>
+		<task name="t3_CTRL1_FROM_ECM_EBCM"/>
+	</path>
+	<path name="path_2_EBCM_CTRL1" deadline="2000">
+		<task name="t2_EBCM_FROM_CTRLS"/>
+		<task name="t3_CTRL1_FROM_ECM_EBCM"/>
+	</path>
+	<path name="path_2_ECM_CTRL2" deadline="4000">
+		<task name="t2_ECM_FROM_CTRLS"/>
+		<task name="t3_CTRL2_FROM_ECM_EBCM"/>
+	</path>
+	<path name="path_2_EBCM_CTRL2" deadline="2000">
+		<task name="t2_EBCM_FROM_CTRLS"/>
+		<task name="t3_CTRL2_FROM_ECM_EBCM"/>
+	</path>
+	<path name="path_1_CTRL1_TO_EPS" deadline="2000">
+		<task name="t1_CTRL1_TO_EPS"/>
+		<task name="t2_EPS_FROM_CTRLS"/>
+	</path>
+	<path name="path_1_CTRL2_TO_EPS" deadline="2000">
+		<task name="t1_CTRL2_TO_EPS"/>
+		<task name="t2_EPS_FROM_CTRLS"/>
+	</path>
+	<path name="path_1_EPS_TO_CTRL1" deadline="2000">
+		<task name="t1_EPS_TO_CTRLS"/>
+		<task name="t2_CTRL1_FROM_EPS"/>
+	</path>
+	<path name="path_1_EPS_TO_CTRL2" deadline="2000">
+		<task name="t1_EPS_TO_CTRLS"/>
+		<task name="t2_CTRL2_FROM_EPS"/>
+	</path>
+	<path name="path_1_IMU1_TO_CTRL1" deadline="4000">
+		<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
+		<task name="t2_CTRL1_FROM_IMUS"/>
+	</path>
+	<path name="path_1_IMU1_TO_CTRL2" deadline="4000">
+		<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
+		<task name="t2_CTRL2_FROM_IMUS"/>
+	</path>
+	<path name="path_1_IMU1_TO_MAPLOC" deadline="4000">
+		<task name="t1_IMU1_TO_CTRLS_AND_MAPLOC"/>
+		<task name="t2_MAPLOC_FROM_IMUS"/>
+	</path>
+	<path name="path_1_IMU2_TO_CTRL1" deadline="4000">
+		<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
+		<task name="t2_CTRL1_FROM_IMUS"/>
+	</path>
+	<path name="path_1_IMU2_TO_CTRL2" deadline="4000">
+		<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
+		<task name="t2_CTRL2_FROM_IMUS"/>
+	</path>
+	<path name="path_1_IMU2_TO_MAPLOC" deadline="4000">
+		<task name="t1_IMU2_TO_CTRLS_AND_MAPLOC"/>
+		<task name="t2_MAPLOC_FROM_IMUS"/>
+	</path>
+	<path name="path_1_MAPLOC_TO_CTRL1" deadline="5000">
+		<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
+		<task name="t2_CTRL1_FROM_MAPLOC"/>
+	</path>
+	<path name="path_1_MAPLOC_TO_CTRL2" deadline="5000">
+		<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
+		<task name="t2_CTRL2_FROM_MAPLOC"/>
+	</path>
+	<path name="path_1_MAPLOC_TO_FRONT_CAM" deadline="5000">
+		<task name="t1_MAPLOC_TO_CTRLS_AND_FRONT_CAM"/>
+		<task name="t2_FRONT_CAM_FROM_MAPLOC"/>
+	</path>
+	<path name="path_2_FRONT_CAM_TO_MAPLOC" deadline="5000">
+		<task name="t2_FRONT_CAM_FROM_MAPLOC"/>
+		<task name="t3_MAPLOC_FROM_FRONT_CAM"/>
+	</path>
 
 </NetworkDescription>

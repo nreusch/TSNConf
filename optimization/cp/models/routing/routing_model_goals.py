@@ -7,7 +7,7 @@ def add_optimization_goal(model):
     _create_cost_variable_route_length(model)
 
     # overlap is not allowed
-    # self._create_cost_variable_overlap()
+    _create_cost_variable_overlap(model)
 
     # Set cost for each stream
     for f_int in range(model.max_stream_int):
@@ -30,13 +30,13 @@ def add_optimization_goal(model):
 
 def _create_cost_variable_route_length(model):
     for f_int in range(model.max_stream_int):
-        f = model.tc.F[model._IntToStreamIDMap[f_int]]
+        f = model.tc.F_routed[model._IntToStreamIDMap[f_int]]
         all_used_links = flatten(model.x_v_is_u[f_int])
 
         stream_route_len = model.model.NewIntVar(
             0, model.max_node_int, "stream_route_weight_{}".format(f.id)
         )
-        model.model.Add(stream_route_len == sum(all_used_links))
+        model.model.Add(stream_route_len == sum(all_used_links) - 1) # substract 1 to not count source self link
         model.stream_route_lens[f.id] = stream_route_len
 
 
@@ -56,41 +56,35 @@ def _create_cost_variable_overlap(model):
             for u_id in model.tc.N_conn[v.id]:
                 u_int = model._NodeIDToIntMap[u_id]
                 # switch u and v here to get connections FROM v to u
-                x_v_is_u_list = [
-                    model.x_v_is_u[f_int][u_int][v_int] for f_int in f_int_list
-                ]
+                x_v_is_u_list = [model.x_v_is_u[f_int][u_int][v_int] for f_int in f_int_list]
 
-                model.link_occupations[stream_id_prefix][v.id][
-                    u_id
-                ] = model.model.NewIntVar(
-                    0,
-                    len(stream_list),
-                    "link_occupation_{}_{}_{}".format(stream_id_prefix, v.id, u_id),
-                )
-                model.model.Add(
-                    model.link_occupations[stream_id_prefix][v.id][u_id]
-                    == sum(x_v_is_u_list)
-                )
+                model.link_occupations[stream_id_prefix][v.id][u_id] = model.model.NewIntVar(0, len(stream_list),
+                                                                                             "link_occupation_{}_{}_{}".format(
+                                                                                                 stream_id_prefix, v.id,
+                                                                                                 u_id))
+                model.model.Add(model.link_occupations[stream_id_prefix][v.id][u_id] == sum(x_v_is_u_list))
 
                 for f_int in f_int_list:
                     stream_id = model._IntToStreamIDMap[f_int]
-                    stream = model.tc.F[stream_id]
+                    stream = model.tc.F_routed[stream_id]
 
-                    model.stream_overlaps[stream_id].append(
-                        model.model.NewIntVar(
-                            0,
-                            len(stream_list) - 1,
-                            "stream_{}_overlap_on_{}_{}".format(f_int, v_int, u_int),
-                        )
-                    )
+                    model.stream_overlaps[stream_id].append(model.model.NewIntVar(0, len(stream_list) - 1,
+                                                                                  "stream_{}_overlap_on_{}_{}".format(
+                                                                                      f_int, v_int, u_int)))
 
                     if u_id != stream.sender_es_id:
-                        model.model.Add(
-                            model.stream_overlaps[stream_id][-1]
-                            == sum(x_v_is_u_list) - 1
-                        ).OnlyEnforceIf(model.x_v_is_u[f_int][u_int][v_int])
-                        model.model.Add(
-                            model.stream_overlaps[stream_id][-1] == 0
-                        ).OnlyEnforceIf(model.x_v_is_u[f_int][u_int][v_int].Not())
+                        model.model.Add(model.stream_overlaps[stream_id][-1] == sum(x_v_is_u_list) - 1).OnlyEnforceIf(
+                            model.x_v_is_u[f_int][u_int][v_int])
+                        model.model.Add(model.stream_overlaps[stream_id][-1] == 0).OnlyEnforceIf(
+                            model.x_v_is_u[f_int][u_int][v_int].Not())
                     else:
                         model.model.Add(model.stream_overlaps[stream_id][-1] == 0)
+
+        # Set cost for sub-streams
+        for f_int in f_int_list:
+            stream_id = model._IntToStreamIDMap[f_int]
+            model.stream_cost[stream_id] = model.model.NewIntVar(0, model.max_node_int + 100 * (
+                    len(stream_list) * model.max_node_int), "stream_cost_{}".format(f_int))
+            model.model.Add(
+                model.stream_cost[stream_id] == 10 * sum(model.stream_overlaps[stream_id]) + model.stream_route_lens[
+                    stream_id])

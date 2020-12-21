@@ -1,5 +1,5 @@
 <!-- mtu, overhead, mac_length in Byte. All times in us-->
-<NetworkDescription mtu="1500" frame_overhead="32" key_length="64" mac_length="22">
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="64" mac_length="32">
 	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
 	<device name="SW1" type="Switch"/>
 	<device name="ES1" type="EndSystem" mac_exec_time="20"/>
@@ -17,27 +17,24 @@
 	<!-- period&wcet is in us, size in Byte-->
 	<application name="App1" period="1000" type="NORMAL">
 		<tasks>
-			<task name="t1" node="ES1" wcet="100" secure="True" rl="1" type="NORMAL"/>
-			<task name="t2" node="ES2" wcet="100" secure="True" rl="1" type="NORMAL"/>
-			<task name="t3" node="ES3" wcet="100" secure="True" rl="1" type="NORMAL"/>
+			<task name="t1" node="ES1" wcet="100" period="1000" type="NORMAL"/>
+			<task name="t2" node="ES2" wcet="100" period="1000" type="NORMAL"/>
+			<task name="t3" node="ES3" wcet="100" period="1000" type="NORMAL"/>
 		</tasks>
-		<signals>
-			<signal name="s1" src="t1" dest="t3" size="50" group="t1_1" secure="True" rl="1" type="NORMAL"/>
-			<signal name="s2" src="t2" dest="t3" size="50" group="t2_1" secure="True" rl="1" type="NORMAL"/>
-		</signals>
-		<functionpaths>
-			<path name="path_t1_t3" deadline="1000">
-				<task name="t1"/>
-				<task name="t3"/>
-			</path>
-			<path name="path_t2_t3" deadline="1000">
-				<task name="t2"/>
-				<task name="t3"/>
-			</path>
-		</functionpaths>
+		<streams>
+			<stream name="s1" src="ES1" dest="ES3" sender_task="t1" receiver_tasks="t3" size="50" period="1000" rl="1" secure="True" type="NORMAL" />
+			<stream name="s2" src="ES2" dest="ES3" sender_task="t2" receiver_tasks="t3" size="50" period="1000" rl="1" secure="True" type="NORMAL" />
+		</streams>
 	</application>
 	
 
-
+	<path name="path_t1_t3" deadline="1000">
+		<task name="t1"/>
+		<task name="t3"/>
+	</path>
+	<path name="path_t2_t3" deadline="1000">
+		<task name="t2"/>
+		<task name="t3"/>
+	</path>
 
 </NetworkDescription>

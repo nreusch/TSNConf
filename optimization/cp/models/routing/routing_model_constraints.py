@@ -7,7 +7,7 @@ def add_constraints(model):
     # HELPER CONSTRAINTS
     for f_int in range(model.max_stream_int):
         for v_int in range(model.max_node_int):
-            f = model.tc.F[model._IntToStreamIDMap[f_int]]
+            f = model.tc.F_routed[model._IntToStreamIDMap[f_int]]
             v = model.tc.N[model._IntToNodeIDMap[v_int]]
 
             x_v_has_s = model.x_v_has_successor[f_int][v_int]
@@ -42,7 +42,7 @@ def add_constraints(model):
             model.x_v_is_not_u[f_int].append([])  #
             model.x_v_is_u[f_int].append([])  #
             model.x_v_is_u_and_uses_bandwidth[f_int].append([])
-            f = model.tc.F[model._IntToStreamIDMap[f_int]]
+            f = model.tc.F_routed[model._IntToStreamIDMap[f_int]]
             v = model.tc.N[model._IntToNodeIDMap[v_int]]
 
             # Constraint 1: x(v) != -1 => y(v) = y(x(v)) + 1 -> Avoid cycles
@@ -185,7 +185,7 @@ def add_constraints(model):
             )
 
     for f_int in range(model.max_stream_int):
-        f = model.tc.F[model._IntToStreamIDMap[f_int]]
+        f = model.tc.F_routed[model._IntToStreamIDMap[f_int]]
         for u_int in range(model.max_node_int):
             u = model.tc.N[model._IntToNodeIDMap[u_int]]
 

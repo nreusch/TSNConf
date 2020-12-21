@@ -1,3 +1,4 @@
+import math
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from typing import Dict
@@ -17,6 +18,12 @@ class link:
 
     def __str__(self):
         return self.__repr__()
+
+    def transmission_length(self, bytes: int):
+        """
+        Returns the amount of time it takes to transmit x bytes on this link
+        """
+        return math.ceil(bytes / self.speed)
 
     def xml_string(self):
         return '<link src="{}" dest="{}" speed="{:.2f}"/>\n'.format(

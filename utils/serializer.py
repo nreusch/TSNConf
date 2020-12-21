@@ -52,9 +52,9 @@ def serialize_solution(base_path: Path, solution: Solution) -> Path:
     if fig is not None:
         fig.write_html(str(path / "schedule.html"))
         try:
-            fig.write_image(str(path / "schedule.pdf"), width=1920, height=640)
-        except ValueError:
-            print("-"*20 + " Couldn't find orca. Won't write schedule.pdf.", file=sys.stderr)
+            fig.write_image(str(path / "schedule.pdf"), width=1920, height=640, engine="kaleido")
+        except Exception as e:
+            raise e
 
     # Append to results.csv
     df = solution_parser.get_solution_results_info_dataframe(solution)
@@ -168,16 +168,15 @@ def serialize_graphs(path: Path, solution: Solution):
             dot.node(task.id)
             index += 1
 
-        # TODO: Split labels with multiple signals
-        for signal_id, tup in app.edges.items():
-            if tup in existing_tuples:
-                dot.body[existing_tuples[tup]] = dot.body[existing_tuples[tup]][
-                    :-2
-                ] + ', {}"]'.format(signal_id)
-            else:
-                dot.edge(tup[0], tup[1], label=" {}".format(signal_id))
-                existing_tuples[tup] = index
-                index += 1
+
+        existing_streams = []
+        for stream_id, tup_list in app.edges.items():
+            stream = solution.tc.F[stream_id]
+
+            if stream.get_id_prefix() not in existing_streams:
+                for tup in tup_list:
+                    dot.edge(tup[0], tup[1], label=" {}".format(stream_id))
+                    existing_streams.append(stream.get_id_prefix())
 
         dot.format = "pdf"
         dot.render(filename=path / (app.id + ".gv"))

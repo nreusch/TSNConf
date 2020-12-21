@@ -5,3 +5,5 @@ testcases/output/
 .vscode/
 .venv_ubuntu/
 .venvubuntu/
+testcases/mdh_example.flex_network_description
+testcases/mdh_example_multiple_periods.flex_network_description

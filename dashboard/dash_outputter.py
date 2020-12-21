@@ -60,9 +60,9 @@ def run(solution: Solution):
     # ------- Task Table
     df = solution_parser.get_testcase_task_dataframe(solution)
     input_task_table = table("table_input_tasks", df)
-    # ------- Signal Table
-    df = solution_parser.get_testcase_signal_dataframe(solution)
-    input_signal_table = table("table_input_signals", df)
+    # ------- Stream Table
+    df = solution_parser.get_testcase_stream_dataframe(solution)
+    input_stream_table = table("table_input_streams", df)
 
     # --- Derived
 
@@ -100,12 +100,8 @@ def run(solution: Solution):
     derived_security_task_table = table("table_derived_security_tasks", df)
 
     # ------- Security Signal Table
-    df = solution_parser.get_derived_security_signal_dataframe(solution)
-    derived_security_signal_table = table("table_derived_security_signals", df)
-
-    # ------- Frame Table
-    df = solution_parser.get_derived_streams_dataframe(solution)
-    derived_stream_table = table("table_derived_frames", df)
+    df = solution_parser.get_derived_security_stream_dataframe(solution)
+    derived_security_stream_table = table("table_derived_security_streams", df)
 
     # --- Output
     # ------- Information
@@ -125,6 +121,7 @@ def run(solution: Solution):
     solution_timing_info_pint = table("table_solution_timing_info_pint", df[["Creating Variables - Pint (ms)", "Creating Constraints - Pint (ms)", "Optimizing - Pint (ms)"]])
     solution_timing_info_routing = table("table_solution_timing_info_routing", df[["Creating Variables - Routing (ms)", "Creating Constraints - Routing (ms)", "Optimizing - Routing (ms)"]])
     solution_timing_info_scheduling = table("table_solution_timing_info_scheduling", df[["Creating Variables - Scheduling (ms)", "Creating Constraints - Scheduling (ms)", "Optimizing - Scheduling (ms)"]])
+    solution_timing_info_sa = table("table_solution_timing_info_sa", df[["Creating Variables - Simulated Annealing (ms)", "Optimizing - Simulated Annealing (ms)"]])
     solution_timing_info_other = table("table_solution_timing_info_other", df[["Testcase Parsing (ms)"]])
 
     descr = solution_parser.get_solution_mode_description(solution)
@@ -152,62 +149,90 @@ def run(solution: Solution):
         solution_routing = solution_parser.get_solution_routing_cytoscape(
             solution
         )
+        solution_routing_info_table = table("table_solution_routing_info", solution_parser.get_solution_routing_info_dataframe(solution))
+        solution_routing_total_cost = html.H6(f"Total Cost: {solution.total_cost_routing}")
     else:
-        solution_routing = html.P("No feasible route found")
+        if len(solution.tc.R) > 0:
+            solution_routing = solution_parser.get_solution_routing_cytoscape(
+                solution
+            )
+            solution_routing_info_table = html.P("Routing was given -> No information available")
+            solution_routing_total_cost = None
+        else:
+            solution_routing = html.P("No feasible route found")
+            solution_routing_info_table = html.P("No information available")
+            solution_routing_total_cost = None
 
     # ------- Schedule
-    if solution.is_feasible_all():
+    if solution.tc.schedule:
         fig = solution_parser.get_solution_schedule_plotly(solution)
         solution_schedule = dcc.Graph(id="solution_schedule", figure=fig)
     else:
         solution_schedule = html.P("No solution found")
 
-    app.layout = html.Div(
-        [
-            html.Div(
-                [
-                    section(
+    input_section = section(
                         [
                             header("Input"),
                             row(
                                 [
-                                    columns(
+                                    row(
                                         [
-                                            column(
+                                            columns(
                                                 [
-                                                    inner_container(
-                                                        "Topology",
-                                                        inner_element_topology(input_topology),
+                                                    column(
+                                                        [
+                                                            inner_container(
+                                                                "Topology",
+                                                                inner_element_topology(input_topology),
+                                                            ),
+                                                        ]
                                                     ),
-                                                    inner_container(
-                                                        "Tasks", input_task_table
-                                                    ),
-                                                ]
-                                            ),
-                                            column(
-                                                [
-                                                    inner_container(
-                                                        "Normal Applications",
-                                                        row(
-                                                            [
-                                                                inner_element_dag(input_normal_app_dag_dropdown),
-                                                                inner_element_dag(input_normal_app_dag_viewer)
-                                                            ]
-                                                        )
-                                                    ),
-                                                    inner_container(
-                                                        "Input Signals",
-                                                        input_signal_table,
+                                                    column(
+                                                        [
+                                                            inner_container(
+                                                                "Normal Applications",
+                                                                row(
+                                                                    [
+                                                                        inner_element_dag(
+                                                                            input_normal_app_dag_dropdown),
+                                                                        inner_element_dag(input_normal_app_dag_viewer)
+                                                                    ]
+                                                                )
+                                                            ),
+
+                                                        ]
                                                     ),
                                                 ]
                                             ),
                                         ]
+                                    ),
+
+                                    row(
+                                        [
+                                            inner_container(
+                                                "Tasks", input_task_table
+                                            )
+                                        ]
+                                    ),
+
+                                    row(
+                                        [
+                                            inner_container(
+                                                "Input Streams",
+                                                input_stream_table,
+                                            )
+                                        ]
                                     )
                                 ]
                             ),
+
+
+
+
                         ]
-                    ),
-                    section(
+                    )
+
+    security_input_section = section(
                         [
                             header("Derived Security Applications"),
                             row(
@@ -238,8 +263,8 @@ def run(solution: Solution):
                                                         )
                                                     ),
                                                     inner_container(
-                                                        "Security Signals",
-                                                        derived_security_signal_table,
+                                                        "Security Streams",
+                                                        derived_security_stream_table,
                                                     ),
                                                 ]
                                             ),
@@ -248,26 +273,26 @@ def run(solution: Solution):
                                 ]
                             ),
                         ]
-                    ),
-                    section(
+                    )
+
+    routing_section = section(
                         [
-                            header("Derived Streams"),
-                            row([inner_container("Streams", derived_stream_table)]),
-                        ]
-                    ),
-                    section(
-                        [
-                            header("Optimized Routing"),
+                            header("Routing"),
                             row(
                                 [
                                     columns(
                                         [
                                             column(
                                                 [
-                                                    html.H5("Layout:"),
-                                                    cytoscape_layout_dropdown(),
-                                                    html.H5("Streams:"),
-                                                    stream_checklist(solution.tc.F),
+                                                    row(
+                                                        [
+                                                            html.H5("Layout:"),
+                                                            cytoscape_layout_dropdown(),
+                                                            html.H5("Streams:"),
+                                                            stream_checklist(solution.tc.F),
+                                                        ]
+                                                    )
+
                                                 ],
                                                 size="one-third"
                                             ),
@@ -275,20 +300,25 @@ def run(solution: Solution):
                                                 [
                                                     row(
                                                         [
-                                                            solution_routing
+                                                            html.H5("Cytoscape:"),
+                                                            solution_routing,
+                                                            html.H5("Routing Information:"),
+                                                            solution_routing_total_cost,
+                                                            solution_routing_info_table
                                                         ]
                                                     )
                                                 ],
                                                 size="two-thirds"
-                                            ),
+                                            )
                                         ]
                                     ),
                                 ]
                             )
 
                         ]
-                    ),
-                    section(
+                    )
+
+    results_section = section(
                         [
                             header("Output"),
                             row(
@@ -326,6 +356,7 @@ def run(solution: Solution):
                                                                         inner_element(solution_timing_info_pint),
                                                                         inner_element(solution_timing_info_routing),
                                                                         inner_element(solution_timing_info_scheduling),
+                                                                        inner_element(solution_timing_info_sa),
                                                                         inner_element(solution_timing_info_other)
                                                                     ]
                                                                 )
@@ -359,7 +390,7 @@ def run(solution: Solution):
                                                     column(
                                                         [
                                                             inner_container(
-                                                                "Functionpath Laxities",
+                                                                "Functionpaths",
                                                                 solution_results_functionpaths_table,
                                                             ),
                                                         ]
@@ -372,11 +403,33 @@ def run(solution: Solution):
                                 ]
                             ),
                         ]
-                    ),
-                ]
-            )
-        ]
-    )
+                    )
+
+    if solution.input_params.no_security:
+        app.layout = html.Div(
+            [
+                html.Div(
+                    [
+                        input_section,
+                        routing_section,
+                        results_section
+                    ]
+                )
+            ]
+        )
+    else:
+        app.layout = html.Div(
+            [
+                html.Div(
+                    [
+                        input_section,
+                        security_input_section,
+                        routing_section,
+                        results_section
+                    ]
+                )
+            ]
+        )
 
     @app.callback(
         Output("cytoscape-routing-graph", "layout"),
@@ -390,15 +443,17 @@ def run(solution: Solution):
         Output('input_normal_app_dag_viewer', 'children'),
         [Input('input_normal_app_dag_dropdown', 'value')])
     def update_normal_app_dag_viewer(value):
-        i = html.Img(src=normal_app_id_digraph_map[value], style={"width":"100%", "height" : "100%", "max-height" : "200px"})
-        return i
+        if value != "":
+            i = html.Img(src=normal_app_id_digraph_map[value], style={"width":"100%", "height" : "100%", "max-height" : "200px"})
+            return i
 
     @app.callback(
         Output('input_security_app_dag_viewer', 'children'),
         [Input('input_security_app_dag_dropdown', 'value')])
     def update_security_app_dag_viewer(value):
-        i = html.Img(src=security_app_id_digraph_map[value], style={"width": "100%", "height" : "100%", "max-height" : "200px"})
-        return i
+        if value != "":
+            i = html.Img(src=security_app_id_digraph_map[value], style={"width": "100%", "height" : "100%", "max-height" : "200px"})
+            return i
 
     @app.callback(
         Output("cytoscape-routing-graph", "stylesheet"),
@@ -435,7 +490,7 @@ def run(solution: Solution):
 
         return stylesheet
 
-    app.run_server()
+    app.run_server(port=8060)
 
 
 if __name__ == "__main__":

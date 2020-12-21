@@ -12,7 +12,7 @@ from input.model.stream import EStreamType
 from input.model.task import key_verification_task
 from input.testcase import ETaskType
 from solution.solution import Solution
-from utils.utilities import flatten
+from utils.utilities import flatten, set_to_string
 
 
 def get_testcase_application_graphs(solution: Solution) -> Dict[str, str]:
@@ -55,44 +55,65 @@ def get_testcase_topology_graph(solution: Solution) -> str:
 
 def get_testcase_task_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe with task information: columns=["ID", "Period (us)", "WCET (us)", "ES"]
+    Returns a dataframe with ETaskType.NORMAL task information: columns=["ID", "Period (us)", "WCET (us)", "ES"]
     """
     columns = []
-    for task in flatten(solution.tc.T_app.values()):
-        row = []
+    for task in solution.tc.T.values():
+        if task.type == ETaskType.NORMAL:
+            row = []
 
-        row.append(task.id)
-        row.append(task.app_period)
-        row.append(task.exec_time)
-        row.append(task.src_es_id)
+            row.append(task.id)
+            row.append(task.period)
+            row.append(task.exec_time)
+            row.append(task.src_es_id)
 
-        columns.append(row)
+            columns.append(row)
 
     return pd.DataFrame(columns, columns=["ID", "Period (us)", "WCET (us)", "ES"])
 
 
-def get_testcase_signal_dataframe(solution: Solution) -> pd.DataFrame:
+def get_testcase_stream_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe with signal information: columns=["ID", "Period (us)", "Length (Byte)", "Deadline (us)", "Source Task", "Dest. Task", "Group", "RL", "Secure?"]
+    Returns a dataframe with information about all EStreamType.NORMAL streams: columns=["ID","Sender ES", "Receiver ESs", "Sender Task", "Receiver Tasks", "Size", "Period", "Type", "RL", "Secure?"]
     """
     columns = []
-    for app_id, signal_list in solution.tc.S_app.items():
-        solution.tc.A_app[app_id]
-        for signal in signal_list:
+    for f_id in solution.tc.F.keys():
+        stream = solution.tc.F[f_id]
+        if stream.type == EStreamType.NORMAL:
             row = []
+            # ID
+            row.append(stream.id)
+            row.append(stream.sender_es_id)
 
-            row.append(signal.id)
-            row.append(signal.app_period)
-            row.append(signal.size)
-            row.append(signal.app_period)
-            row.append(signal.src_task_id)
-            row.append(signal.dest_task_id)
+            # Receiver ESs
+            id_string = ""
+            for recv_id in stream.receiver_es_ids:
+                id_string += recv_id + ", "
+            id_string = id_string[:-2]
+            row.append(id_string)
 
-            # group_string = "{}->{}".format(signal.sender_PE.id, signal.group)
-            # row.append(group_string)
-            row.append(signal.group)
-            row.append(signal.rl)
-            row.append(signal.is_secure)
+            row.append(stream.sender_task_id)
+
+            #Receiver Tasks
+            task_string = ""
+            for recv_id in stream.receiver_task_ids:
+                task_string += recv_id + ", "
+            task_string = task_string[:-2]
+            row.append(task_string)
+
+
+            row.append(
+                "{} = {} + {} (OH) + {} (MAC)".format(
+                    stream.size,
+                    stream.message_size,
+                    stream.frame_overhead_size,
+                    stream.mac_size,
+                )
+            )
+            row.append(stream.period)
+            row.append(stream.type.name)
+            row.append(stream.rl)
+            row.append(stream.is_secure)
 
             columns.append(row)
 
@@ -100,12 +121,13 @@ def get_testcase_signal_dataframe(solution: Solution) -> pd.DataFrame:
         columns,
         columns=[
             "ID",
-            "Period (us)",
-            "Length (Byte)",
-            "Deadline (us)",
-            "Source Task",
-            "Dest. Task",
-            "Group",
+            "Sender ES",
+            "Receiver ESs",
+            "Sender Task",
+            "Receiver Tasks",
+            "Size",
+            "Period",
+            "Type",
             "RL",
             "Secure?",
         ],
@@ -149,97 +171,50 @@ def get_derived_security_application_graphs(solution: Solution) -> Dict[str, str
     return app_id_graph_b64_map
 
 
-def get_derived_security_signal_dataframe(solution: Solution) -> pd.DataFrame:
+def get_derived_security_stream_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe with information about security signals: columns=["ID", "Period (us)", "Length (Byte)",  "Group"]
-    """
-
-    columns = []
-    for app_id, signal_list in solution.tc.S_sec.items():
-        solution.tc.A[app_id]
-        for signal in signal_list:
-            row = []
-
-            row.append(signal.id)
-            row.append(signal.app_period)
-            row.append(signal.size)
-            row.append(signal.group)
-
-            columns.append(row)
-
-    return pd.DataFrame(
-        columns, columns=["ID", "Period (us)", "Length (Byte)", "Group"]
-    )
-
-
-def get_derived_security_task_dataframe(solution: Solution) -> pd.DataFrame:
-    """
-    Returns a dataframe with information about security tasks: columns=["ID", "Period (us)", "WCET (us)", "ES", "Key Release ES"]
-    """
-    columns = []
-    for task in solution.tc.T_sec.values():
-        row = []
-
-        row.append(task.id)
-        row.append(task.app_period)
-        row.append(task.exec_time)
-        row.append(task.src_es_id)
-
-        if isinstance(task, key_verification_task):
-            row.append(task.corr_release_task_es_id)
-        else:
-            row.append("/")
-
-        columns.append(row)
-
-    return pd.DataFrame(
-        columns, columns=["ID", "Period (us)", "WCET (us)", "ES", "Key Release ES"]
-    )
-
-
-def get_derived_streams_dataframe(solution: Solution) -> pd.DataFrame:
-    """
-    Returns a dataframe with information about the streams: columns=["ID","Sender ES", "Receiver ESs", "Sender Task", "Carried Group - ID", "Carried Group - Signals", "Size", "Period", "Type", "RL", "Secure?"]
+    Returns a dataframe with information about the key streams: columns=["ID","Sender ES", "Receiver ESs", "Sender Task", "Receiver Tasks", "Size", "Period", "Type", "RL", "Secure?"]
     """
     columns = []
     for f_id in solution.tc.F.keys():
-        row = []
         stream = solution.tc.F[f_id]
-        # ID
-        row.append(stream.id)
-        row.append(stream.sender_es_id)
+        if stream.type == EStreamType.KEY:
+            row = []
+            # ID
+            row.append(stream.id)
+            row.append(stream.sender_es_id)
 
-        # Receiver ESs
-        id_string = ""
-        for recv_id in stream.receiver_es_ids:
-            id_string += recv_id + ", "
-        id_string = id_string[:-2]
-        row.append(id_string)
+            # Receiver ESs
+            id_string = ""
+            for recv_id in stream.receiver_es_ids:
+                id_string += recv_id + ", "
+            id_string = id_string[:-2]
+            row.append(id_string)
 
-        row.append(stream.sender_task_id)
-        row.append(stream.group_id)
+            row.append(stream.sender_task_id)
 
-        # Carried signals
-        signals_string = ""
-        for signal in solution.tc.S_group[stream.group_id]:
-            signals_string += signal.id + ", "
-        signals_string = signals_string[:-2]
-        row.append(signals_string)
+            #Receiver Tasks
+            task_string = ""
+            for recv_id in stream.receiver_task_ids:
+                task_string += recv_id + ", "
+            task_string = task_string[:-2]
+            row.append(task_string)
 
-        row.append(
-            "{} = {} + {} (OH) + {} (MAC)".format(
-                stream.size,
-                stream.signal_sizes[0][1],
-                stream.frame_overhead_size,
-                stream.mac_size,
+
+            row.append(
+                "{} = {} + {} (OH) + {} (MAC)".format(
+                    stream.size,
+                    stream.message_size,
+                    stream.frame_overhead_size,
+                    stream.mac_size,
+                )
             )
-        )
-        row.append(stream.period)
-        row.append(stream.type.name)
-        row.append(stream.rl)
-        row.append(stream.is_secure)
+            row.append(stream.period)
+            row.append(stream.type.name)
+            row.append(stream.rl)
+            row.append(stream.is_secure)
 
-        columns.append(row)
+            columns.append(row)
 
     return pd.DataFrame(
         columns,
@@ -248,8 +223,7 @@ def get_derived_streams_dataframe(solution: Solution) -> pd.DataFrame:
             "Sender ES",
             "Receiver ESs",
             "Sender Task",
-            "Carried Group - ID",
-            "Carried Group - Signals",
+            "Receiver Tasks",
             "Size",
             "Period",
             "Type",
@@ -259,9 +233,34 @@ def get_derived_streams_dataframe(solution: Solution) -> pd.DataFrame:
     )
 
 
+def get_derived_security_task_dataframe(solution: Solution) -> pd.DataFrame:
+    """
+    Returns a dataframe with information about security tasks: columns=["ID", "Period (us)", "WCET (us)", "ES", "Key Release ES"]
+    """
+    columns = []
+    for task in solution.tc.T.values():
+        if task.type == ETaskType.KEY_RELEASE or task.type == ETaskType.KEY_VERIFICATION:
+            row = []
+
+            row.append(task.id)
+            row.append(task.period)
+            row.append(task.exec_time)
+            row.append(task.src_es_id)
+
+            if isinstance(task, key_verification_task):
+                row.append(task.corr_release_task_es_id)
+            else:
+                row.append("/")
+
+            columns.append(row)
+
+    return pd.DataFrame(
+        columns, columns=["ID", "Period (us)", "WCET (us)", "ES", "Key Release ES"]
+    )
+
 def get_solution_general_info_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe with general information of the testcase: columns=["Testcase Name", "# ES", "# SW", "# Signals", "# Tasks"]
+    Returns a dataframe with general information of the testcase: columns=["Testcase Name", "# ES", "# Streams", "# Signals", "# Tasks"]
     """
     columns = []
     row = []
@@ -269,13 +268,13 @@ def get_solution_general_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append(solution.tc.name)
     row.append(len(solution.tc.ES))
     row.append(len(solution.tc.SW))
-    row.append(len(solution.tc.S_all))
+    row.append(len(solution.tc.F))
     row.append(len(solution.tc.T))
 
     columns.append(row)
 
     return pd.DataFrame(
-        columns, columns=["Testcase Name", "# ES", "# SW", "# Signals", "# Tasks"]
+        columns, columns=["Testcase Name", "# ES", "# Streams", "# Signals", "# Tasks"]
     )
 
 
@@ -336,7 +335,7 @@ def get_solution_results_optimization_status_dataframe(
 
 def get_solution_functionpath_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe about functionpaths: columns=["Function Path ID", "Parent Application", "Deadline", "Laxity"]
+    Returns a dataframe about functionpaths: columns=["Function Path ID", "Deadline", "Latency", "Laxity"]
     """
     columns = []
     row = []
@@ -344,20 +343,22 @@ def get_solution_functionpath_dataframe(solution: Solution) -> pd.DataFrame:
     for fp in solution.tc.FP.values():
         row = []
         row.append(fp.id)
-        row.append(fp.app_id)
 
         row.append(fp.deadline)
 
         laxity = -1
+        latency = -1
         if solution.tc.schedule != None:
-            if fp.app_id in solution.tc.schedule.laxities_val:
-                laxity = solution.tc.schedule.laxities_val[fp.app_id][fp.id]
+            if fp.id in solution.tc.schedule.laxities_val:
+                laxity = solution.tc.schedule.laxities_val[fp.id]
+                latency = fp.deadline - laxity
+        row.append(latency)
         row.append(laxity)
         columns.append(row)
 
     return pd.DataFrame(
         columns,
-        columns=["Function Path ID", "Parent Application", "Deadline", "Laxity"],
+        columns=["Function Path ID", "Deadline (us)", "Latency (us)", "Laxity (us)"],
     )
 
 
@@ -394,6 +395,7 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
         "Creating Variables - Routing (ms)", "Creating Constraints - Routing (ms)", "Optimizing - Routing (ms)",
         "Creating Variables - Pint (ms)", "Creating Constraints - Pint (ms)", "Optimizing - Pint (ms)",
         "Creating Variables - Scheduling (ms)", "Creating Constraints - Scheduling (ms)", "Optimizing - Scheduling (ms)",
+        "Creating Variables - Simulated Annealing (ms)", "Optimizing - Simulated Annealing (ms)",
         "Serializing Solution (ms)"]
     """
     columns = []
@@ -416,6 +418,9 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
     )
     row.append("{:.2f}".format(solution.timing_object.time_optimizing_scheduling))
 
+    row.append("{:.2f}".format(solution.timing_object.time_creating_vars_simulated_annealing))
+    row.append("{:.2f}".format(solution.timing_object.time_optimizing_simulated_annealing))
+
     row.append("{:.2f}".format(solution.timing_object.time_serializing_solution))
 
     columns.append(row)
@@ -433,7 +438,38 @@ def get_solution_timing_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Creating Variables - Scheduling (ms)",
             "Creating Constraints - Scheduling (ms)",
             "Optimizing - Scheduling (ms)",
+            "Creating Variables - Simulated Annealing (ms)",
+            "Optimizing - Simulated Annealing (ms)",
             "Serializing Solution (ms)",
+        ],
+    )
+
+def get_solution_routing_info_dataframe(solution: Solution) -> pd.DataFrame:
+    """
+    Returns a dataframe with route information: columns=["Stream ID","Cost","Route Length","Overlap Amount","Overlap Links"]
+    """
+    columns = []
+
+    for r_info in solution.tc.R_info.values():
+        row = []
+
+        row.append(r_info.route.stream.id)
+        row.append(r_info.cost)
+        row.append(r_info.route_len)
+
+        row.append(r_info.overlap_number)
+        row.append(set_to_string(r_info.overlap_links))
+
+        columns.append(row)
+
+    return pd.DataFrame(
+        columns,
+        columns=[
+            "Stream ID",
+            "Cost",
+            "Route Length",
+            "Overlap Amount",
+            "Overlap Links"
         ],
     )
 
@@ -464,13 +500,11 @@ def get_solution_routing_cytoscape(solution: Solution) -> cyto.Cytoscape:
         edges.append(el)
 
     for f_id, mtree in solution.tc.R.items():
-        for l_id in mtree.get_all_links():
-            if l_id in solution.tc.L:
-                l = solution.tc.L[l_id]
-                el = {}
-                el["data"] = {"source": l.src.id, "target": l.dest.id}
-                el["classes"] = f_id
-                edges.append(el)
+        for l in mtree.get_all_links(solution.tc.L_from_nodes):
+            el = {}
+            el["data"] = {"source": l.src.id, "target": l.dest.id}
+            el["classes"] = f_id
+            edges.append(el)
 
     elements = flatten([nodes, edges])
 
@@ -479,7 +513,7 @@ def get_solution_routing_cytoscape(solution: Solution) -> cyto.Cytoscape:
     stylesheet = flatten(
         [
             _cytoscape_base_stylesheet(),
-            _cytoscape_base_stream_selectors(solution.tc.F.keys()),
+            _cytoscape_base_stream_selectors(solution.tc.F_routed.keys()),
         ]
     )
 
@@ -546,20 +580,31 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
     """
     solution = solution
 
-    if solution.is_feasible_all():
+    if solution.tc.schedule:
         tick_distance = solution.tc.Pint
-        fig = go.Figure(
-            layout={
-                "barmode": "stack",
-                "xaxis": {
-                    "automargin": True,
-                    "tickmode": "linear",
-                    "tick0": 0,
-                    "dtick": tick_distance,
+        if tick_distance > 0:
+            fig = go.Figure(
+                layout={
+                    "barmode": "stack",
+                    "xaxis": {
+                        "automargin": True,
+                        "tickmode": "linear",
+                        "tick0": 0,
+                        "dtick": tick_distance,
+                    },
+                    "yaxis": {"automargin": True},
                 },
-                "yaxis": {"automargin": True},
-            },
-        )
+            )
+        else:
+            fig = go.Figure(
+                layout={
+                    "barmode": "stack",
+                    "xaxis": {
+                        "automargin": True
+                    },
+                    "yaxis": {"automargin": True},
+                },
+            )
 
         """
         fig.update_layout(
@@ -603,9 +648,9 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
             else:
                 index = "INVALID"
 
-            for i_period in range(int(solution.tc.hyperperiod / task.app_period)):
+            for i_period in range(int(solution.tc.hyperperiod / task.period)):
                 offset = (
-                    i_period * task.app_period + solution.tc.schedule.o_t_val[task.id]
+                    i_period * task.period + solution.tc.schedule.o_t_val[task.id]
                 )
                 length = task.exec_time
 
@@ -621,7 +666,7 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
             for l_or_n_id in itertools.chain(
                 solution.tc.L.keys(), solution.tc.N.keys()
             ):
-                for f in solution.tc.F.values():
+                for f in solution.tc.F_routed.values():
                     if solution.tc.schedule.is_stream_using_link_or_node(
                         f.id, l_or_n_id
                     ):
@@ -653,15 +698,8 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
                             block_linkids[index].append(str(l_or_n))
                             block_offsets[index].append(offset)
 
-                            # Change frame text to show packed signals
-                            if f.type == EStreamType.KEY:
-                                block_texts[index].append(f.id)
-                            else:
-                                st = "f<sub>"
-                                for s in solution.tc.S_group[f.group_id]:
-                                    st += s.id
-                                st += "</sub>"
-                                block_texts[index].append(st)
+                            block_texts[index].append(f.id)
+
 
         for ind in block_types:
             if ind == "app_task":
@@ -691,18 +729,19 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
                 hovertext=block_hovers[ind],
             )
 
-        for x in range(1, int(solution.tc.hyperperiod / tick_distance)):
-            fig.add_shape(
-                # Line reference to the axes
-                type="line",
-                xref="x",
-                yref="paper",
-                x0=x * tick_distance,
-                y0=0,
-                x1=x * tick_distance,
-                y1=1,
-                line=dict(color="Black", width=3, dash="dot"),
-            )
+        if tick_distance > 0:
+            for x in range(1, int(solution.tc.hyperperiod / tick_distance)):
+                fig.add_shape(
+                    # Line reference to the axes
+                    type="line",
+                    xref="x",
+                    yref="paper",
+                    x0=x * tick_distance,
+                    y0=0,
+                    x1=x * tick_distance,
+                    y1=1,
+                    line=dict(color="Black", width=3, dash="dot"),
+                )
 
         return fig
     return None

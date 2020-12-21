@@ -1,0 +1,29 @@
+usage: main.py [-h] [--mode MODE] [--visualize] [--no_redundancy]
+               [--no_security] [--timeout_routing TIMEOUT_ROUTING]
+               [--timeout_scheduling TIMEOUT_SCHEDULING]
+               [--timeout_pint TIMEOUT_PINT]
+               testcase_path
+
+test
+
+positional arguments:
+  testcase_path         The path to the testcase. E.g "testcases/TC0_example.flex_network_description"
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --mode MODE           Mode to run
+  --visualize           Visualize testcase (show dashboard)  (Default: False)
+  --no_redundancy       Disable redundancy, by ignoring RL specified in testcase  (Default: False)
+  --no_security         Disable security  (Default: False)
+  --timeout_routing TIMEOUT_ROUTING
+                        Timeout: Routing Solver (s) (Default: 300)
+  --timeout_scheduling TIMEOUT_SCHEDULING
+                        Timeout: Scheduling Solver (s) (Default: 300)
+  --timeout_pint TIMEOUT_PINT
+                        Timeout: Pint Solver (s) (Default: 60)
+
+Available Modes:
+- Mode 0: View/Check the testcase. Doesn't generate/optimize anything
+- Mode 1: Generate Security Applications, Generate Stream, CP Routing, CP Scheduling
+- Mode 2: CP Scheduling
+- Mode 3: Generate Security Applications, Generate Stream, SA Routing, SA Scheduling
