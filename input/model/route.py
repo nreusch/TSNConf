@@ -28,6 +28,18 @@ class route:
                         self._DAG.add_node(tpl[1])
                     self._DAG.add_edge(tpl[0], tpl[1])
 
+    def init_from_node_mapping(self, node_mapping: Set[Tuple[str, str]], tc_L_from_nodes: Dict):
+        """
+        node_mapping: List of tuples which map node.id to successor node.id in route
+        """
+        x_res = {}
+        for tpl in node_mapping:
+            x_res[tpl[1]] = tpl[0]
+
+        x_res[self.stream.sender_es_id] = self.stream.sender_es_id
+
+        self.init_from_x_res_vector(x_res, tc_L_from_nodes)
+
     def init_from_x_res_vector(
         self, x_res_vector: Dict[str, str], tc_L_from_nodes: Dict
     ):
