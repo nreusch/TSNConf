@@ -1,0 +1,27 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<!-- Test one multicast stream -->
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW1" type="Switch"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="10"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="ES1" dest="SW1" speed="1.25"/>
+	<link src="SW1" dest="ES2" speed="1.25"/>
+	<link src="SW1" dest="ES3" speed="1.25"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="App1" period="1000" type="NORMAL">
+		<tasks>
+			<task name="t1" node="ES1" wcet="100" type="NORMAL"/>
+			<task name="t2" node="ES2" wcet="100" type="NORMAL"/>
+			<task name="t3" node="ES3" wcet="100" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s1" src="ES1" dest="ES2,ES3" sender_task="t1" receiver_tasks="t2,t3" size="50" period="1000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+</NetworkDescription>

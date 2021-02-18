@@ -336,10 +336,9 @@
 			<task name="t3_ES0_comm" node="ES0" wcet="46" period="750" type="NORMAL"/>
 			<task name="t2_ES0_comm" node="ES0" wcet="46" period="750" type="NORMAL"/>
 			<task name="t2_ES2_comm" node="ES2" wcet="46" period="750" type="NORMAL"/>
-			<task name="t2_ES12_comm" node="ES12" wcet="46" period="750" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s_t3_ES12_comm_t2_ES5" src="ES12" dest="ES2,ES0,ES14,ES9,ES5,ES12" sender_task="t3_ES12_comm" receiver_tasks="t2_ES2_comm,t3_ES14_comm,t2_ES5_comm,t3_ES0_comm,t3_ES9_comm,t2_ES12_comm,t2_ES0_comm,t3_ES2_comm" size="1475" period="750" rl="2" secure="True" type="NORMAL" />
+			<stream name="s_t3_ES12_comm_t2_ES5" src="ES12" dest="ES2,ES0,ES14,ES9,ES5" sender_task="t3_ES12_comm" receiver_tasks="t2_ES2_comm,t3_ES14_comm,t2_ES5_comm,t3_ES0_comm,t3_ES9_comm,t2_ES0_comm,t3_ES2_comm" size="1475" period="750" rl="2" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
@@ -441,10 +440,6 @@
 	<path name="path_t3_ES12_comm_t2_ES2_comm" deadline="750">
 		<task name="t3_ES12_comm"/>
 		<task name="t2_ES2_comm"/>
-	</path>
-	<path name="path_t3_ES12_comm_t2_ES12_comm" deadline="750">
-		<task name="t3_ES12_comm"/>
-		<task name="t2_ES12_comm"/>
 	</path>
 	<path name="path_t3_ES13_comm_t3_ES6_comm" deadline="750">
 		<task name="t3_ES13_comm"/>

@@ -130,11 +130,11 @@ class CPSchedulingSolver:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            schdl = schedule.from_cp_solver(solver, self)
+            schdl = schedule.from_cp_solver(solver, self, self.tc)
             self.tc.add_to_datastructures(schdl)
             return self.tc, status
         else:
             report_exception(
-                "CPSolver returned invalid status for scheduling model_old: " + str(status)
+                "CPSolver returned invalid status for scheduling model: " + str(status)
             )
             return self.tc, status

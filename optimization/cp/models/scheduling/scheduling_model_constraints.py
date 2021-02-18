@@ -12,7 +12,7 @@ def add_constraints(model):
     # For each stream
     for f in model.tc.F_routed.values():
         # For each link and node
-        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc.N, model.tc.L_from_nodes):
+        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc):
             constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es.id)
 
             if isinstance(l_or_es, link):
@@ -34,7 +34,7 @@ def add_constraints(model):
             # For each other stream, for which link or ES is on route
             for f2 in model.tc.F_routed.values():
                 if f.id != f2.id:
-                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc.N, model.tc.L):
+                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc):
                         constraint_streams_do_not_overlap(model, f, f2, l_or_es.id)
                         constrain_stream_tsn_frame_isolation(
                             model, f, f2, l_or_es, l_or_es.id
@@ -61,7 +61,7 @@ def add_simple_constraints(model):
     # For each stream
     for f in model.tc.F_routed.values():
         # For each link and node
-        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc.N, model.tc.L_from_nodes):
+        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc):
 
             constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es.id)
 
@@ -84,7 +84,7 @@ def add_simple_constraints(model):
             # For each other stream, for which link or ES is on route
             for f2 in model.tc.F_routed.values():
                 if f.id != f2.id:
-                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc.N, model.tc.L):
+                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc):
                         constraint_streams_do_not_overlap(model, f, f2, l_or_es.id)
                         constrain_stream_tsn_frame_isolation(
                             model, f, f2, l_or_es, l_or_es.id
@@ -114,9 +114,9 @@ def constrain_stream_tsn_frame_isolation(model, f, f2, l_or_n, l_or_n_id):
     if isinstance(l_or_n, link):
         if isinstance(l_or_n.src, switch):
             if f2.id != f.id:
-                for l_prev in model.mtrees[f.id].get_predeccessor_links(l_or_n_id, model.tc.N, model.tc.L, model.tc.L_from_nodes):
+                for l_prev in model.mtrees[f.id].get_predeccessor_links(l_or_n_id, model.tc):
                     for l_prev2 in model.mtrees[f2.id].get_predeccessor_links(
-                        l_or_n_id, model.tc.N, model.tc.L, model.tc.L_from_nodes
+                        l_or_n_id, model.tc
                     ):
 
                         if l_prev.id != l_prev2.id:
@@ -305,9 +305,9 @@ def constrain_stream_instance_dependency_between_links_on_route(model, f, l_or_n
     successors = []
     if isinstance(l_or_n, end_system):
         if l_or_n.id == f.sender_es_id:
-            successors = model.mtrees[f.id].get_successor_links(l_or_n.id, model.tc.N, model.tc.L, model.tc.L_from_nodes)
+            successors = model.mtrees[f.id].get_successor_links(l_or_n.id, model.tc)
     elif isinstance(l_or_n, link):
-        successors = model.mtrees[f.id].get_successor_links(l_or_n.id, model.tc.N, model.tc.L, model.tc.L_from_nodes)
+        successors = model.mtrees[f.id].get_successor_links(l_or_n.id, model.tc)
 
         if len(successors) == 0:
             # Last link on route: successor = receiver ES
@@ -341,7 +341,6 @@ def constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_n_id):
 
 def constrain_stream_MAC_key_release_interval(model, f, l_or_n):
     # Constraint 7: MAC release interval is after the interval where the steam is transmitted to the receiver ES (38)
-    # TODO: double check that this is working
     if isinstance(l_or_n, link):
         if (
             l_or_n.dest.id

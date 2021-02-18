@@ -51,6 +51,13 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     )
 
     parser.add_argument(
+        "--port",
+        default=8050,
+        type=int,
+        help="Visualization Dashboard Port",
+    )
+
+    parser.add_argument(
         "--no_redundancy",
         action="store_true",
         default=False,
@@ -94,9 +101,10 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     )
     tc_path = results.testcase_path
     visualize = results.visualize
+    port = results.port
     no_redundancy = results.no_redundancy
     no_security = results.no_security
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, no_redundancy, no_security))
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, port, no_redundancy, no_security))
 
     return input_param_list, Path(results.testcase_path)
 
@@ -114,7 +122,7 @@ def run(input_params: InputParameters) -> Solution:
     try:
         print("-" * 10 + " 1. Running the chosen mode")
         solution = runner.run_mode(input_params.mode, timing_object, input_params)
-    except Exception:
+    except Exception as e:
         print("Error in Step 1: Running the chosen mode")
         raise
 
@@ -131,17 +139,15 @@ def run(input_params: InputParameters) -> Solution:
                 output_folder_path, timing_object.time_serializing_solution
             )
         )
-    except:
+    except Exception as e:
         print("Error in Step 2: Serializing the solution")
-        raise
 
-        # 4. Print results
+    # 4. Print results
     try:
         print("-" * 10 + " 3. Printing results")
         print(solution.get_result_string())
-    except Exception:
+    except Exception as e:
         print("Error in Step 3: Printing results")
-        raise
 
     print("--------------------------\n")
 
@@ -161,4 +167,4 @@ if __name__ == "__main__":
     # If --visualize, visualize first testcase
     if input_param_list[0].visualize:
         # Outputting to Dash
-        dash_outputter.run(results[0])
+        dash_outputter.run(results[0], PORT=input_param_list[0].port)

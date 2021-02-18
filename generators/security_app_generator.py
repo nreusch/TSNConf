@@ -49,7 +49,7 @@ def run(tc: Testcase, timing_object: TimingData) -> Testcase:
                             )
 
                             key_stream = stream(
-                                "f_key_{}".format(src_es_id),
+                                "s_key_{}".format(src_es_id),
                                 secapp.id,
                                 src_es_id,
                                 set(),

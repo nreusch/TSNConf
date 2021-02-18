@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from enum import Enum
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple, List, Set
 
 from networkx import DiGraph
 import networkx as nx
@@ -25,15 +25,30 @@ class application:
         self.edges_from_nodes: Dict[str, Dict[str, List[str]]] = {}  # task1.id => (task2.id => List[stream.id])
         self._DAG: DiGraph = DiGraph()
 
+        self.root_vertex_ids: Set[str] = set()
+        self.leaf_vertex_ids: Set[str] = set()
+
     def __repr__(self):
         return "app({})".format(self.id)
 
     def __str__(self):
         return self.__repr__()
 
+    def _update_roots_and_leafs(self):
+        self.root_vertex_ids.clear()
+        self.leaf_vertex_ids.clear()
+
+        for t_id in self.verticies.keys():
+            if self.in_degree(t_id) == 0:
+                self.root_vertex_ids.add(t_id)
+            if self.out_degree(t_id) == 0:
+                self.leaf_vertex_ids.add(t_id)
+
     def add_vertex(self, t: task):
         self.verticies[t.id] = t
         self._DAG.add_node(t.id)
+
+        self._update_roots_and_leafs()
 
     def add_edges(self, s: stream):
         for dest_task_id in s.receiver_task_ids:
@@ -47,10 +62,12 @@ class application:
 
             if dest_task_id not in self.edges_from_nodes[s.sender_task_id]:
                 self.edges_from_nodes[s.sender_task_id][dest_task_id] = [s.id]
-                self._DAG.add_edge(s.sender_task_id, dest_task_id)
             else:
                 self.edges_from_nodes[s.sender_task_id][dest_task_id].append(s.id)
 
+            self._DAG.add_edge(s.sender_task_id, dest_task_id)
+
+        self._update_roots_and_leafs()
 
     def get_stream_id_list_from_x_to_y(self, x: str, y: str) -> List[str]:
         return self.edges_from_nodes[x][y]
@@ -63,7 +80,7 @@ class application:
 
     def get_successors_ids(self, task_id: str):
         """
-        Returns a list of task_ids for all predecessor tasks
+        Returns a list of task_ids for all successor tasks
         """
         return self._DAG.successors(task_id)
 
@@ -72,6 +89,12 @@ class application:
         for t_id in nx.topological_sort(self._DAG):
             l.append(t_id)
         return l
+
+    def in_degree(self, t_id: str) -> int:
+        return self._DAG.in_degree(t_id)
+
+    def out_degree(self, t_id: str) ->int :
+        return self._DAG.out_degree(t_id)
 
     def xml_string(self, tc_F: Dict[str, stream]):
         s = ""

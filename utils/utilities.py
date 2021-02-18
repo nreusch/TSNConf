@@ -5,6 +5,13 @@ from pathlib import Path
 from time import time
 from typing import Dict, List
 
+from intervaltree import IntervalTree
+from networkx import DiGraph
+
+from input.model.application import application
+from input.model.nodes import end_system, node
+from input.model.route import route
+
 PRINT_CONSTRAINT_DESCRIPTION = False
 PRINT_CONSTRAINT_VALUES = True
 DEBUG = False
@@ -20,7 +27,6 @@ MINOR version when you add functionality in a backwards compatible manner, and
 PATCH version when you make backwards compatible bug fixes.
 """
 VERSION = "0.6"
-
 
 def report_exception(e):
     sys.stderr.write(str(e))
@@ -75,6 +81,18 @@ def print_model_stats(model_stats_string: str):
 
 def set_to_string(s: set):
     return ", ".join([str(x) for x in s])
+
+def sorted_complement(tree, start=None, end=None) -> IntervalTree:
+    result = IntervalTree()
+    if start is None:
+        start = tree.begin()
+    if end is None:
+        end = tree.end()
+
+    result.addi(start, end)  # using input tree bounds
+    for iv in tree:
+        result.chop(iv[0], iv[1])
+    return sorted(result)
 
 class Timer:
     elapsed_time = 0

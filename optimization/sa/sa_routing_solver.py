@@ -22,7 +22,7 @@ class SARoutingSolver:
 
         self.possible_paths : Dict[str, Dict[str, List[List[str]]]] = {} # stream_id -> Dict(receiver_es_id -> List[path])
 
-        # Create the model_old
+        # Create the model
         self.model = CpModel()
 
         # Create variables
@@ -42,6 +42,7 @@ class SARoutingSolver:
 
         for s in self.tc.F_routed.values():
             self.possible_paths[s.id] = {}
+            # TODO: Own implementation of path finding which skips a path once an ES is encountered
             paths = [p for p in nx.all_simple_paths(g, s.sender_es_id, s.receiver_es_ids)]
 
             for p in paths:
@@ -70,32 +71,31 @@ class SARoutingSolver:
     def _random_neighbour(self, s_i: Dict[str, Dict[str, List[str]]]) -> Dict[str, Dict[str, List[str]]]:
         # Dict[stream.id, Dict(receiver_es_id -> path)]
         s = copy.deepcopy(s_i)
-        new = False
-        while not new:
-            rand_stream_nr = random.randint(0, len(self.tc.F.values())-1)
-            rand_stream = list(self.tc.F_routed.values())[rand_stream_nr]
-            rand_receiver_nr = random.randint(0, len(rand_stream.receiver_es_ids)-1)
-            rand_receiver = list(rand_stream.receiver_es_ids)[rand_receiver_nr]
 
-            current_path = s[rand_stream.id][rand_receiver]
-            possible_path_amount = len(self.possible_paths[rand_stream.id][rand_receiver])
+        # select random stream
+        rand_stream_nr = random.randint(0, len(self.tc.F.values())-1)
+        rand_stream = list(self.tc.F_routed.values())[rand_stream_nr]
 
-            if possible_path_amount > 1:
-                new_path = current_path
-                while new_path == current_path:
-                    rand_path_nr = random.randint(0, possible_path_amount-1)
-                    new_path = self.possible_paths[rand_stream.id][rand_receiver][rand_path_nr]
-                new = True
-        s[rand_stream.id][rand_receiver] = new_path
+        # select random receiver of that stream
+        rand_receiver_nr = random.randint(0, len(rand_stream.receiver_es_ids)-1)
+        rand_receiver = list(rand_stream.receiver_es_ids)[rand_receiver_nr]
+
+        current_path = s[rand_stream.id][rand_receiver]
+        possible_path_amount = len(self.possible_paths[rand_stream.id][rand_receiver])
+
+        if possible_path_amount > 1:
+            new_path = current_path
+            while new_path == current_path:
+                rand_path_nr = random.randint(0, possible_path_amount-1)
+                new_path = self.possible_paths[rand_stream.id][rand_receiver][rand_path_nr]
+            s[rand_stream.id][rand_receiver] = new_path
+
         return s
 
     def _solve(self, timeout) -> Dict[str, Dict[str, List[str]]]:
         # returns Dict[stream.id, Dict(receiver_es_id -> path)]
-
-
         Tstart = 1
         alpha = 0.999
-        stop_time = 10  # seconds
 
         s_i = self._initial_solution()
         s_best = s_i
@@ -180,7 +180,7 @@ class SARoutingSolver:
         with t:
             # OPTIMIZE
             selected_paths = self._solve(3)
-        timing_object.time_optimizing_pint = t.elapsed_time
+        timing_object.time_optimizing_routing = t.elapsed_time
         status = EOptimizationStatus.FEASIBLE
 
 
@@ -191,7 +191,7 @@ class SARoutingSolver:
             for s in self.tc.F_routed.values():
                 node_mapping = self._create_node_mapping(selected_paths, s.id)
                 mt = route(s)
-                mt.init_from_node_mapping(node_mapping, self.tc.L_from_nodes)
+                mt.init_from_node_mapping(node_mapping)
                 self.tc.add_to_datastructures(mt)
 
                 cost, route_len, overlap_amount, overlap_links = self._cost_stream(s.id, selected_paths)

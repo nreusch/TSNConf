@@ -1,0 +1,71 @@
+<!-- frame_overhead is added to each frame of each stream. Given in us.-->
+<NetworkDescription frame_overhead="22">
+	<!-- Expected order: devices, links, applications(tasks, streams), (function paths), (routes), (schedule)-->
+	<!-- Devices -->
+	<device name="S1" type="Switch"/>
+	<device name="N1" type="EndSystem"/>
+	<device name="N2" type="EndSystem"/>
+	<device name="N3" type="EndSystem"/>
+
+	<!-- Links -->
+	<!-- Links are directional. speed = byte/us -->
+	<link src="N1" dest="S1" speed="0.1"/>
+	<link src="S1" dest="N1" speed="0.1"/>
+
+	<link src="N2" dest="S1" speed="0.1"/>
+	<link src="S1" dest="N2" speed="0.1"/>
+
+	<link src="N3" dest="S1" speed="0.1"/>
+	<link src="S1" dest="N3" speed="0.1"/>
+
+	<!-- Applications, Tasks, Streams -->
+	<!-- period & wcet is in us, size in Byte-->
+	<!-- Group streams with the same period into the same application-->
+	<application name="App1" period="100000">
+		<tasks>
+			<task name="t_send_message1" node="N1" wcet="0"/>
+			<task name="t_recv_message1" node="N2" wcet="0"/>
+
+			<task name="t_send_message2" node="N2" wcet="0"/>
+			<task name="t_recv_message2" node="N3" wcet="0"/>
+
+			<task name="t_send_message3" node="N3" wcet="0"/>
+			<task name="t_recv_message3" node="N1" wcet="0"/>
+		</tasks>
+		<streams>
+			<stream name="m1" sender_task="t_send_message1" receiver_tasks="t_recv_message1" size="125"/>
+			<stream name="m2" sender_task="t_send_message2" receiver_tasks="t_recv_message2" size="125"/>
+			<stream name="m3" sender_task="t_send_message3" receiver_tasks="t_recv_message3" size="125"/>
+		</streams>
+	</application>
+
+	<application name="App2" period="50000">
+		<tasks>
+			<task name="t_send_message4" node="N1" wcet="0"/>
+			<task name="t_recv_message4" node="N2" wcet="0"/>
+		</tasks>
+		<streams>
+			<stream name="m4" sender_task="t_send_message1" receiver_tasks="t_recv_message1" size="125"/>
+		</streams>
+	</application>
+
+	<!-- Routes -->
+	<!-- You can specify them (like I did here), or let the solver determine them using Mode 1-->
+	<route stream="m1_0">
+		<link src="N1" dest="S1" />
+		<link src="S1" dest="N2" />
+	</route>
+	<route stream="m2_0">
+		<link src="N2" dest="S1" />
+		<link src="S1" dest="N3" />
+	</route>
+	<route stream="m3_0">
+		<link src="N3" dest="S1" />
+		<link src="S1" dest="N1" />
+	</route>
+	<route stream="m4_0">
+		<link src="N1" dest="S1" />
+		<link src="S1" dest="N2" />
+	</route>
+
+</NetworkDescription>

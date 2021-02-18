@@ -24,6 +24,8 @@ class Testcase:
         self.W_mac: int = -1  # MAC length
         self.key_length: int = -1  # TESLA key length
 
+        self.Periods: set = set()
+
         self.F: Dict[str, stream] = {}  # All streams. stream.id => stream
         self.F_routed: Dict[str, stream] = {} # All routed/scheduled streams. stream-id => stream
         self.F_red: Dict[
@@ -85,96 +87,108 @@ class Testcase:
         self.F_sec: Dict[str, stream] = {} # All streams from security applications. security_application.id => [stream]
         self.T_sec: Dict[str, task] = {}  # All key tasks. task.id -> task
         self.T_sec_g: Dict[str, List[task]] = {}  # All key tasks. node.id => [task]
+        self.T_release: Dict[str, task] = {} # key release tasks for ES. es.id => task
+        self.T_verify: Dict[str, Dict[str, task]] = {}# key verify tasks for ES pai. es.id => Dict[es.id => task]
         self.A_sec: Dict[
             str, application
         ] = {}  # All security applications. security_application.id => application
 
-    def finalize(self):
-        self.hyperperiod = lcm([t.period for t in self.T.values()])
-
-    def add_to_datastructures(self, x: Any):
+    def add_to_datastructures(self, *X : Any):
         """
-        Adds any object which is part of the model_old to the testcase and all its datastructures
+        Adds any object which is part of the model to the testcase and all its datastructures
         """
-        if isinstance(x, stream):
-            self.F[x.id] = x
+        for x in X:
+            if isinstance(x, stream):
+                self.F[x.id] = x
 
-            if x.app_id != "":
-                self.A[x.app_id].add_edges(x)
+                if x.app_id != "":
+                    self.A[x.app_id].add_edges(x)
 
-            self.F_t_out[x.sender_task_id].append(x)
-            for task_id in x.receiver_task_ids:
-                self.F_t_in[task_id].append(x)
+                self.F_t_out[x.sender_task_id].append(x)
+                for task_id in x.receiver_task_ids:
+                    self.F_t_in[task_id].append(x)
 
-            # if x is a routed/scheduled stream
-            if len(x.receiver_es_ids) > 1 or list(x.receiver_es_ids)[0] != x.sender_es_id:
-                self.F_routed[x.id] = x
+                # if x is a routed/scheduled stream
+                if len(x.receiver_es_ids) > 1 or list(x.receiver_es_ids)[0] != x.sender_es_id:
+                    self.F_routed[x.id] = x
 
-                self.F_g_out[x.sender_es_id].append(x)
-                for es_id in x.receiver_es_ids:
-                    self.F_g_in[es_id].append(x)
+                    self.F_g_out[x.sender_es_id].append(x)
+                    for es_id in x.receiver_es_ids:
+                        self.F_g_in[es_id].append(x)
 
 
-                if x.get_id_prefix() in self.F_red:
-                    self.F_red[x.get_id_prefix()].append(x)
+                    if x.get_id_prefix() in self.F_red:
+                        self.F_red[x.get_id_prefix()].append(x)
+                    else:
+                        self.F_red[x.get_id_prefix()] = [x]
+
+                    if x.type == EStreamType.KEY:
+                        self.F_sec[x.id] = x
+            elif isinstance(x, route):
+                self.R[x.stream.id] = x
+            elif isinstance(x, route_info):
+                self.R_info[x.route.stream.id] = x
+            elif isinstance(x, schedule):
+                self.schedule = x
+            elif isinstance(x, node):
+                self.N[x.id] = x
+                self.N_conn[x.id] = set()
+                self.N_conn_inv[x.id] = set()
+                self.L_from_nodes[x.id] = {}
+
+                if isinstance(x, end_system):
+                    self.N_conn[x.id].add(x.id)
+                    self.N_conn_inv[x.id].add(x.id)
+                    self.ES[x.id] = x
+                    self.F_g_in[x.id] = []
+                    self.F_g_out[x.id] = []
+                    self.T_g[x.id] = []
+                    self.T_sec_g[x.id] = []
+                elif isinstance(x, switch):
+                    self.SW[x.id] = x
+            elif isinstance(x, link):
+                self.L[x.id] = x
+                self.L_from_nodes[x.src.id][x.dest.id] = x
+                self.N_conn[x.src.id].add(x.dest.id)
+                self.N_conn_inv[x.dest.id].add(x.src.id)
+            elif isinstance(x, application):
+                self.A[x.id] = x
+                if x.period not in self.Periods:
+                    self.Periods.add(x.period)
+                    self.hyperperiod = lcm(list(self.Periods))
+                if x.type == EApplicationType.NORMAL:
+                    self.A_app[x.id] = x
+                    #
+                    self.T_normal[x.id] = []
+                elif x.type == EApplicationType.KEY:
+                    self.A_sec[x.id] = x
+            elif isinstance(x, function_path):
+                self.FP[x.id] = x
+            elif isinstance(x, task):
+                self.T[x.id] = x
+                self.T_g[x.src_es_id].append(x)
+                self.F_t_out[x.id] = []
+                self.F_t_in[x.id] = []
+
+                if x.app_id == "":
+                    self.T_standalone[x.id] = x
                 else:
-                    self.F_red[x.get_id_prefix()] = [x]
+                    self.A[x.app_id].add_vertex(x)
+                    if x.type == ETaskType.NORMAL:
+                        self.T_normal[x.app_id].append(x)
 
-                if x.type == EStreamType.KEY:
-                    self.F_sec[x.id] = x
-        elif isinstance(x, route):
-            self.R[x.stream.id] = x
-        elif isinstance(x, route_info):
-            self.R_info[x.route.stream.id] = x
-        elif isinstance(x, schedule):
-            self.schedule = x
-        elif isinstance(x, node):
-            self.N[x.id] = x
-            self.N_conn[x.id] = set()
-            self.N_conn_inv[x.id] = set()
-            self.L_from_nodes[x.id] = {}
+                if x.type == ETaskType.KEY_RELEASE:
+                    self.T_sec[x.id] = x
+                    self.T_sec_g[x.src_es_id].append(x)
+                    self.T_release[x.src_es_id] = x
 
-            if isinstance(x, end_system):
-                self.N_conn[x.id].add(x.id)
-                self.N_conn_inv[x.id].add(x.id)
-                self.ES[x.id] = x
-                self.F_g_in[x.id] = []
-                self.F_g_out[x.id] = []
-                self.T_g[x.id] = []
-                self.T_sec_g[x.id] = []
-            elif isinstance(x, switch):
-                self.SW[x.id] = x
-        elif isinstance(x, link):
-            self.L[x.id] = x
-            self.L_from_nodes[x.src.id][x.dest.id] = x
-            self.N_conn[x.src.id].add(x.dest.id)
-            self.N_conn_inv[x.dest.id].add(x.src.id)
-        elif isinstance(x, application):
-            self.A[x.id] = x
-            if x.type == EApplicationType.NORMAL:
-                self.A_app[x.id] = x
-                #
-                self.T_normal[x.id] = []
-            elif x.type == EApplicationType.KEY:
-                self.A_sec[x.id] = x
-        elif isinstance(x, function_path):
-            self.FP[x.id] = x
-        elif isinstance(x, task):
-            self.T[x.id] = x
-            self.T_g[x.src_es_id].append(x)
-            self.F_t_out[x.id] = []
-            self.F_t_in[x.id] = []
+                if x.type == ETaskType.KEY_VERIFICATION:
+                    self.T_sec[x.id] = x
+                    self.T_sec_g[x.src_es_id].append(x)
 
-            if x.app_id == "":
-                self.T_standalone[x.id] = x
-            else:
-                self.A[x.app_id].add_vertex(x)
-                if x.type == ETaskType.NORMAL:
-                    self.T_normal[x.app_id].append(x)
-
-            if x.type == ETaskType.KEY_VERIFICATION or x.type == ETaskType.KEY_RELEASE:
-                self.T_sec[x.id] = x
-                self.T_sec_g[x.src_es_id].append(x)
+                    if x.corr_release_task_es_id not in self.T_verify:
+                        self.T_verify[x.corr_release_task_es_id] = {}
+                    self.T_verify[x.corr_release_task_es_id][x.src_es_id] = x
 
     def to_flex_network_description(self):
         s = ""
@@ -218,7 +232,7 @@ class Testcase:
 
         # Routes
         for route in self.R.values():
-            strs = route.xml_string(self.L_from_nodes).split("\n")
+            strs = route.xml_string(self).split("\n")
             for st in strs:
                 s += "\t" + st + "\n"
 
@@ -226,7 +240,7 @@ class Testcase:
         # Schedule
         schedule = self.schedule
         if schedule != None:
-            strs = schedule.xml_string(self.N, self.L, self.T, self.F_sec).split("\n")
+            strs = schedule.xml_string(self).split("\n")
             for st in strs:
                 s += "\t" + st + "\n"
         s += "</NetworkDescription>"

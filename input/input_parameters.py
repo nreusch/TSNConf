@@ -29,7 +29,9 @@ class EMode(Enum):
     VIEW = 0
     ALL_CP_ROUTING_AND_SECURITY = 1
     ONLY_CP_SCHEDULING = 2
-    ALL_SA_ROUTING_AND_SECURITY = 3
+    HEURISTIC_ROUTING_1_AND_SECURITY = 3
+    HEURISTIC_ROUTING_2_AND_SECURITY = 4
+    HEURISTIC_ROUTING_3_AND_SECURITY = 5
 
     def describe(self) -> str:
         if self.value == 0:
@@ -39,7 +41,11 @@ class EMode(Enum):
         elif self.value == 2:
             return "Mode 2: CP Scheduling"
         elif self.value == 3:
-            return "Mode 3: Generate Security Applications,  SA Routing, SA Scheduling (Work in Progress)"
+            return "Mode 3: Generate Security Applications,  SA Routing, ASAP Scheduling"
+        elif self.value == 4:
+            return "Mode 4: Generate Security Applications,  SA Routing, SA Scheduling (Seperated)"
+        elif self.value == 5:
+            return "Mode 5: Generate Security Applications,  SA Routing, ASAP Scheduling (Combined)"
         return ""
 
     @classmethod
@@ -49,7 +55,7 @@ class EMode(Enum):
 
 @dataclass
 class InputParameters:
-    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, visualize: bool, no_redundancy: bool, no_security: bool):
+    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, visualize: bool, port: int, no_redundancy: bool, no_security: bool):
         self.mode = mode
 
         self.timeouts = timeouts
@@ -57,6 +63,7 @@ class InputParameters:
         self.tc_path = tc_path
         self.tc_name = Path(tc_path).stem
         self.visualize = visualize
+        self.port = port
         self.no_redundancy = no_redundancy
         self.no_security = no_security
         # self.tc_name = results.testcase_path.split("/")[-1].split(".")[0]

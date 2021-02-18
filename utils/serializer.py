@@ -1,5 +1,4 @@
 import pickle
-import sys
 from pathlib import Path
 
 from graphviz import Digraph
@@ -7,8 +6,12 @@ from graphviz import Digraph
 from input.model.nodes import switch
 from input.model.task import ETaskType
 from input.testcase import Testcase
+from optimization.sa.task_graph import TaskGraph
 from solution import solution_parser
 from solution.solution import Solution
+import networkx as nx
+
+from utils.utilities import report_exception
 
 
 def create_flex_network_description(output_file: Path, tc: Testcase):
@@ -21,7 +24,6 @@ def serialize_solution(base_path: Path, solution: Solution) -> Path:
     """
     Serializes the given solution (pickle, network_description, graphs, optimization results...) into a folder and returns its path
     """
-    # TODO: Note which optimization parameters were used
     path = base_path / solution.get_folder_name()
     path.mkdir(parents=True, exist_ok=True)
 
@@ -39,8 +41,6 @@ def serialize_solution(base_path: Path, solution: Solution) -> Path:
         ),
         solution.tc,
     )
-
-    # Create run_metadata
 
     # Create graphviz graphs
     svg_path = path / "svg"
@@ -113,10 +113,17 @@ def serialize_graphs(path: Path, solution: Solution):
     for link in testcase.L.values():
         dot.edge(link.src.id, link.dest.id)
 
-    dot.format = "pdf"
-    dot.render(filename=path / ("base_topology.gv"))
-    dot.format = "svg"
-    dot.render(filename=path / ("base_topology.gv"))
+    try:
+        dot.format = "pdf"
+        dot.render(filename=path / ("base_topology.gv"))
+    except Exception as e:
+        report_exception(e)
+
+    try:
+        dot.format = "svg"
+        dot.render(filename=path / ("base_topology.gv"))
+    except Exception as e:
+        report_exception(e)
 
     # TODO: Handle no task case
     # Security Topology
@@ -182,3 +189,15 @@ def serialize_graphs(path: Path, solution: Solution):
         dot.render(filename=path / (app.id + ".gv"))
         dot.format = "svg"
         dot.render(filename=path / (app.id + ".gv"))
+
+    # Application Task DAGs
+
+    try:
+        for app in app_list:
+            tg = TaskGraph.from_applications(testcase)
+            pdot = nx.drawing.nx_pydot.to_pydot(tg.DAG)
+            pdot.write(path / ("taskgraph_" + app.id + ".gv"))
+            pdot.write_png(path / ("taskgraph_" + app.id + ".png"))
+            pdot.write_svg(path / ("taskgraph_" + app.id + ".svg"))
+    except Exception as e:
+        report_exception(e)
