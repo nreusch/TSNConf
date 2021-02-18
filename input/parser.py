@@ -72,12 +72,12 @@ def _parse_application(n: ET.Element, tc: Testcase, input_params: InputParameter
 def _parse_route(n: ET.Element, tc: Testcase):
     # if no redundancy/security, skip routes of streams which are not considered
     if n.attrib["stream"] in tc.F:
-        r = route.from_xml_node(n, tc.F, tc.L_from_nodes)
+        r = route.from_xml_node(n, tc)
         tc.add_to_datastructures(r)
 
 
 def _parse_schedule(n: ET.Element, tc: Testcase):
-    s = schedule.from_xml_node(n, tc.N, tc.T, tc.F, tc.L_from_nodes)
+    s = schedule.from_xml_node(n, tc)
     tc.add_to_datastructures(s)
 
 
@@ -140,8 +140,5 @@ def parse_to_model(input_params: InputParameters) -> Testcase:
             _parse_schedule(n, tc)
         else:
             raise NotImplementedError()
-
-    # 3. Finalize testcase
-    tc.finalize()
 
     return tc

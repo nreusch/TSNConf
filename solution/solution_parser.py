@@ -17,7 +17,7 @@ from utils.utilities import flatten, set_to_string
 
 def get_testcase_application_graphs(solution: Solution) -> Dict[str, str]:
     """
-    Returns a dictionary mapping app_id's to html.img src strings of the topology graphs
+    Returns a dictionary mapping app_id's to html.img src strings of the application graphs
     """
 
     app_id_graph_b64_map = {}
@@ -36,6 +36,26 @@ def get_testcase_application_graphs(solution: Solution) -> Dict[str, str]:
 
     return app_id_graph_b64_map
 
+def get_testcase_application_taskgraphs(solution: Solution) -> Dict[str, str]:
+    """
+    Returns a dictionary mapping app_id's to html.img src strings of the application task graphs
+    """
+
+    app_id_graph_b64_map = {}
+
+    for app in solution.tc.A_app.values():
+        svg_file_path = Path(
+            "testcases/output/{}/svg/taskgraph_{}.svg".format(
+                solution.get_folder_name(), app.id
+            )
+        )
+
+        encoded = base64.b64encode(open(svg_file_path, "rb").read())
+        svg = "data:image/svg+xml;base64,{}".format(encoded.decode())
+
+        app_id_graph_b64_map[app.id] = svg
+
+    return app_id_graph_b64_map
 
 def get_testcase_topology_graph(solution: Solution) -> str:
     """
@@ -152,7 +172,7 @@ def get_derived_security_topology_graph(solution: Solution) -> str:
 
 def get_derived_security_application_graphs(solution: Solution) -> Dict[str, str]:
     """
-    Returns a dictionary mapping app_id's to html.img src strings of the topology graphs
+    Returns a dictionary mapping app_id's to html.img src strings of the application graphs
     """
     app_id_graph_b64_map = {}
 
@@ -170,6 +190,25 @@ def get_derived_security_application_graphs(solution: Solution) -> Dict[str, str
 
     return app_id_graph_b64_map
 
+def get_derived_security_application_taskgraphs(solution: Solution) -> Dict[str, str]:
+    """
+    Returns a dictionary mapping app_id's to html.img src strings of the application taskgraphs
+    """
+    app_id_graph_b64_map = {}
+
+    for app in solution.tc.A_sec.values():
+        svg_file_path = Path(
+            "testcases/output/{}/svg/taskgraph_{}.svg".format(
+                solution.get_folder_name(), app.id
+            )
+        )
+
+        encoded = base64.b64encode(open(svg_file_path, "rb").read())
+        svg = "data:image/svg+xml;base64,{}".format(encoded.decode())
+
+        app_id_graph_b64_map[app.id] = svg
+
+    return app_id_graph_b64_map
 
 def get_derived_security_stream_dataframe(solution: Solution) -> pd.DataFrame:
     """
@@ -288,7 +327,8 @@ def get_solution_mode_description(solution: Solution) -> str:
 
 def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe of the results: columns=["Laxity Sum", "Bandwidth use (Mean,%)", "CPU use (Mean,%)", "Optimization Time (ms)", "Total Runtime (ms)", "E2E-Delay Sum"]
+    Returns a dataframe of the results: columns=["Laxity Sum", "Bandwidth use (Mean,%)", "CPU use (Mean,%)",
+    "Optimization Time (ms)", "Total Runtime (ms)", "E2E-Delay Sum", "Pint", "Hyperperiod"]
     """
 
     columns = []
@@ -300,6 +340,8 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:.0f}".format(solution.timing_object.get_optimization_time()))
     row.append("{:.0f}".format(solution.timing_object.get_total_time()))
     row.append("{:d}".format(solution.e2e_delays_total))
+    row.append("{:d}".format(solution.tc.Pint))
+    row.append("{:d}".format(solution.tc.hyperperiod))
 
     columns.append(row)
 
@@ -312,6 +354,8 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Optimization Time (ms)",
             "Total Runtime (ms)",
             "E2E-Delay Sum",
+            "Pint",
+            "Hyperperiod"
         ],
     )
 
@@ -500,7 +544,7 @@ def get_solution_routing_cytoscape(solution: Solution) -> cyto.Cytoscape:
         edges.append(el)
 
     for f_id, mtree in solution.tc.R.items():
-        for l in mtree.get_all_links(solution.tc.L_from_nodes):
+        for l in mtree.get_all_links(solution.tc):
             el = {}
             el["data"] = {"source": l.src.id, "target": l.dest.id}
             el["classes"] = f_id
@@ -616,7 +660,6 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
         )
         """
 
-        # TODO: Infer from class type
         block_types = [
             "app_task",
             "key_rel_task",

@@ -2,10 +2,49 @@ import itertools
 import xml.etree.ElementTree as ET
 from typing import Dict
 
+from intervaltree import IntervalTree, Interval
+
+from input.model.link import link
+from input.model.nodes import end_system
+from input.model.route import route
+from input.model.stream import stream
+from input.model.task import task
+from optimization.sa.task_graph import TaskGraph
+from utils.utilities import sorted_complement
 
 class schedule:
     @classmethod
-    def from_cp_solver(cls, solver, scheduling_model):
+    def from_heuristic_schedule_and_task_graph(cls, heu_sched, task_graph: TaskGraph, tc):
+        c = cls()
+
+        for f in tc.F_routed.values():
+            for l_or_es in tc.R[f.id].get_all_es_and_links(tc):
+                tgn = task_graph.get_stream_tgn(f.id)
+                if l_or_es.id in heu_sched.frames[tgn.id]:
+                    if l_or_es.id not in c.o_f_val:
+                        c.o_f_val[l_or_es.id] = {}
+                        c.c_f_val[l_or_es.id] = {}
+                        c.a_f_val[l_or_es.id] = {}
+
+                    # TODO: phi value
+                    #if f.id in scheduling_model.phi_f:
+                    #    c.phi_f_val[f.id] = solver.Value(scheduling_model.phi_f[f.id])
+                    c.o_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset
+                    c.c_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].length
+                    c.a_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset + heu_sched.frames[tgn.id][l_or_es.id].length
+
+        for t in tc.T.values():
+            tgn = task_graph.get_task_tgn(t.id)
+            c.o_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset
+            c.a_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset + heu_sched.frames[tgn.id][t.src_es_id].length
+
+        for fp in tc.FP.values():
+            c.laxities_val[fp.id] = fp.deadline - (c.a_t_val[fp.path[-1].id] - c.o_t_val[fp.path[0].id])
+
+        return c
+
+    @classmethod
+    def from_cp_solver(cls, solver, scheduling_model, tc):
         c = cls()
 
         for l_or_n_id in itertools.chain(
@@ -55,11 +94,14 @@ class schedule:
         ] = {}  # Dict(fp.id -> val)
 
     def is_stream_using_link_or_node(self, f_id, l_or_n_id):
-        return self.c_f_val[l_or_n_id][f_id] != 0
+        if l_or_n_id in self.c_f_val and f_id in self.c_f_val[l_or_n_id]:
+            return self.c_f_val[l_or_n_id][f_id] != 0
+        else:
+            return False
 
-    def xml_string(self, tc_N: Dict, tc_L: Dict, tc_T: Dict, tc_Fsec):
+    def xml_string(self, tc):
         # Preperation
-        link_to_o_t_map, link_to_a_t_map = self._map_t_to_links(tc_T)
+        link_to_o_t_map, link_to_a_t_map = self._map_t_to_links(tc.T)
 
         all_links_or_nodes = []
         for k in link_to_o_t_map.keys():
@@ -73,13 +115,13 @@ class schedule:
 
         for l_or_n_id in all_links_or_nodes:
             # Create link header
-            if l_or_n_id in tc_L:
-                l_or_n = tc_L[l_or_n_id]
+            if l_or_n_id in tc.L:
+                l_or_n = tc.L[l_or_n_id]
                 s += '\t<link src="{}" dest="{}">\n'.format(
                     l_or_n.src.id, l_or_n.dest.id
                 )
-            elif l_or_n_id in tc_N:
-                l_or_n = tc_N[l_or_n_id]
+            elif l_or_n_id in tc.N:
+                l_or_n = tc.N[l_or_n_id]
                 s += '\t<node src="{}" dest="{}">\n'.format(l_or_n.id, l_or_n.id)
             else:
                 raise ValueError(
@@ -94,9 +136,11 @@ class schedule:
                     a_t = link_to_a_t_map[l_or_n_id][t_id]
 
                     if a_t > 0:
-                        s += '\t\t<block start="{}" duration="{}" end="{}" creator="{}"/>\n'.format(
-                            o_t, a_t - o_t, a_t, t_id
-                        )
+                        t = tc.T[t_id]
+                        for i_period in range(int(tc.hyperperiod / t.period)):
+                            s += '\t\t<block start="{}" duration="{}" end="{}" creator="{}"/>\n'.format(
+                                o_t+i_period*t.period, a_t - o_t, a_t+i_period*t.period, t_id
+                            )
             # - Streams
             if l_or_n_id in self.o_f_val:
                 for f_id, o_f in self.o_f_val[l_or_n_id].items():
@@ -104,14 +148,16 @@ class schedule:
                     a_f = self.a_f_val[l_or_n_id][f_id]
 
                     if c_f > 0:
-                        s += '\t\t<block start="{}" duration="{}" end="{}" creator="{}"/>\n'.format(
-                            o_f, c_f, a_f, f_id
-                        )
+                        f = tc.F[f_id]
+                        for i_period in range(int(tc.hyperperiod / f.period)):
+                            s += '\t\t<block start="{}" duration="{}" end="{}" creator="{}"/>\n'.format(
+                                o_f+i_period*f.period, c_f, a_f+i_period*f.period, f_id
+                            )
 
             # Link Footer
-            if l_or_n_id in tc_L:
+            if l_or_n_id in tc.L:
                 s += "\t</link>\n"
-            elif l_or_n_id in tc_N:
+            elif l_or_n_id in tc.N:
                 s += "\t</node>\n"
 
 
@@ -120,7 +166,7 @@ class schedule:
 
         for f_id, phi in self.phi_f_val.items():
             # NOTE: security/key streams have no associated key stream and thus no phi
-            if f_id not in tc_Fsec:
+            if f_id not in tc.F_sec:
                 s += '\t\t<phi stream_id="{}" value="{}"/>\n'.format(f_id, phi)
 
         s += "\t</key_release_intervals>\n"
@@ -155,9 +201,9 @@ class schedule:
 
     @classmethod
     def from_xml_node(
-        cls, n: ET.Element, tc_N: Dict, tc_T: Dict, tc_F: Dict, tc_Lfromnodes: Dict
+        cls, n: ET.Element, tc
     ):
-        c = cls()
+        c = cls(tc)
 
         for n_child in n:
             if n_child.tag == "link":
@@ -166,9 +212,9 @@ class schedule:
 
                 if src_n_id == dest_n_id:
                     # Node
-                    l_or_n = tc_N[src_n_id]
+                    l_or_n = tc.N[src_n_id]
                 else:
-                    l_or_n = tc_Lfromnodes[src_n_id][dest_n_id]
+                    l_or_n = tc.L_from_nodes[src_n_id][dest_n_id]
 
                 c.o_f_val[l_or_n.id] = {}
                 c.c_f_val[l_or_n.id] = {}
@@ -180,11 +226,11 @@ class schedule:
                     end = int(n_block.attrib["end"])
                     creator_id = n_block.attrib["creator"]
 
-                    if creator_id in tc_T:
+                    if creator_id in tc.T:
                         # task
                         c.o_t_val[creator_id] = start
                         c.a_t_val[creator_id] = end
-                    elif creator_id in tc_F:
+                    elif creator_id in tc.F:
                         # stream
                         c.o_f_val[l_or_n.id][creator_id] = start
                         c.c_f_val[l_or_n.id][creator_id] = duration

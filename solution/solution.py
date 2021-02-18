@@ -43,7 +43,7 @@ class Solution:
             for l in self.tc.L.values():
                 bw_used = 0
                 for f in self.tc.F_routed.values():
-                    if self.tc.R[f.id].is_in_tree(l.id, self.tc.N, self.tc.L):
+                    if self.tc.R[f.id].is_in_tree(l.id, self.tc):
                         bw_used += f.size / f.period  # B/us
                 perc = bw_used / l.speed
                 assert perc <= 1

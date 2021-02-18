@@ -10,11 +10,11 @@ from dashboard.layout_elements.layout_elements import *
 from solution.solution import Solution
 from utils.utilities import flatten
 
-def run_from_pickle(sol_obj_path: Path):
+def run_from_pickle(sol_obj_path: Path, PORT=None):
     solution = serializer.deserialize_solution(sol_obj_path)
-    run(solution)
+    run(solution, PORT=PORT)
 
-def run(solution: Solution):
+def run(solution: Solution, PORT=None):
     # Init Dash
     app = dash.Dash(
         __name__,
@@ -34,6 +34,10 @@ def run(solution: Solution):
         solution
     )
 
+    normal_app_taskgraph_id_digraph_map = solution_parser.get_testcase_application_taskgraphs(
+        solution
+    )
+
     option_list = []
     first_app_id = ""
     for app_id in normal_app_id_digraph_map.keys():
@@ -50,7 +54,14 @@ def run(solution: Solution):
         value=first_app_id
     )
 
+    input_normal_app_taskgraph_dag_dropdown = dcc.Dropdown(
+        id='input_normal_app_taskgraph_dag_dropdown',
+        options=option_list,
+        value=first_app_id
+    )
+
     input_normal_app_dag_viewer = html.Div(id='input_normal_app_dag_viewer')
+    input_normal_app_taskgraph_dag_viewer = html.Div(id='input_normal_app_taskgraph_dag_viewer')
 
     # ------- Toplogy
     input_topology = html.Img(
@@ -77,6 +88,10 @@ def run(solution: Solution):
         solution
     )
 
+    security_app_taskgraph_id_digraph_map = solution_parser.get_derived_security_application_taskgraphs(
+        solution
+    )
+
     option_list = []
     first_app_id = ""
     for app_id in security_app_id_digraph_map.keys():
@@ -92,8 +107,14 @@ def run(solution: Solution):
         options=option_list,
         value=first_app_id
     )
+    input_security_app_taskgraph_dag_dropdown = dcc.Dropdown(
+        id='input_security_app_taskgraph_dag_dropdown',
+        options=option_list,
+        value=first_app_id
+    )
 
     input_security_app_dag_viewer = html.Div(id='input_security_app_dag_viewer')
+    input_security_app_taskgraph_dag_viewer = html.Div(id='input_security_app_taskgraph_dag_viewer')
 
     # ------- Security Task Table
     df = solution_parser.get_derived_security_task_dataframe(solution)
@@ -222,6 +243,21 @@ def run(solution: Solution):
                                                 input_stream_table,
                                             )
                                         ]
+                                    ),
+
+                                    row(
+                                        [
+                                            inner_container(
+                                                "Normal Applications - Task Graphs",
+                                                row(
+                                                    [
+                                                        inner_element_dag(
+                                                            input_normal_app_taskgraph_dag_dropdown),
+                                                        inner_element_dag(input_normal_app_taskgraph_dag_viewer)
+                                                    ]
+                                                )
+                                            ),
+                                        ]
                                     )
                                 ]
                             ),
@@ -237,36 +273,64 @@ def run(solution: Solution):
                             header("Derived Security Applications"),
                             row(
                                 [
-                                    columns(
+                                    row(
                                         [
-                                            column(
+                                            columns(
                                                 [
-                                                    inner_container(
-                                                        "Security Topology",
-                                                        inner_element_topology(derived_security_topology),
+                                                    column(
+                                                        [
+                                                            inner_container(
+                                                                "Security Topology",
+                                                                inner_element_topology(derived_security_topology),
+                                                            ),
+                                                        ]
                                                     ),
-                                                    inner_container(
-                                                        "Security Tasks",
-                                                        derived_security_task_table,
+                                                    column(
+                                                        [
+                                                            inner_container(
+                                                                "Security Applications",
+                                                                row(
+                                                                    [
+                                                                        inner_element_dag(
+                                                                            input_security_app_dag_dropdown),
+                                                                        inner_element_dag(input_security_app_dag_viewer)
+                                                                    ]
+                                                                )
+                                                            ),
+                                                        ]
                                                     ),
                                                 ]
                                             ),
-                                            column(
-                                                [
-                                                    inner_container(
-                                                        "Security Applications",
-                                                        row(
-                                                            [
-                                                                inner_element_dag(input_security_app_dag_dropdown),
-                                                                inner_element_dag(input_security_app_dag_viewer)
-                                                            ]
-                                                        )
-                                                    ),
-                                                    inner_container(
-                                                        "Security Streams",
-                                                        derived_security_stream_table,
-                                                    ),
-                                                ]
+                                        ]
+                                    ),
+
+                                    row(
+                                        [
+                                            inner_container(
+                                                "Security Tasks", derived_security_task_table
+                                            )
+                                        ]
+                                    ),
+
+                                    row(
+                                        [
+                                            inner_container(
+                                                "Security Streams",
+                                                derived_security_stream_table,
+                                            )
+                                        ]
+                                    ),
+
+                                    row(
+                                        [
+                                            inner_container(
+                                                "Security Applications - Task Graphs",
+                                                row(
+                                                    [
+                                                        inner_element_dag(input_security_app_taskgraph_dag_dropdown),
+                                                        inner_element_dag(input_security_app_taskgraph_dag_viewer)
+                                                    ]
+                                                )
                                             ),
                                         ]
                                     )
@@ -448,11 +512,29 @@ def run(solution: Solution):
             return i
 
     @app.callback(
+        Output('input_normal_app_taskgraph_dag_viewer', 'children'),
+        [Input('input_normal_app_taskgraph_dag_dropdown', 'value')])
+    def update_normal_app_taskgraph_dag_viewer(value):
+        if value != "":
+            i = html.Img(src=normal_app_taskgraph_id_digraph_map[value],
+                         style={"width": "100%", "height": "100%", "max-height": "200px"})
+            return i
+
+    @app.callback(
         Output('input_security_app_dag_viewer', 'children'),
         [Input('input_security_app_dag_dropdown', 'value')])
     def update_security_app_dag_viewer(value):
         if value != "":
             i = html.Img(src=security_app_id_digraph_map[value], style={"width": "100%", "height" : "100%", "max-height" : "200px"})
+            return i
+
+    @app.callback(
+        Output('input_security_app_taskgraph_dag_viewer', 'children'),
+        [Input('input_security_app_taskgraph_dag_dropdown', 'value')])
+    def update_security_app_taskgraph_dag_viewer(value):
+        if value != "":
+            i = html.Img(src=security_app_taskgraph_id_digraph_map[value],
+                         style={"width": "100%", "height": "100%", "max-height": "200px"})
             return i
 
     @app.callback(
@@ -490,7 +572,9 @@ def run(solution: Solution):
 
         return stylesheet
 
-    app.run_server(port=8060)
+    if PORT is None:
+        PORT = 8050
+    app.run_server(port=PORT)
 
 
 if __name__ == "__main__":

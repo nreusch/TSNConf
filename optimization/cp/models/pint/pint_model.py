@@ -14,7 +14,7 @@ class CPPintSolver:
     def __init__(self, tc: Testcase, timing_object: TimingData):
         self.tc = tc
 
-        # Create the model_old
+        # Create the model
         self.model = CpModel()
 
         # Create variables
@@ -23,7 +23,7 @@ class CPPintSolver:
             self._create_variables()
         timing_object.time_creating_vars_pint = t.elapsed_time
 
-        # Add constraints to model_old
+        # Add constraints to model
         t = Timer()
         with t:
             self._add_constraints()
@@ -40,6 +40,8 @@ class CPPintSolver:
         for t in self.tc.T.values():
             period_set.add(t.period)
         period_list = list(period_set)
+
+        # TODO: Better Pint constraints
 
         # Constraint 1: Pint * fp.C <= fp.D for each fp
         for fp in self.tc.FP.values():
