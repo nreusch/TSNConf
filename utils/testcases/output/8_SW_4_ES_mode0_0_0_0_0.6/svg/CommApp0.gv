@@ -1,6 +1,0 @@
-// CommApp0
-digraph {
-	Task_CommApp0_0
-	Task_CommApp0_1
-	Task_CommApp0_0 -> Task_CommApp0_1 [label=" Stream_CommApp0_Task_CommApp0_0"]
-}
