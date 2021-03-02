@@ -24,7 +24,7 @@ class stream:
     sender_task_id: str
     receiver_task_ids: Set[str]
 
-    size: int
+    size: int # message_size + mac_size + OH
     period: int  # =Pint for security streams
     rl: int
     is_secure: bool
