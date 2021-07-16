@@ -27,7 +27,7 @@ def aggregate_solution(csv_path: Path, solution: Solution):
     else:
         df.to_csv(csv_path, mode="a", header=False)
 
-def serialize_solution(base_path: Path, solution: Solution) -> Path:
+def serialize_solution(base_path: Path, solution: Solution, visualize: bool) -> Path:
     """
     Serializes the given solution (pickle, network_description, graphs, optimization results...) into a folder and returns its path
     """
@@ -49,19 +49,20 @@ def serialize_solution(base_path: Path, solution: Solution) -> Path:
         solution.tc,
     )
 
-    # Create graphviz graphs
-    svg_path = path / "svg"
-    svg_path.mkdir(exist_ok=True)
-    serialize_graphs(svg_path, solution)
+    if visualize:
+        # Create graphviz graphs
+        svg_path = path / "svg"
+        svg_path.mkdir(exist_ok=True)
+        serialize_graphs(svg_path, solution)
 
-    # Create plotly schedules
-    fig = solution_parser.get_solution_schedule_plotly(solution)
-    if fig is not None:
-        fig.write_html(str(path / "schedule.html"))
-        try:
-            fig.write_image(str(path / "schedule.pdf"), width=1920, height=640, engine="kaleido")
-        except Exception as e:
-            raise e
+        # Create plotly schedules
+        fig = solution_parser.get_solution_schedule_plotly(solution)
+        if fig is not None:
+            fig.write_html(str(path / "schedule.html"))
+            try:
+                fig.write_image(str(path / "schedule.pdf"), width=1920, height=640, engine="kaleido")
+            except Exception as e:
+                raise e
 
     # Append to results.csv
     df = solution_parser.get_solution_results_info_dataframe(solution)

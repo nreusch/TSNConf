@@ -188,7 +188,7 @@ def run(input_params: InputParameters) -> Solution:
         print("-" * 10 + " 2. Serializing the solution")
         t = Timer()
         with t:
-            output_folder_path = serializer.serialize_solution(utilities.OUTPUT_PATH, solution)
+            output_folder_path = serializer.serialize_solution(utilities.OUTPUT_PATH, solution, input_params.visualize)
 
         timing_object.time_serializing_solution = t.elapsed_time
         print(
