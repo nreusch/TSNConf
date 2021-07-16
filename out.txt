@@ -1,5 +1,4 @@
-usage: main.py [-h] [--mode MODE] [--aggregate AGGREGATE] [--visualize] [--port PORT] [--no_redundancy]
-               [--no_security] [--allow_overlap] [--allow_infeasible] [--timeout_routing TIMEOUT_ROUTING]
+usage: main.py [-h] [--mode MODE] [--aggregate AGGREGATE] [--visualize] [--port PORT] [--no_redundancy] [--no_security] [--allow_overlap] [--allow_infeasible] [--timeout_routing TIMEOUT_ROUTING]
                [--timeout_scheduling TIMEOUT_SCHEDULING] [--timeout_pint TIMEOUT_PINT] [--k K] [--a A] [--b B]
                testcase_path
 

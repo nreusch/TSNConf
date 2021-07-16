@@ -5,8 +5,6 @@ from typing import Dict, List, Tuple, Set
 
 from input.model.task import task
 
-from sortedcontainers import SortedSet
-
 
 class EStreamType(Enum):
     NORMAL = 1
@@ -21,10 +19,10 @@ class stream:
     app_id: str
 
     sender_es_id: str
-    receiver_es_ids: SortedSet[str]
+    receiver_es_ids: Set[str]
 
     sender_task_id: str
-    receiver_task_ids: SortedSet[str]
+    receiver_task_ids: Set[str]
 
     size: int # message_size + mac_size + OH
     period: int  # =Pint for security streams
@@ -74,7 +72,7 @@ class stream:
             rl = 1
 
         sender_task_id = n.attrib["sender_task"]
-        receiver_task_ids = SortedSet(n.attrib["receiver_tasks"].replace(" ", "").split(","))
+        receiver_task_ids = set(n.attrib["receiver_tasks"].replace(" ", "").split(","))
 
         if "src" in n.attrib:
             src_es_id = n.attrib["src"]
@@ -82,9 +80,9 @@ class stream:
             src_es_id = tc_T[sender_task_id].src_es_id
 
         if "dest" in n.attrib:
-            receiver_es_ids = SortedSet(n.attrib["dest"].replace(" ", "").split(","))
+            receiver_es_ids = set(n.attrib["dest"].replace(" ", "").split(","))
         else:
-            receiver_es_ids = SortedSet([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
+            receiver_es_ids = set([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
 
         message_size = int(n.attrib["size"])
 
