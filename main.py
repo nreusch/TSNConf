@@ -6,6 +6,7 @@ from typing import List, Tuple
 import runner
 from input.input_parameters import EMode, InputParameters, Timeouts
 from dashboard import dash_outputter
+from solution import solution_parser
 from solution.solution import Solution
 from solution.solution_timing_data import TimingData
 from utils import utilities, serializer
@@ -39,10 +40,11 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
         help='The path to the testcase. E.g "testcases/TC0_example.flex_network_description"',
     )
 
-    parser.add_argument("--mode", type=int, help="Mode to run")
+    parser.add_argument("--mode", type=str, help="Mode to run")
 
-    # parser.add_argument('--serialize', action="store_true", default=False,
-    #                    help='Serialize testcase (Default: False)')
+    parser.add_argument('--aggregate', type=str, default=False,
+                       help='Aggregate results to [path]')
+
     parser.add_argument(
         "--visualize",
         action="store_true",
@@ -72,6 +74,21 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     )
 
     parser.add_argument(
+        "--allow_overlap",
+        action="store_true",
+        default=False,
+        help="Allow redundant stream overlap for CP solutions  (Default: False)",
+    )
+
+    parser.add_argument(
+        "--allow_infeasible",
+        action="store_true",
+        default=False,
+        help="Allow the CP solver to produce infeasible solutions, including stream overlap or missed deadlines",
+    )
+
+
+    parser.add_argument(
         "--timeout_routing",
         default=300,
         type=int,
@@ -90,21 +107,60 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
         help="Timeout: Pint Solver (s) (Default: 60)",
     )
 
+    parser.add_argument(
+        "--k",
+        default=5,
+        type=int,
+        help="K: Parameter for k-shortest-paths heuristic (Default: 3)",
+    )
+
+    parser.add_argument(
+        "--a",
+        default=50000,
+        type=int,
+        help="a: Weight for routing overlap component of cost function (Default: 5000)",
+    )
+
+    parser.add_argument(
+        "--b",
+        default=100000,
+        type=int,
+        help="b: Weight for infeasible stream component of cost function (Default: 1000)",
+    )
+
     results = parser.parse_args()
 
     input_param_list = []
-    mode = EMode[EMode(results.mode).name]
+
+    if results.mode.isdigit():
+        mode = EMode(int(results.mode))
+    else:
+        mode = EMode[results.mode]
+
     timeouts = Timeouts(
         results.timeout_pint,
         results.timeout_routing,
         results.timeout_scheduling,
     )
     tc_path = results.testcase_path
+    if results.aggregate == False:
+        aggregate = ""
+    else:
+        aggregate = results.aggregate
     visualize = results.visualize
     port = results.port
     no_redundancy = results.no_redundancy
     no_security = results.no_security
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, port, no_redundancy, no_security))
+    allow_overlap = results.allow_overlap
+    allow_infeasible_solutions = results.allow_infeasible
+
+    if allow_infeasible_solutions:
+        allow_overlap = True
+
+    k = results.k
+    a = results.a
+    b = results.b
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b))
 
     return input_param_list, Path(results.testcase_path)
 
@@ -124,7 +180,8 @@ def run(input_params: InputParameters) -> Solution:
         solution = runner.run_mode(input_params.mode, timing_object, input_params)
     except Exception as e:
         print("Error in Step 1: Running the chosen mode")
-        raise
+        print(e)
+        raise e
 
     # 3. Serialize result as .flex_network_description
     try:
@@ -132,6 +189,7 @@ def run(input_params: InputParameters) -> Solution:
         t = Timer()
         with t:
             output_folder_path = serializer.serialize_solution(utilities.OUTPUT_PATH, solution)
+
         timing_object.time_serializing_solution = t.elapsed_time
         print(
             "-" * 20
@@ -139,15 +197,28 @@ def run(input_params: InputParameters) -> Solution:
                 output_folder_path, timing_object.time_serializing_solution
             )
         )
+
+        # 3. Aggregate result if --aggregate
+        if input_params.aggregate_path != "":
+            serializer.aggregate_solution(input_params.aggregate_path, solution)
+            print(
+                "-" * 20
+                + " Aggregated solution to: {}".format(
+                    input_params.aggregate_path
+                )
+            )
     except Exception as e:
         print("Error in Step 2: Serializing the solution")
+        raise e
 
     # 4. Print results
     try:
         print("-" * 10 + " 3. Printing results")
         print(solution.get_result_string())
+        print(solution_parser.get_solution_results_info_dataframe(solution).to_string())
     except Exception as e:
         print("Error in Step 3: Printing results")
+        raise e
 
     print("--------------------------\n")
 

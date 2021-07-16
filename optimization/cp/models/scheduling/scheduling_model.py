@@ -16,7 +16,7 @@ from input.testcase import Testcase
 from input.input_parameters import InputParameters
 from solution.solution_optimization_status import EOptimizationStatus
 from solution.solution_timing_data import TimingData
-from utils.utilities import Timer, print_model_stats, report_exception
+from utils.utilities import Timer, print_model_stats, report_exception, list_gcd
 
 
 class CPSchedulingSolver:
@@ -24,10 +24,17 @@ class CPSchedulingSolver:
         self,
         tc: Testcase,
         timing_object: TimingData,
-        input_params: InputParameters,
-        do_simple_scheduling: bool = False,
+        do_security: bool = True,
+        do_allow_infeasible_solutions: bool = True,
     ):
         self.tc: testcase = tc
+
+        period_set = set()
+        for app in self.tc.A_app.values():
+            period_set.add(app.period)
+        period_list = list(period_set)
+        self.gcd = list_gcd(period_list)
+
         self.Pint = tc.Pint
         self.mtrees: Dict[str, route] = tc.R  # stream.id -> Route
 
@@ -38,19 +45,16 @@ class CPSchedulingSolver:
         t = Timer()
         with t:
             self._create_variables()
-            scheduling_model_variables.init_variables(self, input_params)
+            scheduling_model_variables.init_variables(self, do_security)
         timing_object.time_creating_vars_scheduling = t.elapsed_time
 
         # Add constraints to CP model
         t = Timer()
         with t:
-            if do_simple_scheduling:
-                scheduling_model_constraints.add_simple_constraints(self)
-            else:
-                scheduling_model_constraints.add_constraints(self)
+            scheduling_model_constraints.add_constraints(self, do_security, do_allow_infeasible_solutions)
 
             # Add optimization goal
-            scheduling_model_goals.maximize_laxity(self, do_simple_scheduling)
+            scheduling_model_goals.maximize_laxity(self)
 
         timing_object.time_creating_constraints_scheduling = t.elapsed_time
 
@@ -78,6 +82,9 @@ class CPSchedulingSolver:
 
         # Dict(task.id -> IntVar)
         self.a_t: Dict[str, IntVar] = {}  # end time of t
+
+        # Dict(app.id -> IntVar)
+        self.app_cost: Dict[str, IntVar] = {} # cost of app
 
     def optimize(
         self, input_params, timing_object: TimingData

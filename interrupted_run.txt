@@ -1,0 +1,1716 @@
+--------------------------------------------------------------------------------
+Testcase: tiny1
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: tiny1, in 2.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 61.00 ms
+-------------------- Found Schedule in 30.00 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\tiny1_mode1_600_1800_1800_FFT_0.6,  in 660.01 ms
+---------- 3. Printing results
+tiny1: 4 ES, 2 SW, 9 Tasks, 2 Streams, 3 Apps, 432 Cost, 0.07% Bandwidth , 8.33% CPU , 116.00ms Optimization Time, Infeasible Apps 0/3, Routing OPTIMAL, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: tiny1
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: tiny1, in 2.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 1246; INFEASIBLE TGA: {}; ROUTING COST: 4
+
+-------------------- Found Schedule in 1800011.24 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\tiny1_mode13_600_1800_1800_FFT_0.6,  in 760.96 ms
+---------- 3. Printing results
+tiny1: 4 ES, 2 SW, 9 Tasks, 2 Streams, 3 Apps, 1246 Cost, 0.07% Bandwidth , 8.33% CPU , 1800013.24ms Optimization Time, Infeasible Apps 0/3, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: tiny2
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: tiny2, in 2.00 ms
+-------------------- Found Pint: 500,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 99.00 ms
+-------------------- Found Schedule in 475.97 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\tiny2_mode1_600_1800_1800_FFT_0.6,  in 817.96 ms
+---------- 3. Printing results
+tiny2: 4 ES, 2 SW, 10 Tasks, 4 Streams, 3 Apps, 263 Cost, 0.34% Bandwidth , 12.62% CPU , 619.97ms Optimization Time, Infeasible Apps 0/3, Routing OPTIMAL, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: tiny2
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: tiny2, in 2.00 ms
+-------------------- Found Pint: 500,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 600665; INFEASIBLE TGA: {}; ROUTING COST: 600012
+
+NEW BEST COST: 600649; INFEASIBLE TGA: {}; ROUTING COST: 600012
+
+NEW BEST COST: 500650; INFEASIBLE TGA: {}; ROUTING COST: 500013
+
+NEW BEST COST: 400651; INFEASIBLE TGA: {}; ROUTING COST: 400014
+
+NEW BEST COST: 300652; INFEASIBLE TGA: {}; ROUTING COST: 300015
+
+NEW BEST COST: 200653; INFEASIBLE TGA: {}; ROUTING COST: 200016
+
+NEW BEST COST: 200652; INFEASIBLE TGA: {}; ROUTING COST: 200015
+
+NEW BEST COST: 100648; INFEASIBLE TGA: {}; ROUTING COST: 100013
+
+NEW BEST COST: 647; INFEASIBLE TGA: {}; ROUTING COST: 12
+
+-------------------- Found Schedule in 1800038.23 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\tiny2_mode13_600_1800_1800_FFT_0.6,  in 797.97 ms
+---------- 3. Printing results
+tiny2: 4 ES, 2 SW, 10 Tasks, 4 Streams, 3 Apps, 647 Cost, 0.34% Bandwidth , 12.62% CPU , 1800040.23ms Optimization Time, Infeasible Apps 0/3, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: tiny3
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: tiny3, in 1.52 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 112.00 ms
+-------------------- Found Schedule in 35.00 ms
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: tiny3
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: tiny3, in 2.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 500413; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 400011
+
+NEW BEST COST: 400414; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 300012
+
+CPSolver returned invalid status for scheduling model: EOptimizationStatus.INFEASIBLE
+NEW BEST COST: 300416; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 200014
+
+NEW BEST COST: 200414; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 100013
+
+NEW BEST COST: 100415; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 14
+
+NEW BEST COST: 100414; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 13
+
+-------------------- Found Schedule in 1800010.43 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\tiny3_mode13_600_1800_1800_FFT_0.6,  in 1201.75 ms
+---------- 3. Printing results
+tiny3: 4 ES, 2 SW, 16 Tasks, 5 Streams, 5 Apps, 100414 Cost, 0.52% Bandwidth , 15.09% CPU , 1800012.43ms Optimization Time, Infeasible Apps 1/5, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: small1
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: small1, in 2.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 506.53 ms
+CPSolver returned invalid status for scheduling model: EOptimizationStatus.INFEASIBLE
+-------------------- Found Schedule in 53.00 ms
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: small1
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: small1, in 3.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 100406; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 15
+
+NEW BEST COST: 100405; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 15
+
+-------------------- Found Schedule in 1800048.38 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\small1_mode13_600_1800_1800_FFT_0.6,  in 1487.92 ms
+---------- 3. Printing results
+small1: 8 ES, 4 SW, 25 Tasks, 4 Streams, 7 Apps, 100405 Cost, 0.11% Bandwidth , 10.88% CPU , 1800057.38ms Optimization Time, Infeasible Apps 1/7, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: small2
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: small2, in 2.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 1001.00 ms
+CPSolver returned invalid status for scheduling model: EOptimizationStatus.INFEASIBLE
+-------------------- Found Schedule in 63.99 ms
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: small2
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: small2, in 4.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 700488; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 600020
+
+NEW BEST COST: 600489; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 500021
+
+NEW BEST COST: 500491; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 400023
+
+NEW BEST COST: 400491; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 300024
+
+NEW BEST COST: 300494; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 200026
+
+NEW BEST COST: 200495; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 100027
+
+NEW BEST COST: 100494; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 26
+
+NEW BEST COST: 100493; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 25
+
+NEW BEST COST: 100490; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 26
+
+NEW BEST COST: 100489; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 25
+
+NEW BEST COST: 100488; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 26
+
+NEW BEST COST: 100486; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 24
+
+NEW BEST COST: 100485; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 23
+
+NEW BEST COST: 100484; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 22
+
+NEW BEST COST: 100483; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 21
+
+NEW BEST COST: 100482; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 20
+
+NEW BEST COST: 100481; INFEASIBLE TGA: {'app01': True}; ROUTING COST: 19
+
+-------------------- Found Schedule in 1800053.80 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\small2_mode13_600_1800_1800_FFT_0.6,  in 1617.82 ms
+---------- 3. Printing results
+small2: 8 ES, 4 SW, 24 Tasks, 6 Streams, 7 Apps, 100481 Cost, 0.14% Bandwidth , 11.94% CPU , 1800061.81ms Optimization Time, Infeasible Apps 1/7, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: small3
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: small3, in 3.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 0 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 518.01 ms
+-------------------- Found Schedule in 1103.00 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\small3_mode1_600_1800_1800_FFT_0.6,  in 1922.51 ms
+---------- 3. Printing results
+small3: 8 ES, 4 SW, 28 Tasks, 4 Streams, 8 Apps, 592 Cost, 0.27% Bandwidth , 14.05% CPU , 1751.02ms Optimization Time, Infeasible Apps 0/8, Routing OPTIMAL, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: small3
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: small3, in 4.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 0 Security Applications,  in 0.00 ms
+INITIAL COST: 703; INFEASIBLE TGA: {}; ROUTING COST: 18
+
+NEW BEST COST: 698; INFEASIBLE TGA: {}; ROUTING COST: 18
+
+NEW BEST COST: 687; INFEASIBLE TGA: {}; ROUTING COST: 19
+
+NEW BEST COST: 667; INFEASIBLE TGA: {}; ROUTING COST: 20
+
+NEW BEST COST: 666; INFEASIBLE TGA: {}; ROUTING COST: 19
+
+NEW BEST COST: 665; INFEASIBLE TGA: {}; ROUTING COST: 18
+
+NEW BEST COST: 664; INFEASIBLE TGA: {}; ROUTING COST: 17
+
+NEW BEST COST: 663; INFEASIBLE TGA: {}; ROUTING COST: 16
+
+NEW BEST COST: 662; INFEASIBLE TGA: {}; ROUTING COST: 15
+
+-------------------- Found Schedule in 1800036.70 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\small3_mode13_600_1800_1800_FFT_0.6,  in 1460.07 ms
+---------- 3. Printing results
+small3: 8 ES, 4 SW, 28 Tasks, 4 Streams, 8 Apps, 662 Cost, 0.27% Bandwidth , 14.05% CPU , 1800045.70ms Optimization Time, Infeasible Apps 0/8, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: medium1
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: medium1, in 3.03 ms
+-------------------- Found Pint: 1000,  in 1.99 ms
+-------------------- Created 2 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 4354.10 ms
+-------------------- Found Schedule in 1245.00 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\medium1_mode1_600_1800_1800_FFT_0.6,  in 2413.23 ms
+---------- 3. Printing results
+medium1: 16 ES, 8 SW, 35 Tasks, 8 Streams, 10 Apps, 829 Cost, 0.07% Bandwidth , 6.87% CPU , 6056.07ms Optimization Time, Infeasible Apps 0/10, Routing OPTIMAL, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: medium1
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: medium1, in 5.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 2 Security Applications,  in 0.00 ms
+INITIAL COST: 1202845; INFEASIBLE TGA: {}; ROUTING COST: 1200040
+
+NEW BEST COST: 1102846; INFEASIBLE TGA: {}; ROUTING COST: 1100041
+
+NEW BEST COST: 1102841; INFEASIBLE TGA: {}; ROUTING COST: 1100041
+
+NEW BEST COST: 1102730; INFEASIBLE TGA: {}; ROUTING COST: 1100041
+
+NEW BEST COST: 1002732; INFEASIBLE TGA: {}; ROUTING COST: 1000043
+
+NEW BEST COST: 1002679; INFEASIBLE TGA: {}; ROUTING COST: 1000043
+
+NEW BEST COST: 1002662; INFEASIBLE TGA: {}; ROUTING COST: 1000043
+
+NEW BEST COST: 902662; INFEASIBLE TGA: {}; ROUTING COST: 900043
+
+NEW BEST COST: 802663; INFEASIBLE TGA: {}; ROUTING COST: 800044
+
+NEW BEST COST: 702664; INFEASIBLE TGA: {}; ROUTING COST: 700045
+
+NEW BEST COST: 602665; INFEASIBLE TGA: {}; ROUTING COST: 600046
+
+NEW BEST COST: 502665; INFEASIBLE TGA: {}; ROUTING COST: 500046
+
+NEW BEST COST: 502626; INFEASIBLE TGA: {}; ROUTING COST: 500046
+
+NEW BEST COST: 302635; INFEASIBLE TGA: {}; ROUTING COST: 300046
+
+NEW BEST COST: 202636; INFEASIBLE TGA: {}; ROUTING COST: 200047
+
+NEW BEST COST: 202629; INFEASIBLE TGA: {}; ROUTING COST: 200049
+
+NEW BEST COST: 202587; INFEASIBLE TGA: {}; ROUTING COST: 200051
+
+NEW BEST COST: 202586; INFEASIBLE TGA: {}; ROUTING COST: 200050
+
+NEW BEST COST: 102587; INFEASIBLE TGA: {}; ROUTING COST: 100051
+
+NEW BEST COST: 102585; INFEASIBLE TGA: {}; ROUTING COST: 100049
+
+NEW BEST COST: 102568; INFEASIBLE TGA: {}; ROUTING COST: 100049
+
+NEW BEST COST: 102567; INFEASIBLE TGA: {}; ROUTING COST: 100048
+
+NEW BEST COST: 102566; INFEASIBLE TGA: {}; ROUTING COST: 100047
+
+NEW BEST COST: 102548; INFEASIBLE TGA: {}; ROUTING COST: 100050
+
+NEW BEST COST: 102547; INFEASIBLE TGA: {}; ROUTING COST: 100050
+
+NEW BEST COST: 102546; INFEASIBLE TGA: {}; ROUTING COST: 100049
+
+NEW BEST COST: 102545; INFEASIBLE TGA: {}; ROUTING COST: 100048
+
+NEW BEST COST: 102544; INFEASIBLE TGA: {}; ROUTING COST: 100047
+
+NEW BEST COST: 2548; INFEASIBLE TGA: {}; ROUTING COST: 51
+
+NEW BEST COST: 2547; INFEASIBLE TGA: {}; ROUTING COST: 50
+
+NEW BEST COST: 2545; INFEASIBLE TGA: {}; ROUTING COST: 48
+
+NEW BEST COST: 2544; INFEASIBLE TGA: {}; ROUTING COST: 47
+
+NEW BEST COST: 2543; INFEASIBLE TGA: {}; ROUTING COST: 46
+
+NEW BEST COST: 2542; INFEASIBLE TGA: {}; ROUTING COST: 45
+
+NEW BEST COST: 2541; INFEASIBLE TGA: {}; ROUTING COST: 44
+
+NEW BEST COST: 2539; INFEASIBLE TGA: {}; ROUTING COST: 41
+
+NEW BEST COST: 2538; INFEASIBLE TGA: {}; ROUTING COST: 40
+
+NEW BEST COST: 2537; INFEASIBLE TGA: {}; ROUTING COST: 40
+
+NEW BEST COST: 2536; INFEASIBLE TGA: {}; ROUTING COST: 39
+
+NEW BEST COST: 2535; INFEASIBLE TGA: {}; ROUTING COST: 38
+
+NEW BEST COST: 2534; INFEASIBLE TGA: {}; ROUTING COST: 37
+
+-------------------- Found Schedule in 1800109.96 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\medium1_mode13_600_1800_1800_FFT_0.6,  in 1924.80 ms
+---------- 3. Printing results
+medium1: 16 ES, 8 SW, 35 Tasks, 8 Streams, 10 Apps, 2534 Cost, 0.07% Bandwidth , 6.87% CPU , 1800119.96ms Optimization Time, Infeasible Apps 0/10, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: medium2
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: medium2, in 3.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 3 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 8146.02 ms
+CPSolver returned invalid status for scheduling model: EOptimizationStatus.INFEASIBLE
+-------------------- Found Schedule in 145.00 ms
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: medium2
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: medium2, in 5.00 ms
+-------------------- Found Pint: 1000,  in 2.01 ms
+-------------------- Created 3 Security Applications,  in 0.00 ms
+INITIAL COST: 1903065; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 1800057
+
+NEW BEST COST: 1803066; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 1700058
+
+NEW BEST COST: 1703069; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 1600061
+
+NEW BEST COST: 1503071; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 1400063
+
+NEW BEST COST: 1203070; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 1100062
+
+NEW BEST COST: 1103072; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 1000064
+
+NEW BEST COST: 1003073; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 900065
+
+NEW BEST COST: 1003046; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 900065
+
+NEW BEST COST: 1003045; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 900064
+
+NEW BEST COST: 803049; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 700068
+
+NEW BEST COST: 802927; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 700068
+
+NEW BEST COST: 702928; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 600069
+
+NEW BEST COST: 602930; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 500071
+
+NEW BEST COST: 502933; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 400074
+
+NEW BEST COST: 502878; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 400074
+
+NEW BEST COST: 502877; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 400073
+
+NEW BEST COST: 502876; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 400072
+
+NEW BEST COST: 402878; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 300074
+
+NEW BEST COST: 402851; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 300074
+
+NEW BEST COST: 302849; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 200072
+
+NEW BEST COST: 302846; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 200070
+
+NEW BEST COST: 302845; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 200069
+
+NEW BEST COST: 302843; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 200067
+
+NEW BEST COST: 202844; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 100068
+
+NEW BEST COST: 102845; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 69
+
+NEW BEST COST: 102844; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 68
+
+NEW BEST COST: 102843; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 67
+
+NEW BEST COST: 102842; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 66
+
+NEW BEST COST: 102841; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 65
+
+NEW BEST COST: 102840; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 64
+
+NEW BEST COST: 102839; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 63
+
+NEW BEST COST: 102838; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 62
+
+NEW BEST COST: 102837; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 61
+
+NEW BEST COST: 102836; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 60
+
+NEW BEST COST: 102835; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 59
+
+NEW BEST COST: 102834; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 58
+
+NEW BEST COST: 102833; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 57
+
+NEW BEST COST: 102832; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 56
+
+NEW BEST COST: 102831; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 55
+
+NEW BEST COST: 102830; INFEASIBLE TGA: {'app21': True}; ROUTING COST: 54
+
+-------------------- Found Schedule in 1800132.04 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\medium2_mode13_600_1800_1800_FFT_0.6,  in 2402.76 ms
+---------- 3. Printing results
+medium2: 16 ES, 8 SW, 46 Tasks, 12 Streams, 13 Apps, 102830 Cost, 0.23% Bandwidth , 11.03% CPU , 1800146.04ms Optimization Time, Infeasible Apps 1/13, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: medium3
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: medium3, in 4.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 4 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 47208.17 ms
+CPSolver returned invalid status for scheduling model: EOptimizationStatus.INFEASIBLE
+-------------------- Found Schedule in 142.00 ms
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: medium3
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: medium3, in 4.00 ms
+-------------------- Found Pint: 1000,  in 1.01 ms
+-------------------- Created 4 Security Applications,  in 0.00 ms
+INITIAL COST: 4200549; INFEASIBLE TGA: {'app01': True, 'app11': True, 'app31': True, 'app41': True}; ROUTING COST: 3800075
+
+NEW BEST COST: 4200545; INFEASIBLE TGA: {'app31': True, 'app41': True, 'app11': True, 'app01': True}; ROUTING COST: 3800075
+
+NEW BEST COST: 4100547; INFEASIBLE TGA: {'app31': True, 'app41': True, 'app11': True, 'app01': True}; ROUTING COST: 3700077
+
+NEW BEST COST: 4000553; INFEASIBLE TGA: {'app31': True, 'app41': True, 'app11': True, 'app01': True}; ROUTING COST: 3600080
+
+NEW BEST COST: 3800554; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app11': True, 'app41': True}; ROUTING COST: 3400081
+
+NEW BEST COST: 3600557; INFEASIBLE TGA: {'app01': True, 'app11': True, 'app41': True, 'app31': True}; ROUTING COST: 3200083
+
+NEW BEST COST: 3600556; INFEASIBLE TGA: {'app01': True, 'app11': True, 'app41': True, 'app31': True}; ROUTING COST: 3200082
+
+NEW BEST COST: 3600542; INFEASIBLE TGA: {'app01': True, 'app11': True, 'app41': True, 'app31': True}; ROUTING COST: 3200082
+
+NEW BEST COST: 3400544; INFEASIBLE TGA: {'app01': True, 'app11': True, 'app41': True, 'app31': True}; ROUTING COST: 3000084
+
+NEW BEST COST: 3100545; INFEASIBLE TGA: {'app01': True, 'app31': True, 'app41': True, 'app11': True}; ROUTING COST: 2700085
+
+NEW BEST COST: 3000544; INFEASIBLE TGA: {'app11': True, 'app31': True, 'app41': True, 'app01': True}; ROUTING COST: 2600084
+
+NEW BEST COST: 2900549; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app01': True, 'app31': True}; ROUTING COST: 2500089
+
+NEW BEST COST: 2900548; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app31': True, 'app01': True}; ROUTING COST: 2500088
+
+NEW BEST COST: 2700551; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app31': True, 'app01': True}; ROUTING COST: 2300091
+
+NEW BEST COST: 2500556; INFEASIBLE TGA: {'app11': True, 'app31': True, 'app41': True, 'app01': True}; ROUTING COST: 2100096
+
+NEW BEST COST: 2300557; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app41': True, 'app01': True}; ROUTING COST: 1900097
+
+NEW BEST COST: 2200561; INFEASIBLE TGA: {'app11': True, 'app41': True, 'app31': True, 'app01': True}; ROUTING COST: 1800101
+
+NEW BEST COST: 2100562; INFEASIBLE TGA: {'app11': True, 'app41': True, 'app31': True, 'app01': True}; ROUTING COST: 1700102
+
+NEW BEST COST: 2000562; INFEASIBLE TGA: {'app11': True, 'app31': True, 'app41': True, 'app01': True}; ROUTING COST: 1600102
+
+NEW BEST COST: 1900564; INFEASIBLE TGA: {'app31': True, 'app41': True, 'app11': True, 'app01': True}; ROUTING COST: 1500104
+
+NEW BEST COST: 1900563; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app01': True, 'app31': True}; ROUTING COST: 1500103
+
+NEW BEST COST: 1900562; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app41': True, 'app11': True}; ROUTING COST: 1500102
+
+NEW BEST COST: 1900561; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app01': True, 'app41': True}; ROUTING COST: 1500101
+
+NEW BEST COST: 1900560; INFEASIBLE TGA: {'app11': True, 'app01': True, 'app41': True, 'app31': True}; ROUTING COST: 1500100
+
+NEW BEST COST: 1900558; INFEASIBLE TGA: {'app11': True, 'app41': True, 'app01': True, 'app31': True}; ROUTING COST: 1500098
+
+NEW BEST COST: 1900556; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app01': True, 'app31': True}; ROUTING COST: 1500096
+
+NEW BEST COST: 1900555; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app01': True, 'app31': True}; ROUTING COST: 1500095
+
+NEW BEST COST: 1800555; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app01': True, 'app41': True}; ROUTING COST: 1400095
+
+NEW BEST COST: 1700554; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app01': True, 'app41': True}; ROUTING COST: 1300094
+
+NEW BEST COST: 1700553; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app01': True, 'app41': True}; ROUTING COST: 1300093
+
+NEW BEST COST: 1300552; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app11': True, 'app41': True}; ROUTING COST: 900092
+
+NEW BEST COST: 1200553; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app11': True, 'app41': True}; ROUTING COST: 800093
+
+NEW BEST COST: 1200552; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app01': True, 'app41': True}; ROUTING COST: 800092
+
+NEW BEST COST: 1100552; INFEASIBLE TGA: {'app31': True, 'app41': True, 'app01': True, 'app11': True}; ROUTING COST: 700092
+
+NEW BEST COST: 1100551; INFEASIBLE TGA: {'app41': True, 'app11': True, 'app31': True, 'app01': True}; ROUTING COST: 700091
+
+NEW BEST COST: 1100550; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app11': True, 'app41': True}; ROUTING COST: 700090
+
+NEW BEST COST: 1100549; INFEASIBLE TGA: {'app41': True, 'app01': True, 'app11': True, 'app31': True}; ROUTING COST: 700089
+
+NEW BEST COST: 1100547; INFEASIBLE TGA: {'app11': True, 'app01': True, 'app31': True, 'app41': True}; ROUTING COST: 700087
+
+NEW BEST COST: 1100545; INFEASIBLE TGA: {'app11': True, 'app01': True, 'app31': True, 'app41': True}; ROUTING COST: 700085
+
+NEW BEST COST: 1100544; INFEASIBLE TGA: {'app31': True, 'app11': True, 'app41': True, 'app01': True}; ROUTING COST: 700084
+
+NEW BEST COST: 1100543; INFEASIBLE TGA: {'app41': True, 'app31': True, 'app01': True, 'app11': True}; ROUTING COST: 700083
+
+NEW BEST COST: 1100542; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app41': True, 'app11': True}; ROUTING COST: 700082
+
+NEW BEST COST: 1100540; INFEASIBLE TGA: {'app31': True, 'app01': True, 'app41': True, 'app11': True}; ROUTING COST: 700080
+
+NEW BEST COST: 1100539; INFEASIBLE TGA: {'app11': True, 'app41': True, 'app31': True, 'app01': True}; ROUTING COST: 700079
+
+NEW BEST COST: 1100538; INFEASIBLE TGA: {'app41': True, 'app01': True, 'app31': True, 'app11': True}; ROUTING COST: 700078
+
+NEW BEST COST: 1100537; INFEASIBLE TGA: {'app11': True, 'app41': True, 'app01': True, 'app31': True}; ROUTING COST: 700077
+
+NEW BEST COST: 1100535; INFEASIBLE TGA: {'app11': True, 'app31': True, 'app01': True, 'app41': True}; ROUTING COST: 700076
+
+NEW BEST COST: 1000536; INFEASIBLE TGA: {'app41': True, 'app31': True, 'app11': True, 'app01': True}; ROUTING COST: 600077
+
+NEW BEST COST: 1000535; INFEASIBLE TGA: {'app31': True, 'app41': True, 'app11': True, 'app01': True}; ROUTING COST: 600076
+
+-------------------- Found Schedule in 1800117.90 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\medium3_mode13_600_1800_1800_FFT_0.6,  in 3180.95 ms
+---------- 3. Printing results
+medium3: 16 ES, 8 SW, 50 Tasks, 15 Streams, 14 Apps, 1000535 Cost, 0.18% Bandwidth , 12.15% CPU , 1800134.91ms Optimization Time, Infeasible Apps 4/14, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: large1
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: large1, in 9.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 11301.99 ms
+-------------------- Found Schedule in 17751.72 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\large1_mode1_600_1800_1800_FFT_0.6,  in 3098.54 ms
+---------- 3. Printing results
+large1: 24 ES, 12 SW, 53 Tasks, 10 Streams, 15 Apps, 1330 Cost, 0.09% Bandwidth , 7.66% CPU , 30524.70ms Optimization Time, Infeasible Apps 0/15, Routing OPTIMAL, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: large1
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: large1, in 7.01 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 1002882; INFEASIBLE TGA: {}; ROUTING COST: 1000054
+
+NEW BEST COST: 1002852; INFEASIBLE TGA: {}; ROUTING COST: 1000056
+
+NEW BEST COST: 1002738; INFEASIBLE TGA: {}; ROUTING COST: 1000056
+
+NEW BEST COST: 902739; INFEASIBLE TGA: {}; ROUTING COST: 900057
+
+NEW BEST COST: 902721; INFEASIBLE TGA: {}; ROUTING COST: 900057
+
+NEW BEST COST: 902660; INFEASIBLE TGA: {}; ROUTING COST: 900059
+
+NEW BEST COST: 902650; INFEASIBLE TGA: {}; ROUTING COST: 900059
+
+NEW BEST COST: 802650; INFEASIBLE TGA: {}; ROUTING COST: 800059
+
+NEW BEST COST: 802427; INFEASIBLE TGA: {}; ROUTING COST: 800059
+
+NEW BEST COST: 702430; INFEASIBLE TGA: {}; ROUTING COST: 700062
+
+NEW BEST COST: 702429; INFEASIBLE TGA: {}; ROUTING COST: 700061
+
+NEW BEST COST: 702421; INFEASIBLE TGA: {}; ROUTING COST: 700063
+
+NEW BEST COST: 702420; INFEASIBLE TGA: {}; ROUTING COST: 700062
+
+NEW BEST COST: 602425; INFEASIBLE TGA: {}; ROUTING COST: 600067
+
+NEW BEST COST: 502426; INFEASIBLE TGA: {}; ROUTING COST: 500068
+
+NEW BEST COST: 402429; INFEASIBLE TGA: {}; ROUTING COST: 400071
+
+NEW BEST COST: 302431; INFEASIBLE TGA: {}; ROUTING COST: 300073
+
+NEW BEST COST: 202432; INFEASIBLE TGA: {}; ROUTING COST: 200074
+
+NEW BEST COST: 202430; INFEASIBLE TGA: {}; ROUTING COST: 200072
+
+NEW BEST COST: 202420; INFEASIBLE TGA: {}; ROUTING COST: 200072
+
+NEW BEST COST: 102419; INFEASIBLE TGA: {}; ROUTING COST: 100071
+
+NEW BEST COST: 102418; INFEASIBLE TGA: {}; ROUTING COST: 100070
+
+NEW BEST COST: 2418; INFEASIBLE TGA: {}; ROUTING COST: 70
+
+NEW BEST COST: 2417; INFEASIBLE TGA: {}; ROUTING COST: 69
+
+NEW BEST COST: 2416; INFEASIBLE TGA: {}; ROUTING COST: 69
+
+NEW BEST COST: 2415; INFEASIBLE TGA: {}; ROUTING COST: 67
+
+NEW BEST COST: 2413; INFEASIBLE TGA: {}; ROUTING COST: 65
+
+NEW BEST COST: 2412; INFEASIBLE TGA: {}; ROUTING COST: 64
+
+NEW BEST COST: 2411; INFEASIBLE TGA: {}; ROUTING COST: 63
+
+NEW BEST COST: 2410; INFEASIBLE TGA: {}; ROUTING COST: 62
+
+NEW BEST COST: 2408; INFEASIBLE TGA: {}; ROUTING COST: 60
+
+NEW BEST COST: 2406; INFEASIBLE TGA: {}; ROUTING COST: 58
+
+NEW BEST COST: 2405; INFEASIBLE TGA: {}; ROUTING COST: 58
+
+NEW BEST COST: 2404; INFEASIBLE TGA: {}; ROUTING COST: 57
+
+NEW BEST COST: 2402; INFEASIBLE TGA: {}; ROUTING COST: 59
+
+NEW BEST COST: 2378; INFEASIBLE TGA: {}; ROUTING COST: 59
+
+NEW BEST COST: 2377; INFEASIBLE TGA: {}; ROUTING COST: 58
+
+NEW BEST COST: 2376; INFEASIBLE TGA: {}; ROUTING COST: 57
+
+NEW BEST COST: 2375; INFEASIBLE TGA: {}; ROUTING COST: 57
+
+NEW BEST COST: 2374; INFEASIBLE TGA: {}; ROUTING COST: 56
+
+NEW BEST COST: 2373; INFEASIBLE TGA: {}; ROUTING COST: 55
+
+-------------------- Found Schedule in 1800161.55 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\large1_mode13_600_1800_1800_FFT_0.6,  in 2740.03 ms
+---------- 3. Printing results
+large1: 24 ES, 12 SW, 53 Tasks, 10 Streams, 15 Apps, 2373 Cost, 0.10% Bandwidth , 7.66% CPU , 1800180.55ms Optimization Time, Infeasible Apps 0/15, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: large2
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: large2, in 6.02 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 2 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 1304232.11 ms
+CPSolver returned invalid status for scheduling model: EOptimizationStatus.INFEASIBLE
+-------------------- Found Schedule in 236.01 ms
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: large2
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: large2, in 7.00 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 2 Security Applications,  in 0.00 ms
+INITIAL COST: 1703380; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1600084
+
+NEW BEST COST: 1703277; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1600084
+
+NEW BEST COST: 1603278; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1500085
+
+NEW BEST COST: 1603219; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1500085
+
+NEW BEST COST: 1503221; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1400087
+
+NEW BEST COST: 1403221; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1300087
+
+NEW BEST COST: 1403215; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1300089
+
+NEW BEST COST: 1203217; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1100091
+
+NEW BEST COST: 1203210; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1100092
+
+NEW BEST COST: 1203180; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1100092
+
+NEW BEST COST: 1203124; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1100092
+
+NEW BEST COST: 1103129; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 1000095
+
+NEW BEST COST: 903129; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 800095
+
+NEW BEST COST: 703128; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 600094
+
+NEW BEST COST: 503129; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 400095
+
+NEW BEST COST: 503035; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 400095
+
+NEW BEST COST: 403025; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 300094
+
+NEW BEST COST: 403024; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 300093
+
+NEW BEST COST: 403015; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 300094
+
+NEW BEST COST: 403014; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 300095
+
+NEW BEST COST: 403012; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 300093
+
+NEW BEST COST: 303015; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 200096
+
+NEW BEST COST: 303014; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 200095
+
+NEW BEST COST: 303013; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 200094
+
+NEW BEST COST: 303011; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 200094
+
+NEW BEST COST: 303010; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 200093
+
+NEW BEST COST: 303009; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 200092
+
+NEW BEST COST: 203011; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100094
+
+NEW BEST COST: 203010; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100093
+
+NEW BEST COST: 203008; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100093
+
+NEW BEST COST: 203007; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100092
+
+NEW BEST COST: 203006; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100091
+
+NEW BEST COST: 203005; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100093
+
+NEW BEST COST: 202995; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100093
+
+NEW BEST COST: 202993; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100091
+
+NEW BEST COST: 202992; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100090
+
+NEW BEST COST: 202991; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100089
+
+NEW BEST COST: 202989; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 100087
+
+NEW BEST COST: 102988; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 86
+
+NEW BEST COST: 102987; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 85
+
+NEW BEST COST: 102986; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 84
+
+NEW BEST COST: 102968; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 84
+
+NEW BEST COST: 102960; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 84
+
+NEW BEST COST: 102959; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 83
+
+NEW BEST COST: 102948; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 83
+
+NEW BEST COST: 102942; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 83
+
+NEW BEST COST: 102941; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 82
+
+NEW BEST COST: 102896; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 82
+
+NEW BEST COST: 102895; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 81
+
+NEW BEST COST: 102885; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 81
+
+NEW BEST COST: 102884; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 80
+
+NEW BEST COST: 102860; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 80
+
+NEW BEST COST: 102859; INFEASIBLE TGA: {'app31': True}; ROUTING COST: 79
+
+-------------------- Found Schedule in 1800308.36 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\large2_mode13_600_1800_1800_FFT_0.6,  in 7105.33 ms
+---------- 3. Printing results
+large2: 24 ES, 12 SW, 63 Tasks, 12 Streams, 18 Apps, 102859 Cost, 0.17% Bandwidth , 10.20% CPU , 1800339.35ms Optimization Time, Infeasible Apps 1/18, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: large3
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: large3, in 5.00 ms
+-------------------- Found Pint: 1000,  in 25.99 ms
+-------------------- Created 0 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 8014.89 ms
+-------------------- Found Schedule in 2309.43 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\large3_mode1_600_1800_1800_FFT_0.6,  in 11882.81 ms
+---------- 3. Printing results
+large3: 24 ES, 12 SW, 63 Tasks, 9 Streams, 18 Apps, 1840 Cost, 0.15% Bandwidth , 9.72% CPU , 11184.30ms Optimization Time, Infeasible Apps 0/18, Routing OPTIMAL, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: large3
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: large3, in 15.00 ms
+-------------------- Found Pint: 1000,  in 3.00 ms
+-------------------- Created 0 Security Applications,  in 0.00 ms
+INITIAL COST: 2661; INFEASIBLE TGA: {}; ROUTING COST: 55
+
+NEW BEST COST: 2424; INFEASIBLE TGA: {}; ROUTING COST: 56
+
+NEW BEST COST: 2423; INFEASIBLE TGA: {}; ROUTING COST: 59
+
+NEW BEST COST: 2394; INFEASIBLE TGA: {}; ROUTING COST: 59
+
+NEW BEST COST: 2348; INFEASIBLE TGA: {}; ROUTING COST: 60
+
+NEW BEST COST: 2322; INFEASIBLE TGA: {}; ROUTING COST: 66
+
+NEW BEST COST: 2321; INFEASIBLE TGA: {}; ROUTING COST: 65
+
+NEW BEST COST: 2319; INFEASIBLE TGA: {}; ROUTING COST: 63
+
+NEW BEST COST: 2318; INFEASIBLE TGA: {}; ROUTING COST: 62
+
+NEW BEST COST: 2317; INFEASIBLE TGA: {}; ROUTING COST: 61
+
+NEW BEST COST: 2316; INFEASIBLE TGA: {}; ROUTING COST: 60
+
+NEW BEST COST: 2312; INFEASIBLE TGA: {}; ROUTING COST: 65
+
+NEW BEST COST: 2305; INFEASIBLE TGA: {}; ROUTING COST: 65
+
+NEW BEST COST: 2299; INFEASIBLE TGA: {}; ROUTING COST: 66
+
+NEW BEST COST: 2297; INFEASIBLE TGA: {}; ROUTING COST: 64
+
+NEW BEST COST: 2296; INFEASIBLE TGA: {}; ROUTING COST: 63
+
+NEW BEST COST: 2295; INFEASIBLE TGA: {}; ROUTING COST: 62
+
+NEW BEST COST: 2293; INFEASIBLE TGA: {}; ROUTING COST: 60
+
+NEW BEST COST: 2292; INFEASIBLE TGA: {}; ROUTING COST: 59
+
+NEW BEST COST: 2291; INFEASIBLE TGA: {}; ROUTING COST: 58
+
+NEW BEST COST: 2290; INFEASIBLE TGA: {}; ROUTING COST: 57
+
+NEW BEST COST: 2289; INFEASIBLE TGA: {}; ROUTING COST: 56
+
+NEW BEST COST: 2255; INFEASIBLE TGA: {}; ROUTING COST: 58
+
+NEW BEST COST: 2247; INFEASIBLE TGA: {}; ROUTING COST: 59
+
+NEW BEST COST: 2246; INFEASIBLE TGA: {}; ROUTING COST: 58
+
+NEW BEST COST: 2245; INFEASIBLE TGA: {}; ROUTING COST: 57
+
+NEW BEST COST: 2243; INFEASIBLE TGA: {}; ROUTING COST: 55
+
+NEW BEST COST: 2242; INFEASIBLE TGA: {}; ROUTING COST: 54
+
+NEW BEST COST: 2240; INFEASIBLE TGA: {}; ROUTING COST: 52
+
+NEW BEST COST: 2239; INFEASIBLE TGA: {}; ROUTING COST: 51
+
+NEW BEST COST: 2238; INFEASIBLE TGA: {}; ROUTING COST: 50
+
+-------------------- Found Schedule in 1800319.27 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\large3_mode13_600_1800_1800_FFT_0.6,  in 2878.46 ms
+---------- 3. Printing results
+large3: 24 ES, 12 SW, 63 Tasks, 9 Streams, 18 Apps, 2238 Cost, 0.15% Bandwidth , 9.72% CPU , 1800342.26ms Optimization Time, Infeasible Apps 0/18, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+--------------------------------------------------------------------------------
+Testcase: huge1
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: huge1, in 6.01 ms
+-------------------- Found Pint: 1000,  in 1.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 1816363.79 ms
+-------------------- Found Schedule in 23131.97 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\huge1_mode1_600_1800_1800_FFT_0.6,  in 5893.64 ms
+---------- 3. Printing results
+huge1: 40 ES, 20 SW, 95 Tasks, 14 Streams, 27 Apps, 2151 Cost, 0.23% Bandwidth , 8.78% CPU , 1842860.05ms Optimization Time, Infeasible Apps 0/27, Routing FEASIBLE, Scheduling OPTIMAL
+--------------------------
+
+
+--------------------------------------------------------------------------------
+Testcase: huge1
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: huge1, in 10.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 1 Security Applications,  in 0.00 ms
+INITIAL COST: 3814; INFEASIBLE TGA: {}; ROUTING COST: 105
+
+NEW BEST COST: 3813; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3753; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3563; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3561; INFEASIBLE TGA: {}; ROUTING COST: 102
+
+NEW BEST COST: 3442; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3370; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3369; INFEASIBLE TGA: {}; ROUTING COST: 103
+
+NEW BEST COST: 3354; INFEASIBLE TGA: {}; ROUTING COST: 103
+
+NEW BEST COST: 3306; INFEASIBLE TGA: {}; ROUTING COST: 103
+
+NEW BEST COST: 3304; INFEASIBLE TGA: {}; ROUTING COST: 101
+
+NEW BEST COST: 3281; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3250; INFEASIBLE TGA: {}; ROUTING COST: 107
+
+NEW BEST COST: 3221; INFEASIBLE TGA: {}; ROUTING COST: 108
+
+NEW BEST COST: 3212; INFEASIBLE TGA: {}; ROUTING COST: 108
+
+NEW BEST COST: 3211; INFEASIBLE TGA: {}; ROUTING COST: 107
+
+NEW BEST COST: 3199; INFEASIBLE TGA: {}; ROUTING COST: 107
+
+NEW BEST COST: 3198; INFEASIBLE TGA: {}; ROUTING COST: 106
+
+NEW BEST COST: 3189; INFEASIBLE TGA: {}; ROUTING COST: 109
+
+NEW BEST COST: 3186; INFEASIBLE TGA: {}; ROUTING COST: 109
+
+NEW BEST COST: 3184; INFEASIBLE TGA: {}; ROUTING COST: 107
+
+NEW BEST COST: 3151; INFEASIBLE TGA: {}; ROUTING COST: 109
+
+NEW BEST COST: 3137; INFEASIBLE TGA: {}; ROUTING COST: 109
+
+NEW BEST COST: 3103; INFEASIBLE TGA: {}; ROUTING COST: 110
+
+NEW BEST COST: 3102; INFEASIBLE TGA: {}; ROUTING COST: 109
+
+NEW BEST COST: 3101; INFEASIBLE TGA: {}; ROUTING COST: 108
+
+NEW BEST COST: 3100; INFEASIBLE TGA: {}; ROUTING COST: 107
+
+NEW BEST COST: 3098; INFEASIBLE TGA: {}; ROUTING COST: 105
+
+NEW BEST COST: 3097; INFEASIBLE TGA: {}; ROUTING COST: 105
+
+NEW BEST COST: 3096; INFEASIBLE TGA: {}; ROUTING COST: 104
+
+NEW BEST COST: 3095; INFEASIBLE TGA: {}; ROUTING COST: 103
+
+NEW BEST COST: 3094; INFEASIBLE TGA: {}; ROUTING COST: 102
+
+NEW BEST COST: 3093; INFEASIBLE TGA: {}; ROUTING COST: 101
+
+NEW BEST COST: 3092; INFEASIBLE TGA: {}; ROUTING COST: 100
+
+NEW BEST COST: 3091; INFEASIBLE TGA: {}; ROUTING COST: 99
+
+NEW BEST COST: 3090; INFEASIBLE TGA: {}; ROUTING COST: 98
+
+NEW BEST COST: 3089; INFEASIBLE TGA: {}; ROUTING COST: 97
+
+-------------------- Found Schedule in 1800294.62 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\huge1_mode13_600_1800_1800_FFT_0.6,  in 5004.67 ms
+---------- 3. Printing results
+huge1: 40 ES, 20 SW, 95 Tasks, 14 Streams, 27 Apps, 3087 Cost, 0.25% Bandwidth , 8.78% CPU , 1800332.62ms Optimization Time, Infeasible Apps 0/27, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------
+
+--------------------------------------------------------------------------------
+Testcase: huge2
+Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: huge2, in 8.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 4 Security Applications,  in 0.00 ms
+-------------------- Found Routing, in 1827061.97 ms
+-------------------- Found Schedule in 65150.37 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\huge2_mode1_600_1800_1800_FFT_0.6,  in 6517.90 ms
+---------- 3. Printing results
+huge2: 40 ES, 20 SW, 128 Tasks, 26 Streams, 36 Apps, 3831 Cost, 0.32% Bandwidth , 10.36% CPU , 1898417.99ms Optimization Time, Infeasible Apps 0/36, Routing FEASIBLE, Scheduling OPTIMAL
+--------------------------
+
+--------------------------------------------------------------------------------
+Testcase: huge2
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: huge2, in 12.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 4 Security Applications,  in 0.00 ms
+INITIAL COST: 4708879; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 4600187
+
+NEW BEST COST: 4508883; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 4400189
+
+NEW BEST COST: 4508766; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 4400189
+
+NEW BEST COST: 4308767; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 4200190
+
+NEW BEST COST: 4209148; INFEASIBLE TGA: {}; ROUTING COST: 4200190
+
+NEW BEST COST: 4009148; INFEASIBLE TGA: {}; ROUTING COST: 4000190
+
+NEW BEST COST: 4009128; INFEASIBLE TGA: {}; ROUTING COST: 4000190
+
+NEW BEST COST: 4008702; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 3900190
+
+NEW BEST COST: 4008466; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 3900190
+
+NEW BEST COST: 4008459; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 3900190
+
+NEW BEST COST: 3608461; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 3500192
+
+NEW BEST COST: 3408463; INFEASIBLE TGA: {'app81': True}; ROUTING COST: 3300193
+
+NEW BEST COST: 3309171; INFEASIBLE TGA: {}; ROUTING COST: 3300195
+
+NEW BEST COST: 3309146; INFEASIBLE TGA: {}; ROUTING COST: 3300195
+
+NEW BEST COST: 3309145; INFEASIBLE TGA: {}; ROUTING COST: 3300194
+
+NEW BEST COST: 3209146; INFEASIBLE TGA: {}; ROUTING COST: 3200195
+
+NEW BEST COST: 3209145; INFEASIBLE TGA: {}; ROUTING COST: 3200194
+
+NEW BEST COST: 3209126; INFEASIBLE TGA: {}; ROUTING COST: 3200198
+
+NEW BEST COST: 3209100; INFEASIBLE TGA: {}; ROUTING COST: 3200198
+
+NEW BEST COST: 3208982; INFEASIBLE TGA: {}; ROUTING COST: 3200198
+
+NEW BEST COST: 3208912; INFEASIBLE TGA: {}; ROUTING COST: 3200200
+
+NEW BEST COST: 3108912; INFEASIBLE TGA: {}; ROUTING COST: 3100200
+
+NEW BEST COST: 3008915; INFEASIBLE TGA: {}; ROUTING COST: 3000203
+
+NEW BEST COST: 3008599; INFEASIBLE TGA: {}; ROUTING COST: 3000203
+
+NEW BEST COST: 3008378; INFEASIBLE TGA: {}; ROUTING COST: 3000204
+
+NEW BEST COST: 2908382; INFEASIBLE TGA: {}; ROUTING COST: 2900208
+
+NEW BEST COST: 2808381; INFEASIBLE TGA: {}; ROUTING COST: 2800207
+
+NEW BEST COST: 2708383; INFEASIBLE TGA: {}; ROUTING COST: 2700209
+
+NEW BEST COST: 2708380; INFEASIBLE TGA: {}; ROUTING COST: 2700206
+
+NEW BEST COST: 2608383; INFEASIBLE TGA: {}; ROUTING COST: 2600209
+
+NEW BEST COST: 2208384; INFEASIBLE TGA: {}; ROUTING COST: 2200210
+
+NEW BEST COST: 2208372; INFEASIBLE TGA: {}; ROUTING COST: 2200210
+
+NEW BEST COST: 2208370; INFEASIBLE TGA: {}; ROUTING COST: 2200208
+
+NEW BEST COST: 2108373; INFEASIBLE TGA: {}; ROUTING COST: 2100211
+
+NEW BEST COST: 2108372; INFEASIBLE TGA: {}; ROUTING COST: 2100210
+
+NEW BEST COST: 1808371; INFEASIBLE TGA: {}; ROUTING COST: 1800209
+
+NEW BEST COST: 1508371; INFEASIBLE TGA: {}; ROUTING COST: 1500208
+
+NEW BEST COST: 1508370; INFEASIBLE TGA: {}; ROUTING COST: 1500207
+
+NEW BEST COST: 1508369; INFEASIBLE TGA: {}; ROUTING COST: 1500206
+
+NEW BEST COST: 1508368; INFEASIBLE TGA: {}; ROUTING COST: 1500205
+
+NEW BEST COST: 1308369; INFEASIBLE TGA: {}; ROUTING COST: 1300206
+
+NEW BEST COST: 1208370; INFEASIBLE TGA: {}; ROUTING COST: 1200207
+
+NEW BEST COST: 1108371; INFEASIBLE TGA: {}; ROUTING COST: 1100208
+
+NEW BEST COST: 1008374; INFEASIBLE TGA: {}; ROUTING COST: 1000211
+
+NEW BEST COST: 1008313; INFEASIBLE TGA: {}; ROUTING COST: 1000211
+
+NEW BEST COST: 1008311; INFEASIBLE TGA: {}; ROUTING COST: 1000209
+
+NEW BEST COST: 1008310; INFEASIBLE TGA: {}; ROUTING COST: 1000208
+
+NEW BEST COST: 1008309; INFEASIBLE TGA: {}; ROUTING COST: 1000207
+
+NEW BEST COST: 808309; INFEASIBLE TGA: {}; ROUTING COST: 800207
+
+NEW BEST COST: 808267; INFEASIBLE TGA: {}; ROUTING COST: 800207
+
+NEW BEST COST: 808240; INFEASIBLE TGA: {}; ROUTING COST: 800209
+
+NEW BEST COST: 808239; INFEASIBLE TGA: {}; ROUTING COST: 800208
+
+NEW BEST COST: 808238; INFEASIBLE TGA: {}; ROUTING COST: 800207
+
+NEW BEST COST: 808237; INFEASIBLE TGA: {}; ROUTING COST: 800206
+
+NEW BEST COST: 808236; INFEASIBLE TGA: {}; ROUTING COST: 800205
+
+NEW BEST COST: 708238; INFEASIBLE TGA: {}; ROUTING COST: 700207
+
+NEW BEST COST: 608239; INFEASIBLE TGA: {}; ROUTING COST: 600208
+
+NEW BEST COST: 608238; INFEASIBLE TGA: {}; ROUTING COST: 600207
+
+NEW BEST COST: 508240; INFEASIBLE TGA: {}; ROUTING COST: 500209
+
+NEW BEST COST: 508239; INFEASIBLE TGA: {}; ROUTING COST: 500208
+
+NEW BEST COST: 508216; INFEASIBLE TGA: {}; ROUTING COST: 500208
+
+NEW BEST COST: 508213; INFEASIBLE TGA: {}; ROUTING COST: 500208
+
+NEW BEST COST: 508212; INFEASIBLE TGA: {}; ROUTING COST: 500207
+
+NEW BEST COST: 508211; INFEASIBLE TGA: {}; ROUTING COST: 500206
+
+NEW BEST COST: 508199; INFEASIBLE TGA: {}; ROUTING COST: 500206
+
+NEW BEST COST: 508198; INFEASIBLE TGA: {}; ROUTING COST: 500205
+
+NEW BEST COST: 508197; INFEASIBLE TGA: {}; ROUTING COST: 500204
+
+NEW BEST COST: 508195; INFEASIBLE TGA: {}; ROUTING COST: 500202
+
+NEW BEST COST: 408197; INFEASIBLE TGA: {}; ROUTING COST: 400204
+
+Error in Step 1: Running the chosen mode
+
+--------------------------------------------------------------------------------
+Testcase: huge3
+Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
+Timeout Pint: 600s
+Timeout Routing: 1800s
+Timeout Scheduling: 1800s
+(If combined routing+scheduling, Timeout Scheduling is used)
+No redundancy: False
+No security: False
+Overlap allowed for CP: True
+Infeasible solutions allowed for CP: True
+--------------------------------------------------------------------------------
+
+---------- 1. Running the chosen mode
+-------------------- Parsed testcase: huge3, in 10.00 ms
+-------------------- Found Pint: 1000,  in 2.00 ms
+-------------------- Created 7 Security Applications,  in 0.00 ms
+INITIAL COST: 23409162; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 22800370
+
+NEW BEST COST: 22809162; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 22200370
+
+NEW BEST COST: 22809073; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 22200370
+
+NEW BEST COST: 22708629; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 22100372
+
+NEW BEST COST: 22508632; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21900375
+
+NEW BEST COST: 22408635; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21800378
+
+NEW BEST COST: 22408632; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21800379
+
+NEW BEST COST: 22208636; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21600383
+
+NEW BEST COST: 22008639; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21400385
+
+NEW BEST COST: 21808640; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21200386
+
+NEW BEST COST: 21608642; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 21000388
+
+NEW BEST COST: 21508643; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app111': True, 'app121': True, 'app161': True}; ROUTING COST: 20900389
+
+NEW BEST COST: 21308644; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app111': True, 'app121': True, 'app101': True, 'app161': True}; ROUTING COST: 20700390
+
+NEW BEST COST: 21008644; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app111': True, 'app121': True, 'app101': True, 'app161': True}; ROUTING COST: 20400391
+
+NEW BEST COST: 20809154; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 20400391
+
+NEW BEST COST: 20809108; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 20400391
+
+NEW BEST COST: 20709111; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 20300394
+
+NEW BEST COST: 20309113; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 19900396
+
+NEW BEST COST: 20109114; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 19700397
+
+NEW BEST COST: 20009115; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 19600398
+
+NEW BEST COST: 19809117; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 19400400
+
+NEW BEST COST: 18809117; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 18400400
+
+NEW BEST COST: 18709119; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 18300402
+
+NEW BEST COST: 18609122; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 18200405
+
+NEW BEST COST: 18609042; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 18200405
+
+NEW BEST COST: 18409043; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 18000406
+
+NEW BEST COST: 18209043; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17800406
+
+NEW BEST COST: 18109044; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17700407
+
+NEW BEST COST: 18009044; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17600407
+
+NEW BEST COST: 18009039; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17600407
+
+NEW BEST COST: 18008911; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17600409
+
+NEW BEST COST: 17608911; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17200409
+
+NEW BEST COST: 17608906; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 17200409
+
+NEW BEST COST: 17008907; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 16600410
+
+NEW BEST COST: 16908905; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 16500408
+
+NEW BEST COST: 16408905; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 16000408
+
+NEW BEST COST: 16208922; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 15800409
+
+NEW BEST COST: 16108921; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 15700408
+
+NEW BEST COST: 15908917; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 15500406
+
+NEW BEST COST: 15808918; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 15400407
+
+NEW BEST COST: 15508918; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 15100407
+
+NEW BEST COST: 15308919; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14900408
+
+NEW BEST COST: 15308918; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14900407
+
+NEW BEST COST: 15308875; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14900408
+
+NEW BEST COST: 15308864; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14900407
+
+NEW BEST COST: 15108866; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14700409
+
+NEW BEST COST: 14508866; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14100409
+
+NEW BEST COST: 14408870; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14000413
+
+NEW BEST COST: 14408867; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 14000413
+
+NEW BEST COST: 14308869; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 13900415
+
+NEW BEST COST: 14308862; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 13900416
+
+NEW BEST COST: 14308757; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 13900416
+
+NEW BEST COST: 14108760; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 13700419
+
+NEW BEST COST: 14108759; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 13700418
+
+NEW BEST COST: 14108758; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app161': True, 'app101': True}; ROUTING COST: 13700417
+
+NEW BEST COST: 14108732; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13700418
+
+NEW BEST COST: 14008732; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13600418
+
+NEW BEST COST: 14008730; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13600416
+
+NEW BEST COST: 13808729; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13400415
+
+NEW BEST COST: 13808690; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13400415
+
+NEW BEST COST: 13808674; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13400415
+
+NEW BEST COST: 13808663; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13400415
+
+NEW BEST COST: 13608681; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13200416
+
+NEW BEST COST: 13608680; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13200415
+
+NEW BEST COST: 13508683; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13100418
+
+NEW BEST COST: 13508682; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13100418
+
+NEW BEST COST: 13508681; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13100417
+
+NEW BEST COST: 13508678; INFEASIBLE TGA: {'app01': True, 'app21': True, 'app101': True, 'app161': True}; ROUTING COST: 13100417
+
+NEW BEST COST: 13508677; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 13100416
+
+NEW BEST COST: 13508666; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 13100416
+
+NEW BEST COST: 13408666; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 13000416
+
+NEW BEST COST: 13208668; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12800418
+
+NEW BEST COST: 13008670; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12600420
+
+NEW BEST COST: 13008669; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12600419
+
+NEW BEST COST: 13008650; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12600419
+
+NEW BEST COST: 12908651; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12500420
+
+NEW BEST COST: 12908640; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12500421
+
+NEW BEST COST: 12708641; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12300422
+
+NEW BEST COST: 12708637; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12300422
+
+NEW BEST COST: 12608635; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200420
+
+NEW BEST COST: 12608633; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200422
+
+NEW BEST COST: 12608628; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200424
+
+NEW BEST COST: 12608626; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200422
+
+NEW BEST COST: 12608625; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200421
+
+NEW BEST COST: 12608624; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200421
+
+NEW BEST COST: 12608623; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12200420
+
+NEW BEST COST: 12508625; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12100422
+
+NEW BEST COST: 12508624; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12100421
+
+NEW BEST COST: 12508623; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 12100420
+
+NEW BEST COST: 12408623; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app161': True, 'app101': True}; ROUTING COST: 12000420
+
+NEW BEST COST: 12408622; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app161': True, 'app101': True}; ROUTING COST: 12000419
+
+NEW BEST COST: 12308636; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app161': True, 'app101': True}; ROUTING COST: 11900421
+
+NEW BEST COST: 12208638; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11800423
+
+NEW BEST COST: 12008640; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11600425
+
+NEW BEST COST: 12008631; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11600426
+
+NEW BEST COST: 12008630; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11600425
+
+NEW BEST COST: 12008623; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11600426
+
+NEW BEST COST: 11908624; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11500427
+
+NEW BEST COST: 11908618; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app161': True, 'app101': True}; ROUTING COST: 11500429
+
+NEW BEST COST: 11808617; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11400428
+
+NEW BEST COST: 11808615; INFEASIBLE TGA: {'app21': True, 'app01': True, 'app101': True, 'app161': True}; ROUTING COST: 11400426
+
+-------------------- Found Schedule in 1801885.22 ms
+---------- 2. Serializing the solution
+-------------------- Serialized solution to: testcases\output\huge3_mode13_600_1800_1800_FFT_0.6,  in 9916.61 ms
+---------- 3. Printing results
+huge3: 40 ES, 20 SW, 161 Tasks, 45 Streams, 45 Apps, 11808615 Cost, 0.24% Bandwidth , 15.69% CPU , 1802077.23ms Optimization Time, Infeasible Apps 4/45, Routing NOT_OPTIMIZED, Scheduling INFEASIBLE
+--------------------------

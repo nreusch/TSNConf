@@ -12,12 +12,24 @@ from input.testcase import Testcase
 from input.input_parameters import InputParameters
 from solution.solution_optimization_status import EOptimizationStatus
 from solution.solution_timing_data import TimingData
-from utils.utilities import Timer, list_gcd, print_model_stats
+from utils import cost
+from utils.utilities import Timer, list_gcd, print_model_stats, shortest_simple_paths_patched
 import networkx as nx
+from itertools import islice
 
+class SARoutingSolution:
+    def __init__(self, paths: Dict[str, Dict[str, List[str]]]):
+        #Dict[stream.id, Dict(receiver_es_id -> path)]
+        self.paths: Dict[str, Dict[str, List[str]]] = paths
+
+    def __repr__(self):
+        return str(self.paths)
+
+    def __str__(self):
+        return self.__repr__()
 
 class SARoutingSolver:
-    def __init__(self, tc: Testcase, timing_object: TimingData):
+    def __init__(self, tc: Testcase, timing_object: TimingData, k: int, a: int):
         self.tc = tc
 
         self.possible_paths : Dict[str, Dict[str, List[List[str]]]] = {} # stream_id -> Dict(receiver_es_id -> List[path])
@@ -28,59 +40,53 @@ class SARoutingSolver:
         # Create variables
         t = Timer()
         with t:
-            self._create_variables()
+            self._create_variables(k)
         timing_object.time_creating_vars_pint = t.elapsed_time
 
+        self.a = a
 
-    def _create_variables(self):
+
+    def _create_variables(self, k):
+        # Create networkx digraph with all edges & links
         g = nx.DiGraph()
-
         g.add_nodes_from(self.tc.N.keys())
-
         for l in self.tc.L.values():
             g.add_edge(l.src.id, l.dest.id)
 
+        # For each stream, for each sender ES, receiver ES pair, add k-shortest-paths as possibilities
         for s in self.tc.F_routed.values():
             self.possible_paths[s.id] = {}
-            # TODO: Own implementation of path finding which skips a path once an ES is encountered
-            paths = [p for p in nx.all_simple_paths(g, s.sender_es_id, s.receiver_es_ids)]
 
-            for p in paths:
-                # CONSTRAINT: Path may only contain ES at start and end
-                es_in_route = False
-                for n in p[1:-1]:
-                    if n in self.tc.ES:
-                        es_in_route = True
+            for es_recv_id in s.receiver_es_ids:
+                excluded_es = set(self.tc.ES.keys())
+                excluded_es.difference_update({s.sender_es_id, es_recv_id})
+                k_shortest_paths = list(
+                    islice(shortest_simple_paths_patched(g, s.sender_es_id, es_recv_id, ignore_nodes_init=excluded_es), k)
+                )
 
-                if es_in_route:
-                    continue
+                self.possible_paths[s.id][es_recv_id] = k_shortest_paths
 
-                if p[-1] not in self.possible_paths[s.id]:
-                    self.possible_paths[s.id][p[-1]] = [p]
-                else:
-                    self.possible_paths[s.id][p[-1]].append(p)
-
-    def _initial_solution(self):
+    def _initial_solution(self) -> SARoutingSolution:
         selected_paths = {}
         for s in self.tc.F_routed.values():
             selected_paths[s.id] = {}
             for receiver_es_id, path_list in self.possible_paths[s.id].items():
                 selected_paths[s.id][receiver_es_id] = path_list[0]
-        return selected_paths
+        return SARoutingSolution(selected_paths)
 
-    def _random_neighbour(self, s_i: Dict[str, Dict[str, List[str]]]) -> Dict[str, Dict[str, List[str]]]:
+    def _random_neighbour(self, s_i: SARoutingSolution) -> SARoutingSolution:
         # Dict[stream.id, Dict(receiver_es_id -> path)]
         s = copy.deepcopy(s_i)
 
         # select random stream
-        rand_stream_nr = random.randint(0, len(self.tc.F.values())-1)
+        rand_stream_nr = random.randint(0, len(self.tc.F_routed.values())-1)
         rand_stream = list(self.tc.F_routed.values())[rand_stream_nr]
 
         # select random receiver of that stream
         rand_receiver_nr = random.randint(0, len(rand_stream.receiver_es_ids)-1)
         rand_receiver = list(rand_stream.receiver_es_ids)[rand_receiver_nr]
 
-        current_path = s[rand_stream.id][rand_receiver]
+        current_path = s.paths[rand_stream.id][rand_receiver]
         possible_path_amount = len(self.possible_paths[rand_stream.id][rand_receiver])
 
         if possible_path_amount > 1:
@@ -88,11 +94,15 @@ class SARoutingSolver:
             while new_path == current_path:
                 rand_path_nr = random.randint(0, possible_path_amount-1)
                 new_path = self.possible_paths[rand_stream.id][rand_receiver][rand_path_nr]
-            s[rand_stream.id][rand_receiver] = new_path
+            s.paths[rand_stream.id][rand_receiver] = new_path
 
         return s
 
-    def _solve(self, timeout) -> Dict[str, Dict[str, List[str]]]:
+    def _cost(self, sol: SARoutingSolution):
+        total_cost, overlap_amount = cost.cost_SA_routing_solution(sol, self.tc, self.a)
+        return total_cost, overlap_amount
+
+    def _solve(self, timeout) -> SARoutingSolution:
         # returns Dict[stream.id, Dict(receiver_es_id -> path)]
         Tstart = 1
         alpha = 0.999
@@ -114,7 +124,7 @@ class SARoutingSolver:
             new_cost = self._cost(s)
             delta = new_cost - old_cost   # new_cost - old_cost, because we want to minimize cost
 
-            if delta < 0 or self._probability_check(delta, temp):
+            if delta < 0 or _probability_check(delta, temp):
                 s_i = s
 
                 if new_cost < best_cost:
@@ -127,48 +137,6 @@ class SARoutingSolver:
 
         return s_best
 
-    def _cost_stream(self, stream_id: str, selected_paths: Dict[str, Dict[str, List[str]]]):
-        f = self.tc.F_routed[stream_id]
-
-        node_mapping = self._create_node_mapping(selected_paths, stream_id)
-
-        route_len = len(node_mapping)
-
-        overlap_amount = 0
-        overlap_links = set()
-        for stream_red_copy in self.tc.F_red[f.get_id_prefix()]:
-            if stream_red_copy != f:
-                node_mapping_red = self._create_node_mapping(selected_paths, stream_red_copy.id)
-
-                for link in node_mapping_red:
-                    if link in node_mapping:
-                        overlap_amount += 1
-                        overlap_links.add(self.tc.L_from_nodes[link[0]][link[1]])
-
-        cost = 10 * overlap_amount + route_len
-
-        return cost, route_len, overlap_amount, overlap_links
-
-    def _cost(self, selected_paths: Dict[str, Dict[str, List[str]]]):
-        total_cost = 0
-        for s_id in self.tc.F_routed.keys():
-            cost, _, _, _ = self._cost_stream(s_id, selected_paths)
-            total_cost += cost
-        return total_cost
-
-    def _create_node_mapping(self, selected_paths, stream_id):
-        node_mapping = set()
-        for path in selected_paths[stream_id].values():
-            for i in range(len(path) - 1):
-                node_mapping.add((path[i], path[i + 1]))
-        return node_mapping
-
-    def _probability_check(self, delta, t):
-        return random.uniform(0, 1) < self.p(delta, t)
-
-    def p(self, delta, t):
-        return math.e ** (-1 * (delta / t))
-
     def optimize(
         self, input_params: InputParameters, timing_object: TimingData
     ) -> Tuple[Testcase, EOptimizationStatus]:
@@ -179,7 +147,7 @@ class SARoutingSolver:
         t = Timer()
         with t:
             # OPTIMIZE
-            selected_paths = self._solve(3)
+            solution = self._solve(3)
         timing_object.time_optimizing_routing = t.elapsed_time
         status = EOptimizationStatus.FEASIBLE
 
@@ -187,18 +155,43 @@ class SARoutingSolver:
 
         if (status == EOptimizationStatus.FEASIBLE):
             # UPDATE tc
-
-            for s in self.tc.F_routed.values():
-                node_mapping = self._create_node_mapping(selected_paths, s.id)
-                mt = route(s)
-                mt.init_from_node_mapping(node_mapping)
-                self.tc.add_to_datastructures(mt)
-
-                cost, route_len, overlap_amount, overlap_links = self._cost_stream(s.id, selected_paths)
-                r_info = route_info(mt, cost, route_len, overlap_amount, overlap_links)
+            R, R_info = solution_to_datastructures(self.tc, solution)
+            for r in R.values():
+                self.tc.add_to_datastructures(r)
+            for r_info in R_info.values():
                 self.tc.add_to_datastructures(r_info)
         else:
             raise ValueError(
                 "SASolver returned invalid status for SARouting model: " + str(status)
             )
         return self.tc, status
+
+def p(delta, t):
+    return math.e ** (-1 * (delta / t))
+
+def _probability_check(delta, t):
+    return random.uniform(0, 1) < p(delta, t)
+
+def create_node_mapping(s: SARoutingSolution, stream_id: str) -> Dict[str, List[Tuple[str, str]]]:
+    node_mapping = {}
+    for es_recv_id, path in s.paths[stream_id].items():
+        node_mapping[es_recv_id]  = []
+        for i in range(len(path)-1):
+            node_mapping[es_recv_id].append((path[i], path[i+1]))
+
+    return node_mapping
+
+def solution_to_datastructures(tc, sol):
+    R = {}
+    R_info = {}
+    for s in tc.F_routed.values():
+        node_mapping = create_node_mapping(sol, s.id)
+        r = route(s)
+        r.init_from_node_mapping(node_mapping)
+        R[s.id] = r
+
+        route_len, overlap_amount, overlap_links = cost.cost_parameters_for_stream(s, sol, tc)
+        r_info = route_info(r, route_len, overlap_amount, overlap_links)
+        R_info[s.id] = r_info
+
+    return R, R_info

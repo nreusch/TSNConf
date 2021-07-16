@@ -8,7 +8,7 @@ from input.model.stream import stream, EStreamType
 from input.model.task import task, ETaskType
 from input.testcase import Testcase
 from optimization.sa.heuristic_schedule import heuristic_schedule
-from optimization.sa.task_graph import TaskGraph, TaskGraphNode_Stream, TaskGraphNode_Task
+from optimization.sa.task_graph import PrecedenceGraph, TaskGraphNode_Stream, TaskGraphNode_Task
 
 
 def test_heuristic_schedule_single_period():
@@ -33,7 +33,7 @@ def test_heuristic_schedule_single_period():
     r.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id)})
 
     tc.add_to_datastructures(es1, es2, sw1, l1, l2, app, app2, t1_app2, t1, t11, t2, s, r)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
 
     # Check task_graph node count
     all_stream_tgns = [tgn for tgn in task_graph.nodes.values() if isinstance(tgn, TaskGraphNode_Stream)]
@@ -98,7 +98,7 @@ def test_heuristic_schedule_multiple_period():
     t1 = task("t1", app.id, es1.id, 100, app.period, ETaskType.NORMAL)
 
     tc.add_to_datastructures(es1, es2, sw1, l1, l2, app, app2, t1_app2, t1)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
 
     # Check task_graph node count
     all_stream_tgns = [tgn for tgn in task_graph.nodes.values() if isinstance(tgn, TaskGraphNode_Stream)]
@@ -145,7 +145,7 @@ def test__create_frames_singlecast():
     r.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id)})
 
     tc.add_to_datastructures(es1, es2, sw1, l1, l2, app,  t1, t2, s, r)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
     t1_tgn = task_graph.get_task_tgn(t1.id)
     t2_tgn = task_graph.get_task_tgn(t2.id)
     s_tgn = task_graph.get_stream_tgn(s.id)
@@ -164,7 +164,7 @@ def test__create_frames_singlecast():
     assert s_tgn.id in heu_sched.frames
     for l in r.get_all_links_dfs(tc):
         assert l.id in heu_sched.frames[s_tgn.id]
-        for l_prev in r.get_predeccessor_links(l.id, tc):
+        for l_prev in r.get_predeccessor_link(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l.id].prev_frame == heu_sched.frames[s_tgn.id][l_prev.id]
         for l_next in r.get_successor_links(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l_next.id] in heu_sched.frames[s_tgn.id][l.id].next_frames
@@ -191,7 +191,7 @@ def test__create_frames_multicast():
     r.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id), (sw1.id, es3.id)})
 
     tc.add_to_datastructures(es1, es2, es3, sw1, l1, l2, l3, app,  t1, t2, t3, s, r)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
     t1_tgn = task_graph.get_task_tgn(t1.id)
     s_tgn = task_graph.get_stream_tgn(s.id)
 
@@ -209,7 +209,7 @@ def test__create_frames_multicast():
     assert s_tgn.id in heu_sched.frames
     for l in r.get_all_links_dfs(tc):
         assert l.id in heu_sched.frames[s_tgn.id]
-        for l_prev in r.get_predeccessor_links(l.id, tc):
+        for l_prev in r.get_predeccessor_link(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l.id].prev_frame == heu_sched.frames[s_tgn.id][l_prev.id]
         for l_next in r.get_successor_links(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l_next.id] in heu_sched.frames[s_tgn.id][l.id].next_frames
@@ -233,7 +233,7 @@ def test__create_frames_secure():
     r.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id)})
 
     tc.add_to_datastructures(es1, es2, sw1, l1, l2, app,  t1, t2, s, r)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
     t1_tgn = task_graph.get_task_tgn(t1.id)
     s_tgn = task_graph.get_stream_tgn(s.id)
 
@@ -251,7 +251,7 @@ def test__create_frames_secure():
     assert s_tgn.id in heu_sched.frames
     for l in r.get_all_es_and_links_dfs(tc):
         assert l.id in heu_sched.frames[s_tgn.id]
-        for l_prev in r.get_predeccessor_links(l.id, tc):
+        for l_prev in r.get_predeccessor_link(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l.id].prev_frame == heu_sched.frames[s_tgn.id][l_prev.id]
         for l_next in r.get_successor_links(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l_next.id] in heu_sched.frames[s_tgn.id][l.id].next_frames
@@ -278,7 +278,7 @@ def test__create_frames_secure_multicast():
     r.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id), (sw1.id, es3.id)})
 
     tc.add_to_datastructures(es1, es2, es3, sw1, l1, l2, l3, app,  t1, t2, t3, s, r)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
     t1_tgn = task_graph.get_task_tgn(t1.id)
     s_tgn = task_graph.get_stream_tgn(s.id)
 
@@ -296,7 +296,7 @@ def test__create_frames_secure_multicast():
     assert s_tgn.id in heu_sched.frames
     for l in r.get_all_es_and_links_dfs(tc):
         assert l.id in heu_sched.frames[s_tgn.id]
-        for l_prev in r.get_predeccessor_links(l.id, tc):
+        for l_prev in r.get_predeccessor_link(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l.id].prev_frame == heu_sched.frames[s_tgn.id][l_prev.id]
         for l_next in r.get_successor_links(l.id, tc):
             assert heu_sched.frames[s_tgn.id][l_next.id] in heu_sched.frames[s_tgn.id][l.id].next_frames

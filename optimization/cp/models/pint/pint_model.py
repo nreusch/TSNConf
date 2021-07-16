@@ -43,12 +43,11 @@ class CPPintSolver:
 
         # TODO: Better Pint constraints
 
-        # Constraint 1: Pint * fp.C <= fp.D for each fp
-        for fp in self.tc.FP.values():
-            self.model.Add(self.Pint_var * fp.signal_level <= fp.deadline)
+        # Communication depth constraint
+        for app in self.tc.A_app.values():
+            self.model.Add(self.Pint_var * (app.get_communication_depth() + 1) <= app.period)
 
-
-        # Constraint 3: Pint mod gcd(all app periods) = 0 OR Pint * n = gcd(all app periods)
+        # Constraint 2: Pint mod gcd(all app periods) = 0 OR Pint * n = gcd(all app periods)
         gcd = list_gcd(period_list)
         PintIsMultiple = self.model.NewBoolVar("PintIsMultiple")
         PintIsFactor = self.model.NewBoolVar("PintIsFactor")
@@ -63,6 +62,12 @@ class CPPintSolver:
         self.model.Add(pint_times_n == gcd).OnlyEnforceIf(PintIsFactor)
 
         self.model.AddBoolOr([PintIsFactor, PintIsMultiple])
+
+        # Constraint 3: Hyperperiod mod Pint = 0
+        m = self.model.NewIntVar(1, self.tc.hyperperiod, "m")
+        pint_times_m = self.model.NewIntVar(0, self.tc.hyperperiod, "")
+        self.model.AddMultiplicationEquality(pint_times_m, [self.Pint_var, m])
+        self.model.Add(pint_times_m == self.tc.hyperperiod)
 
     def _add_optimization_goal_maximize(self):
         self.model.Maximize(self.Pint_var)

@@ -5,3 +5,4 @@ testcases/output/
 .vscode/
 .venv_ubuntu/
 .venvubuntu/
+.ipynb_checkpoints/

@@ -1,0 +1,2 @@
+,Testcase,Security,Redundancy,Method,# ES,# Switches,# Streams,# Receiver Tasks,# Tasks,Total cost,Routing cost,Scheduling cost,Normal application latency,"Bandwidth use (Mean,%)","CPU use (Mean,%)",Optimization Time (ms),First feasible solution time (ms),Total Runtime (ms),Infeasible apps,Overlapping number,Stream with overlap
+0,tiny1,True,True,SA_ROUTING_SA_SCHEDULING_COMB,4,2,2,3,9,2746,4,2742,2725,0.03,3.33,20053,0,29400,0/3,0,0

@@ -1,0 +1,28 @@
+// security_topology
+digraph {
+	node [shape=record]
+	SW0 [label="SW0 (SW)" shape=circle]
+	SW1 [label="SW1 (SW)" shape=circle]
+	ES0 [label="{ES0 (ES)}"]
+	ES1 [label="{ES1 (ES)}"]
+	ES2 [label="{ES2 (ES)}"]
+	ES3 [label="{ES3 (ES)}"]
+	ES0 -> SW0
+	ES0 -> SW1
+	ES1 -> SW0
+	ES1 -> SW1
+	ES2 -> SW0
+	ES2 -> SW1
+	ES3 -> SW0
+	ES3 -> SW1
+	SW0 -> SW1
+	SW0 -> ES0
+	SW0 -> ES1
+	SW0 -> ES2
+	SW0 -> ES3
+	SW1 -> SW0
+	SW1 -> ES0
+	SW1 -> ES1
+	SW1 -> ES2
+	SW1 -> ES3
+}

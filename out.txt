@@ -1,7 +1,6 @@
-usage: main.py [-h] [--mode MODE] [--visualize] [--no_redundancy]
-               [--no_security] [--timeout_routing TIMEOUT_ROUTING]
-               [--timeout_scheduling TIMEOUT_SCHEDULING]
-               [--timeout_pint TIMEOUT_PINT]
+usage: main.py [-h] [--mode MODE] [--aggregate AGGREGATE] [--visualize] [--port PORT] [--no_redundancy]
+               [--no_security] [--allow_overlap] [--allow_infeasible] [--timeout_routing TIMEOUT_ROUTING]
+               [--timeout_scheduling TIMEOUT_SCHEDULING] [--timeout_pint TIMEOUT_PINT] [--k K] [--a A] [--b B]
                testcase_path
 
 test
@@ -12,18 +11,27 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --mode MODE           Mode to run
+  --aggregate AGGREGATE
+                        Aggregate results to [path]
   --visualize           Visualize testcase (show dashboard)  (Default: False)
+  --port PORT           Visualization Dashboard Port
   --no_redundancy       Disable redundancy, by ignoring RL specified in testcase  (Default: False)
   --no_security         Disable security  (Default: False)
+  --allow_overlap       Allow redundant stream overlap for CP solutions  (Default: False)
+  --allow_infeasible    Allow the CP solver to produce infeasible solutions, including stream overlap or missed deadlines
   --timeout_routing TIMEOUT_ROUTING
                         Timeout: Routing Solver (s) (Default: 300)
   --timeout_scheduling TIMEOUT_SCHEDULING
                         Timeout: Scheduling Solver (s) (Default: 300)
   --timeout_pint TIMEOUT_PINT
                         Timeout: Pint Solver (s) (Default: 60)
+  --k K                 K: Parameter for k-shortest-paths heuristic (Default: 3)
+  --a A                 a: Weight for routing overlap component of cost function (Default: 5000)
+  --b B                 b: Weight for infeasible stream component of cost function (Default: 1000)
 
 Available Modes:
 - Mode 0: View/Check the testcase. Doesn't generate/optimize anything
-- Mode 1: Generate Security Applications, Generate Stream, CP Routing, CP Scheduling
-- Mode 2: CP Scheduling
-- Mode 3: Generate Security Applications, Generate Stream, SA Routing, SA Scheduling
+- Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
+- Mode 11: SA Routing, ASAP Scheduling, Security, Redundancy, Optimization
+- Mode 12: SA Routing, SA Scheduling, Security, Redundancy, Optimization
+- Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization

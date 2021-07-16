@@ -34,7 +34,7 @@ def run(solution: Solution, PORT=None):
         solution
     )
 
-    normal_app_taskgraph_id_digraph_map = solution_parser.get_testcase_application_taskgraphs(
+    precgraph_b64srcstring = solution_parser.get_testcase_application_precgraph(
         solution
     )
 
@@ -54,14 +54,9 @@ def run(solution: Solution, PORT=None):
         value=first_app_id
     )
 
-    input_normal_app_taskgraph_dag_dropdown = dcc.Dropdown(
-        id='input_normal_app_taskgraph_dag_dropdown',
-        options=option_list,
-        value=first_app_id
-    )
-
     input_normal_app_dag_viewer = html.Div(id='input_normal_app_dag_viewer')
-    input_normal_app_taskgraph_dag_viewer = html.Div(id='input_normal_app_taskgraph_dag_viewer')
+    prec_graph_viewer = html.Img(src=precgraph_b64srcstring,
+                 style={"width": "100%", "height": "100%", "max-height": "200px"})
 
     # ------- Toplogy
     input_topology = html.Img(
@@ -88,10 +83,6 @@ def run(solution: Solution, PORT=None):
         solution
     )
 
-    security_app_taskgraph_id_digraph_map = solution_parser.get_derived_security_application_taskgraphs(
-        solution
-    )
-
     option_list = []
     first_app_id = ""
     for app_id in security_app_id_digraph_map.keys():
@@ -107,14 +98,8 @@ def run(solution: Solution, PORT=None):
         options=option_list,
         value=first_app_id
     )
-    input_security_app_taskgraph_dag_dropdown = dcc.Dropdown(
-        id='input_security_app_taskgraph_dag_dropdown',
-        options=option_list,
-        value=first_app_id
-    )
 
     input_security_app_dag_viewer = html.Div(id='input_security_app_dag_viewer')
-    input_security_app_taskgraph_dag_viewer = html.Div(id='input_security_app_taskgraph_dag_viewer')
 
     # ------- Security Task Table
     df = solution_parser.get_derived_security_task_dataframe(solution)
@@ -134,7 +119,7 @@ def run(solution: Solution, PORT=None):
     )
     solution_opt_status_table = optstatus_table("table_solution_opt_status", df)
 
-    df = solution_parser.get_solution_inputparam_info_dataframe(solution)
+    df = solution_parser.get_solution_parameter_info_dataframe(solution)
     solution_inputparam_info_table = table("table_solution_inputparam_info", df)
 
     df = solution_parser.get_solution_timing_info_dataframe(solution)
@@ -162,8 +147,8 @@ def run(solution: Solution, PORT=None):
     """
     solution_application_e2edelay_table = None
 
-    df = solution_parser.get_solution_functionpath_dataframe(solution)
-    solution_results_functionpaths_table = table("table_solution_functionpaths", df)
+    df = solution_parser.get_solution_application_dataframe(solution)
+    solution_results_applications_table = table("table_solution_applications", df)
 
     # ------- Routing
     if solution.is_feasible_routing():
@@ -171,7 +156,7 @@ def run(solution: Solution, PORT=None):
             solution
         )
         solution_routing_info_table = table("table_solution_routing_info", solution_parser.get_solution_routing_info_dataframe(solution))
-        solution_routing_total_cost = html.H6(f"Total Cost: {solution.total_cost_routing}")
+        solution_routing_total_cost = html.H6(f"Total Cost: {solution.cost_routing}")
     else:
         if len(solution.tc.R) > 0:
             solution_routing = solution_parser.get_solution_routing_cytoscape(
@@ -244,21 +229,6 @@ def run(solution: Solution, PORT=None):
                                             )
                                         ]
                                     ),
-
-                                    row(
-                                        [
-                                            inner_container(
-                                                "Normal Applications - Task Graphs",
-                                                row(
-                                                    [
-                                                        inner_element_dag(
-                                                            input_normal_app_taskgraph_dag_dropdown),
-                                                        inner_element_dag(input_normal_app_taskgraph_dag_viewer)
-                                                    ]
-                                                )
-                                            ),
-                                        ]
-                                    )
                                 ]
                             ),
 
@@ -320,24 +290,24 @@ def run(solution: Solution, PORT=None):
                                             )
                                         ]
                                     ),
-
-                                    row(
-                                        [
-                                            inner_container(
-                                                "Security Applications - Task Graphs",
-                                                row(
-                                                    [
-                                                        inner_element_dag(input_security_app_taskgraph_dag_dropdown),
-                                                        inner_element_dag(input_security_app_taskgraph_dag_viewer)
-                                                    ]
-                                                )
-                                            ),
-                                        ]
-                                    )
                                 ]
                             ),
                         ]
                     )
+
+    precgraph_section = section(
+        [
+            header("Precedence Graph"),
+            row(
+                [
+                    inner_container(
+                        "Graph",
+                        inner_element_dag(prec_graph_viewer)
+                    ),
+                ]
+            )
+        ]
+    )
 
     routing_section = section(
                         [
@@ -454,8 +424,8 @@ def run(solution: Solution, PORT=None):
                                                     column(
                                                         [
                                                             inner_container(
-                                                                "Functionpaths",
-                                                                solution_results_functionpaths_table,
+                                                                "Applications",
+                                                                solution_results_applications_table,
                                                             ),
                                                         ]
                                                     ),
@@ -469,7 +439,7 @@ def run(solution: Solution, PORT=None):
                         ]
                     )
 
-    if solution.input_params.no_security:
+    if not solution.security:
         app.layout = html.Div(
             [
                 html.Div(
@@ -488,6 +458,7 @@ def run(solution: Solution, PORT=None):
                     [
                         input_section,
                         security_input_section,
+                        precgraph_section,
                         routing_section,
                         results_section
                     ]
@@ -512,29 +483,11 @@ def run(solution: Solution, PORT=None):
             return i
 
     @app.callback(
-        Output('input_normal_app_taskgraph_dag_viewer', 'children'),
-        [Input('input_normal_app_taskgraph_dag_dropdown', 'value')])
-    def update_normal_app_taskgraph_dag_viewer(value):
-        if value != "":
-            i = html.Img(src=normal_app_taskgraph_id_digraph_map[value],
-                         style={"width": "100%", "height": "100%", "max-height": "200px"})
-            return i
-
-    @app.callback(
         Output('input_security_app_dag_viewer', 'children'),
         [Input('input_security_app_dag_dropdown', 'value')])
     def update_security_app_dag_viewer(value):
         if value != "":
             i = html.Img(src=security_app_id_digraph_map[value], style={"width": "100%", "height" : "100%", "max-height" : "200px"})
-            return i
-
-    @app.callback(
-        Output('input_security_app_taskgraph_dag_viewer', 'children'),
-        [Input('input_security_app_taskgraph_dag_dropdown', 'value')])
-    def update_security_app_taskgraph_dag_viewer(value):
-        if value != "":
-            i = html.Img(src=security_app_taskgraph_id_digraph_map[value],
-                         style={"width": "100%", "height": "100%", "max-height": "200px"})
             return i
 
     @app.callback(

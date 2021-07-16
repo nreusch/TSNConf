@@ -10,7 +10,8 @@ from input.model.nodes import end_system
 from input.model.route import route
 from input.model.stream import stream
 from input.model.task import task, key_verification_task
-from optimization.sa.task_graph import TaskGraphNode, TaskGraphNode_Task, TaskGraphNode_Stream, TaskGraph
+from optimization.sa.task_graph import TaskGraphNode, TaskGraphNode_Task, TaskGraphNode_Stream, PrecedenceGraph, \
+    TopologicalTaskGraphApp
 from utils.utilities import sorted_complement, debug_print
 
 
@@ -30,8 +31,13 @@ class frame:
     def __repr__(self):
         return f"({self.s_or_t.id}, {self.l_or_es}, {self.offset}, {self.offset+self.length})"
 
+
+class KeyFrameDoesNotExistError(Exception):
+    pass
+
+
 class heuristic_schedule:
-    def __init__(self, tc: testcase, task_graph: TaskGraph):
+    def __init__(self, tc: testcase, task_graph: PrecedenceGraph):
         self.tc: testcase = tc
         self.task_graph = task_graph
         self.StartTimes: Dict[str, List[Tuple[int, int]]] = {} # Dict[tgn.id -> List[offset]]
@@ -100,9 +106,9 @@ class heuristic_schedule:
             r: route = self.tc.R[frm.s_or_t.id]
 
             if frm.s_or_t.is_secure:
-                previous_links_or_es = r.get_predeccessor_links_and_es(l_or_es.id, self.tc)
+                previous_links_or_es = r.get_predeccessor_link_or_es(l_or_es.id, self.tc)
             else:
-                previous_links_or_es = r.get_predeccessor_links(l_or_es.id, self.tc)
+                previous_links_or_es = r.get_predeccessor_link(l_or_es.id, self.tc)
 
             for l_or_es in previous_links_or_es:
                 prev_frame = self.frames[tgn.id][l_or_es.id]
@@ -113,14 +119,18 @@ class heuristic_schedule:
 
 
             t_key_verify: key_verification_task = self.tc.T_verify[frm.s_or_t.sender_es_id][es_recv.id]
-            t_key_verify_frame = self.frames[self.task_graph.get_task_tgn(t_key_verify.id).id][es_recv.id]
-
-            # TODO: Make sure i is after inteval of previous frame
-            # TODO: What happens if t_key_verify_frame.offset > max_previous_end_time
-            # TODO: What happens if there is no space for task in first interval after last stream arrival
-            i = self._calculate_pint_interval_from_key_verification_task(t_key_verify_frame, l_or_es.id, tgn)
-
-            lb = t_key_verify_frame.offset + i * t_key_verify_frame.period + t_key_verify_frame.length
+            if self.task_graph.get_task_tgn(t_key_verify.id).id in self.frames:
+                t_key_verify_frame = self.frames[self.task_graph.get_task_tgn(t_key_verify.id).id][es_recv.id]
+    
+                # TODO: Make sure i is after inteval of previous frame
+                # TODO: What happens if t_key_verify_frame.offset > max_previous_end_time
+                # TODO: What happens if there is no space for task in first interval after last stream arrival
+                i = self._calculate_pint_interval_from_key_verification_task(t_key_verify_frame, l_or_es.id, tgn)
+    
+                lb = t_key_verify_frame.offset + i * t_key_verify_frame.period + t_key_verify_frame.length
+            else:
+                # if the key verification task is not scheduled we also cannot schedule this stream
+                raise KeyFrameDoesNotExistError
         else:
             raise ValueError
 
@@ -130,7 +140,7 @@ class heuristic_schedule:
     def _calculate_pint_interval_from_key_verification_task(self, t_key_verify_frame: frame, es_id:str, tgn: TaskGraphNode):
         assert isinstance(tgn, TaskGraphNode_Stream)
         r: route = self.tc.R[tgn.s.id]
-        previous_links = r.get_predeccessor_links(es_id, self.tc)
+        previous_links = r.get_predeccessor_link(es_id, self.tc)
         assert len(previous_links) != 0
         max_previous_end_time = max(
             [self.frames[tgn.id][l.id].offset + self.frames[tgn.id][l.id].length for l in previous_links])
@@ -141,14 +151,15 @@ class heuristic_schedule:
 
     def _earliest_offset(self, tgn : TaskGraphNode, l_or_es: Union[link, end_system], frm: frame):
         """
-        Returns the earliest offset in the free intervals for given task/stream on given link/node, which is >= frm.lb and where the frame fits inside the interval
+        Returns the earliest offset in the free intervals for given task/stream on given link/node, which is >=
+        frm.lb and where the frame fits inside the interval
         """
         intervals = self._get_feasible_region(frm, l_or_es)
 
         for iv in intervals:
             offset = max(frm.lb, iv.begin)
-            # also included end of interval
-            if iv.contains_point(offset) or iv.end == offset:
+            # consider intervals right-open
+            if iv.contains_point(offset):
                 return offset
 
         return -1
@@ -175,13 +186,13 @@ class heuristic_schedule:
                 r: route = self.tc.R[s.id]
 
                 if s.is_secure:
-                    previous_links_or_es = r.get_predeccessor_links_and_es(l_or_es.id, self.tc)
+                    previous_links_or_es = r.get_predeccessor_link_or_es(l_or_es.id, self.tc)
                 else:
-                    previous_links_or_es = r.get_predeccessor_links(l_or_es.id, self.tc)
+                    previous_links_or_es = r.get_predeccessor_link(l_or_es.id, self.tc)
 
                 # Connect frame with previous frame
-                for l_or_es in previous_links_or_es:
-                    prev_frame = link_to_frame_dict[l_or_es.id]
+                for prev_l_or_es in previous_links_or_es:
+                    prev_frame = link_to_frame_dict[prev_l_or_es.id]
                     prev_frame.next_frames.append(f)
                     f.prev_frame = prev_frame
 
@@ -199,7 +210,10 @@ class heuristic_schedule:
         l = ordered_l_or_es_list[0]
         while True:
             f = self.frames[tgn.id][l.id]
-            f.lb = self._calc_lower_bound(tgn, f, l)
+            try:
+                f.lb = self._calc_lower_bound(tgn, f, l)
+            except KeyFrameDoesNotExistError:
+                return False
             offset = self._earliest_offset(tgn, l, f)
             debug_print(f"\tCurrent frame on {f.l_or_es.id}: LB {f.lb}, UB {f.ub}, Calc. Offset {offset}")
 
@@ -232,6 +246,7 @@ class heuristic_schedule:
                 if f.prev_frame != None:
                     if eqat != -1:
                         f.prev_frame.lb = eqat
+                        debug_print(f"BACKTRACKING")
                         debug_print(f"\t\tSetting lower bound for frame on {f.l_or_es.id} to {eqat}")
                     else:
                         return False
@@ -244,14 +259,53 @@ class heuristic_schedule:
             if finished:
                 break
 
-        if isinstance(tgn, TaskGraphNode_Stream):
-            #self._optimize_latency(tgn, tgn.s)
-            pass
+        #if isinstance(tgn, TaskGraphNode_Stream):
+        #    self._optimize_latency(tgn, tgn.s)
+
+
+        # Only block queues if all blocks were scheduled!
         self._block_queues(tgn)
-        debug_print("")
+
         return True
 
-    def _optimize_latency(self, tgn: TaskGraphNode, s: stream):
+    def optimize_latency(self, tga: TopologicalTaskGraphApp, prec_graph):
+        app = self.tc.A[tga.app_id]
+
+        app_stream_ids = app.edges.keys()
+        handled_streams = set()
+
+
+        for s_id in app_stream_ids:
+            s : stream = self.tc.F[s_id]
+
+            if not s.is_self_stream() and s.is_secure and s.get_id_prefix() not in handled_streams:
+                if s.rl > 1:
+                    for s_red in self.tc.F_red[s.get_id_prefix()]:
+                        if s_red.id != s.id:
+                            s_tgn = prec_graph.nodes[s_red.id]
+                            self._optimize_latency(s_tgn, s_red, False)
+                    s_tgn = prec_graph.nodes[s_id]
+                    self._optimize_latency(s_tgn, s, True)
+                    handled_streams.add(s.get_id_prefix())
+                else:
+                    s_tgn = prec_graph.nodes[s_id]
+                    self._optimize_latency(s_tgn, s, True)
+                    handled_streams.add(s.get_id_prefix())
+
+        tga_start = self.tc.hyperperiod
+        tga_end = 0
+
+        for tgn_id in tga.internal_order:
+            for f in self.frames[tgn_id].values():
+                if f.offset < tga_start:
+                    tga_start = f.offset
+                if f.offset + f.length > tga_end:
+                    tga_end = f.offset + f.length
+
+        return tga_start, tga_end
+
+
+    def _optimize_latency(self, tgn: TaskGraphNode, s: stream, optimize_sender_task: bool):
         # for each receiver es
         # for each incoming frame to that receiver es
         # interval_upper_bound = Pint * index of key_verification_task OR -1 if stream not secure
@@ -260,6 +314,7 @@ class heuristic_schedule:
         # set ub of previous frame to max(prev_frame.ub, frame.offset-prev_frame.length)
         # set prev_frame.offset to prev_frame.ub
         # repeat until not prev_frame available
+        j = 0
         for recv_es_id in s.receiver_es_ids:
             if s.is_secure:
                 f = self.frames[tgn.id][recv_es_id]
@@ -279,13 +334,33 @@ class heuristic_schedule:
                 upper_bound = 0
 
             while incoming_f != None:
-                print(f"{incoming_f}.offset = min({upper_bound},{incoming_f.ub}) = {min(upper_bound, incoming_f.ub)}")
-                if incoming_f.ub == -1:
-                    incoming_f.offset = upper_bound
-                else:
-                    incoming_f.offset = min(upper_bound, incoming_f.ub)
 
-                if incoming_f.prev_frame is None and isinstance(incoming_f.s_or_t, stream):
+                old_offset = incoming_f.offset
+
+                feasible_region = IntervalTree(self._get_feasible_region(incoming_f, incoming_f.l_or_es))
+
+                if feasible_region.overlaps(upper_bound):
+                    if incoming_f.ub != -1:
+                        incoming_f.offset = min(upper_bound, incoming_f.ub)
+                    else:
+                        incoming_f.offset = upper_bound
+                else:
+                    envelope = sorted(feasible_region.envelop(0, upper_bound))
+
+                    if len(envelope) > 0:
+                        max_feasible_value_below_upperbound = envelope[-1].end
+
+                        if incoming_f.ub != -1:
+                            incoming_f.offset = min(max_feasible_value_below_upperbound, incoming_f.ub)
+                        else:
+                            incoming_f.offset = max_feasible_value_below_upperbound
+
+                self._unblock(incoming_f.s_or_t, incoming_f.l_or_es, old_offset)
+                incoming_f.ub = incoming_f.offset
+                debug_print(f"{incoming_f}: changed offset from {old_offset} to {incoming_f.offset}")
+
+                if incoming_f.prev_frame is None and isinstance(incoming_f.s_or_t, stream) and optimize_sender_task and j == len(s.receiver_es_ids)-1:
+                    # Only update the sender task if boolean is set and we are handling the last path
                     sender_task_tgn: TaskGraphNode_Task = self.task_graph.get_task_tgn(s.sender_task_id)
                     task_f = self.frames[sender_task_tgn.id][sender_task_tgn.es_id]
                     upper_bound = incoming_f.offset - task_f.length
@@ -296,12 +371,12 @@ class heuristic_schedule:
                 else:
                     incoming_f = incoming_f.prev_frame
 
+            j += 1
+            # TODO: make more efficient. We only have to recalculate for the links/ES from the current es_recv path
+            self._block_queues(tgn)
 
-
-
-        pass
-
-    def _get_feasible_region(self, f: frame, l_or_es: Union[link, end_system]):
+    def _get_feasible_region(self, f: frame, l_or_es: Union[link, end_system])  -> List[Interval]:
+        # returns a sorted list of intervals
         if isinstance(l_or_es, end_system):
             return self._get_feasible_region_es(f, l_or_es)
         elif isinstance(l_or_es, link):
@@ -309,13 +384,14 @@ class heuristic_schedule:
         else:
             raise ValueError
 
-    def _get_feasible_region_link(self, f: frame, l: link) -> IntervalTree:
+    def _get_feasible_region_link(self, f: frame, l: link) -> List[Interval]:
         feasible_region = IntervalTree()
-        free_blocks = sorted_complement(self.Blocks[l.id][f.period], start=0, end=f.period)
+        free_blocks = sorted_complement(self.Blocks[l.id][f.period], f, start=0, end=f.period)
 
         # Condition (i): Link va_vb is available in [t, t+frame.length]
+        # TODO: Null intervals allowed? iv.begin == iv.end - f.length
         for iv in free_blocks:
-            if iv.end - f.length >= iv.begin:
+            if iv.end - f.length > iv.begin:
                 feasible_region.add(Interval(iv.begin, iv.end - f.length))
 
         # Condition (iii): Chop out queue occupations of other streams on next link
@@ -329,12 +405,12 @@ class heuristic_schedule:
         # TODO: Condition (ii)
         return sorted(feasible_region)
 
-    def _get_feasible_region_es(self, f: frame, es: end_system) -> IntervalTree:
+    def _get_feasible_region_es(self, f: frame, es: end_system) -> List[Interval]:
+        free_blocks = sorted_complement(self.Blocks[es.id][f.period], f, start=0, end=f.period)
         feasible_region = IntervalTree()
-        free_blocks = sorted_complement(self.Blocks[es.id][f.period], start=0, end=f.period)
 
-        for iv in free_blocks:
-            if iv.end - f.length >= iv.begin:
+        for iv in sorted(free_blocks):
+            if iv.end - f.length > iv.begin:
                 feasible_region.add(Interval(iv.begin, iv.end - f.length))
 
         return sorted(feasible_region)
@@ -375,6 +451,54 @@ class heuristic_schedule:
                     raise ValueError
         else:
             raise ValueError
+
+    def _unblock(self, s_or_t, l_or_es, start_time: int):
+        if isinstance(s_or_t, stream):
+            s: stream = s_or_t
+
+            if isinstance(l_or_es, link):
+                l: link = l_or_es
+                offsets = [start_time + i * s.period for i in range(0, int(self.tc.hyperperiod / s.period))]
+                endtimes = [start_time + l.transmission_length(s.size) + i * s.period for i in
+                            range(0, int(self.tc.hyperperiod / s.period))]
+
+            elif isinstance(l_or_es, end_system):
+                es: end_system = l_or_es
+                offsets = [start_time + i * s.period for i in range(0, int(self.tc.hyperperiod / s.period))]
+                endtimes = [start_time + es.mac_exec_time + i * s.period for i in
+                            range(0, int(self.tc.hyperperiod / s.period))]
+            else:
+                raise ValueError
+        elif isinstance(s_or_t, task):
+            t: task = s_or_t
+            if isinstance(l_or_es, end_system):
+                es: end_system = l_or_es
+                offsets = [start_time + i * t.period for i in range(0, int(self.tc.hyperperiod / t.period))]
+                endtimes = [start_time + t.exec_time + i * t.period for i in
+                            range(0, int(self.tc.hyperperiod / t.period))]
+            else:
+                raise ValueError
+        else:
+            raise ValueError
+
+        for T in self.tc.Periods:
+            for i in range(len(offsets)):
+                o = offsets[i]
+                e = endtimes[i]
+
+                # unblock on va_vb [offset, offset+length]
+                intervals = []
+                if e % T < o % T:
+                    # if block wraps around
+                    intervals.append(Interval(o % T, T))
+                    if e % T > 0:
+                        intervals.append(Interval(0, e % T))
+                else:
+                    intervals.append(Interval(o % T, e % T))
+
+                for iv in intervals:
+                    if iv in self.Blocks[l_or_es.id][T]:
+                        self.Blocks[l_or_es.id][T].remove(iv)
 
     def _block(self, offsets: List[int], endtimes: List[int], l_or_es: Union[link, end_system]):
         assert len(offsets) == len(endtimes)

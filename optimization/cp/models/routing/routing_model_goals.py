@@ -2,27 +2,29 @@ from utils.utilities import flatten
 
 
 def add_optimization_goal(model):
-    # Calc. routes LENGTH
-    # Populates self.stream_route_lens
-    _create_cost_variable_route_length(model)
+    # max route length + 10 * max amount of overlaps
+    upper_bound_stream_cost = model.max_node_int + 10 * (model.max_stream_int * model.max_node_int)
+    upper_bound_total_cost = model.max_stream_int * upper_bound_stream_cost
 
-    # overlap is not allowed
+    _create_cost_variable_route_length(model)
     _create_cost_variable_overlap(model)
+
 
     # Set cost for each stream
     for f_int in range(model.max_stream_int):
         stream_id = model._IntToStreamIDMap[f_int]
 
         model.stream_cost[stream_id] = model.model.NewIntVar(
-            0, model.max_node_int, "stream_cost_{}".format(f_int)
+            0, upper_bound_stream_cost, "stream_cost_{}".format(f_int)
         )
         model.model.Add(
-            model.stream_cost[stream_id] == model.stream_route_lens[stream_id]
+            model.stream_cost[stream_id] == 10 * sum(model.stream_overlaps[stream_id]) + model.stream_route_lens[stream_id]
         )
+
 
     # Cost
     model.total_cost = model.model.NewIntVar(
-        0, model.max_stream_int * model.max_node_int, "total_cost"
+        0, upper_bound_total_cost, "total_cost"
     )
     model.model.Add(model.total_cost == sum(model.stream_cost.values()))
     model.model.Minimize(model.total_cost)
@@ -79,12 +81,3 @@ def _create_cost_variable_overlap(model):
                             model.x_v_is_u[f_int][u_int][v_int].Not())
                     else:
                         model.model.Add(model.stream_overlaps[stream_id][-1] == 0)
-
-        # Set cost for sub-streams
-        for f_int in f_int_list:
-            stream_id = model._IntToStreamIDMap[f_int]
-            model.stream_cost[stream_id] = model.model.NewIntVar(0, model.max_node_int + 100 * (
-                    len(stream_list) * model.max_node_int), "stream_cost_{}".format(f_int))
-            model.model.Add(
-                model.stream_cost[stream_id] == 10 * sum(model.stream_overlaps[stream_id]) + model.stream_route_lens[
-                    stream_id])

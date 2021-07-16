@@ -9,37 +9,43 @@ from input.model.nodes import end_system
 from input.model.route import route
 from input.model.stream import stream
 from input.model.task import task
-from optimization.sa.task_graph import TaskGraph
+from optimization.sa.task_graph import PrecedenceGraph
 from utils.utilities import sorted_complement
 
 class schedule:
     @classmethod
-    def from_heuristic_schedule_and_task_graph(cls, heu_sched, task_graph: TaskGraph, tc):
+    def from_heuristic_schedule_and_task_graph(cls, heu_sched, task_graph: PrecedenceGraph, tc, infeasible_tga):
         c = cls()
 
         for f in tc.F_routed.values():
             for l_or_es in tc.R[f.id].get_all_es_and_links(tc):
                 tgn = task_graph.get_stream_tgn(f.id)
-                if l_or_es.id in heu_sched.frames[tgn.id]:
-                    if l_or_es.id not in c.o_f_val:
-                        c.o_f_val[l_or_es.id] = {}
-                        c.c_f_val[l_or_es.id] = {}
-                        c.a_f_val[l_or_es.id] = {}
+                if tgn.id in heu_sched.frames:
+                    if l_or_es.id in heu_sched.frames[tgn.id]:
+                        if l_or_es.id not in c.o_f_val:
+                            c.o_f_val[l_or_es.id] = {}
+                            c.c_f_val[l_or_es.id] = {}
+                            c.a_f_val[l_or_es.id] = {}
 
-                    # TODO: phi value
-                    #if f.id in scheduling_model.phi_f:
-                    #    c.phi_f_val[f.id] = solver.Value(scheduling_model.phi_f[f.id])
-                    c.o_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset
-                    c.c_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].length
-                    c.a_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset + heu_sched.frames[tgn.id][l_or_es.id].length
+                        # TODO: phi value
+                        #if f.id in scheduling_model.phi_f:
+                        #    c.phi_f_val[f.id] = solver.Value(scheduling_model.phi_f[f.id])
+                        if tgn.id in heu_sched.frames:
+                            if l_or_es.id in heu_sched.frames[tgn.id]:
+                                c.o_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset
+                                c.c_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].length
+                                c.a_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset + heu_sched.frames[tgn.id][l_or_es.id].length
 
         for t in tc.T.values():
             tgn = task_graph.get_task_tgn(t.id)
-            c.o_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset
-            c.a_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset + heu_sched.frames[tgn.id][t.src_es_id].length
+            if tgn.id in heu_sched.frames:
+                if t.src_es_id in heu_sched.frames[tgn.id]:
+                    c.o_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset
+                    c.a_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset + heu_sched.frames[tgn.id][t.src_es_id].length
 
-        for fp in tc.FP.values():
-            c.laxities_val[fp.id] = fp.deadline - (c.a_t_val[fp.path[-1].id] - c.o_t_val[fp.path[0].id])
+        for app in tc.A.values():
+            if app.id not in infeasible_tga:
+                c.app_costs[app.id] = max([c.a_t_val[t_id] for t_id in app.verticies.keys()]) - min([c.o_t_val[t_id] for t_id in app.verticies.keys()])
 
         return c
 
@@ -70,10 +76,8 @@ class schedule:
             c.o_t_val[t.id] = solver.Value(scheduling_model.o_t[t.id])
             c.a_t_val[t.id] = solver.Value(scheduling_model.a_t[t.id])
 
-        for fp in scheduling_model.tc.FP.values():
-            c.laxities_val[fp.id] = solver.Value(
-                scheduling_model.laxities[fp.id]
-            )
+        for app in scheduling_model.tc.A.values():
+            c.app_costs[app.id] = max([c.a_t_val[t_id] for t_id in app.verticies.keys()]) - min([c.o_t_val[t_id] for t_id in app.verticies.keys()])
 
         return c
 
@@ -89,9 +93,9 @@ class schedule:
         self.o_t_val: Dict[str, int] = {}
         self.a_t_val: Dict[str, int] = {}
 
-        self.laxities_val: Dict[
+        self.app_costs: Dict[
             str, int
-        ] = {}  # Dict(fp.id -> val)
+        ] = {}  # Dict(app.id -> val)
 
     def is_stream_using_link_or_node(self, f_id, l_or_n_id):
         if l_or_n_id in self.c_f_val and f_id in self.c_f_val[l_or_n_id]:
@@ -171,13 +175,13 @@ class schedule:
 
         s += "\t</key_release_intervals>\n"
 
-        # Laxities
-        s += "\t<laxities>\n"
-        for fp_id, fp_val in self.laxities_val.items():
-            s += '\t\t<lax fp_id="{}" value="{}"/>\n'.format(
-                fp_id, fp_val
+        # App costs
+        s += "\t<costs>\n"
+        for app_id, cost in self.app_costs.items():
+            s += '\t\t<cost app_id="{}" value="{}"/>\n'.format(
+                app_id, cost
             )
-        s += "\t</laxities>\n"
+        s += "\t</costs>\n"
 
         s += "</schedule>"
         return s
@@ -192,7 +196,7 @@ class schedule:
                 link_to_o_t_map[node_id] = {}
                 link_to_o_t_map[node_id][t_id] = self.o_t_val[t_id]
                 link_to_a_t_map[node_id] = {}
-                link_to_a_t_map[node_id][t_id] = self.o_t_val[t_id]
+                link_to_a_t_map[node_id][t_id] = self.a_t_val[t_id]
             else:
                 link_to_o_t_map[node_id][t_id] = self.o_t_val[t_id]
                 link_to_a_t_map[node_id][t_id] = self.a_t_val[t_id]
@@ -241,9 +245,9 @@ class schedule:
                     value = int(n_phi.attrib["value"])
 
                     c.phi_f_val[stream_id] = value
-            elif n_child.tag == "laxities":
-                for n_lax in n_child:
-                    fp_id = n_lax.attrib["fp_id"]
-                    value = int(n_lax.attrib["value"])
+            elif n_child.tag == "costs":
+                for n_cost in n_child:
+                    app_id = n_cost.attrib["app_id"]
+                    value = int(n_cost.attrib["value"])
 
-                    c.laxities_val[fp_id] = value
+                    c.app_costs[app_id] = value

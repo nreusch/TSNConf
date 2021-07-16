@@ -1,0 +1,2 @@
+Testcase Name,Total cost,"Bandwidth use (Mean,%)","CPU use (Mean,%)",Optimization Time (ms),Total Runtime (ms),E2E-Delay Sum,Pint,Hyperperiod
+2_SW_4_ES_mode0_0_0_0_FFF_0.6,-1,-100.00,-100.00,0,3,-1,-1,1000

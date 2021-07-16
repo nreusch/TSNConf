@@ -5,6 +5,8 @@ from typing import Dict, List, Tuple, Set
 
 from input.model.task import task
 
+from sortedcontainers import SortedSet
+
 
 class EStreamType(Enum):
     NORMAL = 1
@@ -19,10 +21,10 @@ class stream:
     app_id: str
 
     sender_es_id: str
-    receiver_es_ids: Set[str]
+    receiver_es_ids: SortedSet[str]
 
     sender_task_id: str
-    receiver_task_ids: Set[str]
+    receiver_task_ids: SortedSet[str]
 
     size: int # message_size + mac_size + OH
     period: int  # =Pint for security streams
@@ -63,16 +65,16 @@ class stream:
         )
 
     @classmethod
-    def list_from_xml_node(cls, n: ET.Element, tc_T: Dict[str, task], tc_W_mac: int, tc_OH: int, app_id: str = ""):
+    def list_from_xml_node(cls, redundancy: bool, security: bool, n: ET.Element, tc_T: Dict[str, task], tc_W_mac: int, tc_OH: int, app_id: str = ""):
         ret_list = []
 
-        if "rl" in n.attrib:
+        if "rl" in n.attrib and redundancy:
             rl = int(n.attrib["rl"])
         else:
             rl = 1
 
         sender_task_id = n.attrib["sender_task"]
-        receiver_task_ids = set(n.attrib["receiver_tasks"].split(","))
+        receiver_task_ids = SortedSet(n.attrib["receiver_tasks"].replace(" ", "").split(","))
 
         if "src" in n.attrib:
             src_es_id = n.attrib["src"]
@@ -80,9 +82,9 @@ class stream:
             src_es_id = tc_T[sender_task_id].src_es_id
 
         if "dest" in n.attrib:
-            receiver_es_ids = set(n.attrib["dest"].split(","))
+            receiver_es_ids = SortedSet(n.attrib["dest"].replace(" ", "").split(","))
         else:
-            receiver_es_ids = set([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
+            receiver_es_ids = SortedSet([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
 
         message_size = int(n.attrib["size"])
 
@@ -94,13 +96,14 @@ class stream:
             type = EStreamType["NORMAL"]
 
 
-        if "secure" in n.attrib:
+        if "secure" in n.attrib and security:
             if n.attrib["secure"] == "true" or n.attrib["secure"] == "True":
                 is_secure = True
+                mac_size = tc_W_mac
             else:
                 is_secure = False
+                mac_size = 0
 
-            mac_size = tc_W_mac
         else:
             is_secure = False
             mac_size = 0

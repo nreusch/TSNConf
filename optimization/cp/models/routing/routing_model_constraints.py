@@ -1,9 +1,10 @@
 from ortools.sat.python.cp_model import Domain
 
 from input.model.nodes import end_system
+from input.model.stream import EStreamType
 
 
-def add_constraints(model):
+def add_constraints(model, redundancy, allow_overlap):
     # HELPER CONSTRAINTS
     for f_int in range(model.max_stream_int):
         for v_int in range(model.max_node_int):
@@ -12,8 +13,14 @@ def add_constraints(model):
 
             x_v_has_s = model.x_v_has_successor[f_int][v_int]
             if isinstance(v, end_system):
-                if v.id == f.sender_es_id or v.id in f.receiver_es_ids:
-                    # Sender and Receivers have guaranteed successor
+                # Sender and Receivers have guaranteed successor
+                # Sender: x(v) = v, y(v) = 0
+                # Receivers: x(v) != -1
+                if v.id == f.sender_es_id:
+                    model.model.Add(x_v_has_s == 1)
+                    model.model.Add(model.x[f_int][v_int] == v_int)
+                    model.model.Add(model.y[f_int][v_int] == 0)
+                elif v.id in f.receiver_es_ids:
                     model.model.Add(x_v_has_s == 1)
                     model.model.Add(model.x[f_int][v_int] != -1).OnlyEnforceIf(
                         x_v_has_s
@@ -106,14 +113,16 @@ def add_constraints(model):
                 # sum(x_v_is_u_list) > 0 => sum(x_v_is_u_and_uses_bw)  == 1
                 x_v_is_u_and_uses_bandwidth_list = [x_v_is_u_and_uses_bandwidth]
                 x_v_is_u_list = [x_v_is_u]
-                if f.rl > 1:
-                    for f_2 in model.tc.F_red[f.get_id_prefix()]:
-                        if f_2.id != f.id:
-                            f2_int = model._StreamIDToIntMap[f_2.id]
-                            x_v_is_u_and_uses_bandwidth_list.append(
-                                model.x_v_is_u_and_uses_bandwidth[f2_int][v_int][u_int]
-                            )
-                            x_v_is_u_list.append(model.x_v_is_u[f2_int][v_int][u_int])
+
+                if redundancy:
+                    if f.rl > 1:
+                        for f_2 in model.tc.F_red[f.get_id_prefix()]:
+                            if f_2.id != f.id:
+                                f2_int = model._StreamIDToIntMap[f_2.id]
+                                x_v_is_u_and_uses_bandwidth_list.append(
+                                    model.x_v_is_u_and_uses_bandwidth[f2_int][v_int][u_int]
+                                )
+                                x_v_is_u_list.append(model.x_v_is_u[f2_int][v_int][u_int])
                 stream_uses_link = model.model.NewBoolVar(
                     "sum_of_x_{}({})_is_{}_is_greater_0".format(f_int, v_int, u_int)
                 )
@@ -145,36 +154,30 @@ def add_constraints(model):
                     u.id in model.tc.N_conn_inv[v.id]
                     and v.id in model.tc.L_from_nodes[u.id]
                 ):
+                    period = f.period
+
                     model.model.Add(
                         model.v_to_u_capc_use_of_f[v_int][u_int][f_int]
-                        == int((f.size / f.period) * 1000)
+                        == int((f.size / period) * 1000)
                     ).OnlyEnforceIf(x_v_is_u).OnlyEnforceIf(x_v_is_u_and_uses_bandwidth)
 
                 model.model.AddImplication(x_u_has_successor.Not(), x_v_is_not_u)
 
-            # Constraint 3: x(v) != -1 for all stream destinations
-            if v.id in f.receiver_es_ids:
-                model.model.Add(model.x[f_int][v_int] != -1)
-
-            # Constraint 4: x(v) = int(v) for stream source
-            # Constraint 5: y(v) = 0 for stream source
-            if v.id == f.sender_es_id:
-                model.model.Add(model.x[f_int][v_int] == v_int)
-                model.model.Add(model.y[f_int][v_int] == 0)
-
             # Constraint 6: Redundant copies of each streams should not have common links
-            if f.rl > 1:
-                if v.id != f.sender_es_id:
-                    for f_2 in model.tc.F_red[f.get_id_prefix()]:
-                        if f_2.id != f.id:
-                            f_2_int = model._StreamIDToIntMap[f_2.id]
-                            model.model.Add(
-                                model.x[f_int][v_int] != model.x[f_2_int][v_int]
-                            ).OnlyEnforceIf(
-                                model.x_v_has_successor[f_int][v_int]
-                            ).OnlyEnforceIf(
-                                model.x_v_has_successor[f_2_int][v_int]
-                            )
+
+            if redundancy and not allow_overlap:
+                if f.rl > 1:
+                    if v.id != f.sender_es_id:
+                        for f_2 in model.tc.F_red[f.get_id_prefix()]:
+                            if f_2.id != f.id:
+                                f_2_int = model._StreamIDToIntMap[f_2.id]
+                                model.model.Add(
+                                    model.x[f_int][v_int] != model.x[f_2_int][v_int]
+                                ).OnlyEnforceIf(
+                                    model.x_v_has_successor[f_int][v_int]
+                                ).OnlyEnforceIf(
+                                    model.x_v_has_successor[f_2_int][v_int]
+                                )
 
     # Constraint 7.2: Streams may not exceed link capacity (upper bound is implicit through link_capacity domain)
     for v_int in range(model.max_node_int):
@@ -202,6 +205,7 @@ def add_constraints(model):
                 model.model.Add(sum(x_v_is_u_list) > 0).OnlyEnforceIf(
                     model.x_v_has_predecessor[f_int][u_int]
                 )
+
 
                 x_u_has_successor = model.x_v_has_successor[f_int][u_int]
                 # If u has no predecessors, it can't have successor

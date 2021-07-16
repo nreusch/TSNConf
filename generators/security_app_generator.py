@@ -68,7 +68,7 @@ def run(tc: Testcase, timing_object: TimingData) -> Testcase:
 
                         secapp = es_to_secapp_map[src_es_id][0]
                         key_verify_task_id = "t_ver_{}_{}".format(src_es_id, dest_es_id)
-                        if key_verify_task_id not in secapp.verticies:
+                        if key_verify_task_id not in es_to_secapp_map[src_es_id][1].receiver_task_ids:
                             key_verify_task = key_verification_task(
                                 key_verify_task_id,
                                 secapp.id,

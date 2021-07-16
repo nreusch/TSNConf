@@ -7,7 +7,7 @@ from input.model.task import ETaskType, key_verification_task
 from utils.utilities import lcm
 
 
-def add_constraints(model):
+def add_constraints(model, security, do_allow_infeasible_solutions):
     # Streams
     # For each stream
     for f in model.tc.F_routed.values():
@@ -19,13 +19,16 @@ def add_constraints(model):
                 constrain_stream_exec_time_based_on_link_speed(
                     model, f, l_or_es, l_or_es.id
                 )
-                constrain_stream_MAC_key_release_interval(model, f, l_or_es)
+                if security:
+                    constrain_stream_MAC_key_release_interval(model, f, l_or_es)
             elif isinstance(l_or_es, end_system) and f.type != EStreamType.KEY:
                 # Key streams are not executed on ES
-                constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es.id)
+                if security:
+                    constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es.id)
 
                 if l_or_es.id in f.receiver_es_ids:
-                    constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es.id)
+                    if security:
+                        constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es.id)
 
             constrain_stream_instance_dependency_between_links_on_route(
                 model, f, l_or_es
@@ -48,65 +51,13 @@ def add_constraints(model):
         constrain_task_outgoing_stream_dependency(model, t)
         constrain_task_incoming_stream_dependency(model, t)
         constrain_task_task_dependency(model, t)
-        constrain_task_does_not_overlap_with_stream_MAC_operations(model, t)
+        if security:
+            constrain_task_does_not_overlap_with_stream_MAC_operations(model, t)
 
     # Functions Paths
     # For each function path
-    for fp in model.tc.FP.values():
-        constrain_function_path_deadline(model, fp)
-
-
-def add_simple_constraints(model):
-    # Streams
-    # For each stream
-    for f in model.tc.F_routed.values():
-        # For each link and node
-        for l_or_es in model.mtrees[f.id].get_all_es_and_links(model.tc):
-
-            constrain_stream_end_time_equals_start_plus_exec_time(model, f, l_or_es.id)
-
-            if isinstance(l_or_es, link):
-                constrain_stream_exec_time_based_on_link_speed(
-                    model, f, l_or_es, l_or_es.id
-                )
-                constrain_stream_MAC_key_release_interval(model, f, l_or_es)
-            elif isinstance(l_or_es, end_system) and f.type != EStreamType.KEY:
-                # Key streams are not executed on ES
-                constrain_stream_exec_time_based_on_ES_hash_speed(model, f, l_or_es.id)
-
-                if l_or_es.id in f.receiver_es_ids:
-                    constrain_stream_MAC_verify_after_key_verify(model, f, l_or_es.id)
-
-            constrain_stream_instance_dependency_between_links_on_route(
-                model, f, l_or_es
-            )
-
-            # For each other stream, for which link or ES is on route
-            for f2 in model.tc.F_routed.values():
-                if f.id != f2.id:
-                    if model.mtrees[f2.id].is_in_tree(l_or_es.id, model.tc):
-                        constraint_streams_do_not_overlap(model, f, f2, l_or_es.id)
-                        constrain_stream_tsn_frame_isolation(
-                            model, f, f2, l_or_es, l_or_es.id
-                        )
-
-    # Tasks
-    # For each task
-    for t in model.tc.T.values():
-        constrain_task_end_time_equals_start_plus_exec_time(model, t)
-        constrain_task_do_not_overlap(model, t)
-        constrain_task_outgoing_stream_dependency(model, t)
-        constrain_task_incoming_stream_dependency(model, t)
-        constrain_task_task_dependency(model, t)
-        constrain_task_does_not_overlap_with_stream_MAC_operations(model, t)
-
-    # Functions Paths
-    # For each function path
-    for fp in model.tc.FP.values():
-        # No deadline constraint for simple optimization
-        # constrain_function_path_deadline(fp)
-        pass
-
+    for app in model.tc.A.values():
+        constrain_app_latency(model, app, do_allow_infeasible_solutions)
 
 def constrain_stream_tsn_frame_isolation(model, f, f2, l_or_n, l_or_n_id):
     # Constrain X: TSN Frame Isolation
@@ -114,8 +65,8 @@ def constrain_stream_tsn_frame_isolation(model, f, f2, l_or_n, l_or_n_id):
     if isinstance(l_or_n, link):
         if isinstance(l_or_n.src, switch):
             if f2.id != f.id:
-                for l_prev in model.mtrees[f.id].get_predeccessor_links(l_or_n_id, model.tc):
-                    for l_prev2 in model.mtrees[f2.id].get_predeccessor_links(
+                for l_prev in model.mtrees[f.id].get_predeccessor_link(l_or_n_id, model.tc):
+                    for l_prev2 in model.mtrees[f2.id].get_predeccessor_link(
                         l_or_n_id, model.tc
                     ):
 
@@ -125,7 +76,7 @@ def constrain_stream_tsn_frame_isolation(model, f, f2, l_or_n, l_or_n_id):
                             P_m = f.period
 
                             o_m2_g = model.o_f[l_or_n_id][f2.id]
-                            o_m2_g_prev2 = model.o_f[l_prev2.id][f2.id]
+                            o_m2_g_prev = model.o_f[l_prev2.id][f2.id]
                             P_m2 = f2.period
 
                             rg_a = range(int(lcm([P_m, P_m2]) / P_m))
@@ -147,19 +98,28 @@ def constrain_stream_tsn_frame_isolation(model, f, f2, l_or_n, l_or_n_id):
 
                                     # Constraint 30 (TSN)
                                     model.model.Add(
-                                        o_m_g + beta * P_m <= o_m2_g_prev2 + alph * P_m2
+                                        o_m_g + beta * P_m <= o_m2_g_prev + alph * P_m2
                                     ).OnlyEnforceIf(bl.Not())
 
 
-def constrain_function_path_deadline(model, fp):
-    # Constraint 1: Function path deadlines are held (42)
-    des_t = fp.path[-1]
-    src_t = fp.path[0]
+def constrain_app_latency(model, app, do_allow_infeasible_solutions):
+    # Constraint 1: Application deadlines are held (Only if we don't allow infeasible solutions)
+    start_times = []
+    end_times = []
+    for t_id in app.verticies:
+        start_times.append(model.o_t[t_id])
+        end_times.append(model.o_t[t_id])
 
-    a_t_des = model.a_t[des_t.id]
-    o_t_src = model.o_t[src_t.id]
-    D = fp.deadline
-    model.model.Add(a_t_des - o_t_src <= D)
+    min_start_time = model.model.NewIntVar(0, model.tc.hyperperiod, f"min_start_time_{app.id}")
+    max_end_time = model.model.NewIntVar(0, model.tc.hyperperiod, f"max_end_time_{app.id}")
+
+    model.model.AddMinEquality(min_start_time, start_times)
+    model.model.AddMaxEquality(max_end_time, start_times)
+
+    model.model.Add(model.app_cost[app.id] == max_end_time - min_start_time)
+
+    if not do_allow_infeasible_solutions:
+        model.model.Add(model.app_cost[app.id] <= app.period)
 
 
 def constrain_task_does_not_overlap_with_stream_MAC_operations(model, t):
@@ -200,14 +160,24 @@ def constrain_task_incoming_stream_dependency(model, t):
     # Constraint 3.2: incoming dependency between stream and task
     for f in model.tc.F_t_in[t.id]:
         if f.id in model.tc.F_routed.keys():
-            model.model.Add(model.a_f[t.src_es_id][f.id] <= model.o_t[t.id])
+            if f.is_secure:
+                model.model.Add(model.a_f[t.src_es_id][f.id] <= model.o_t[t.id])
+            else:
+                last_links = model.tc.R[f.id].get_predeccessor_link(t.src_es_id, model.tc)
+                for l in last_links:
+                    model.model.Add(model.a_f[l.id][f.id] <= model.o_t[t.id])
 
 
 def constrain_task_outgoing_stream_dependency(model, t):
     # Constraint 3.1: outgoing dependency between task and stream
     for f in model.tc.F_t_out[t.id]:
         if f.id in model.tc.F_routed.keys():
-            model.model.Add(model.a_t[t.id] <= model.o_f[t.src_es_id][f.id])
+            if f.is_secure:
+                model.model.Add(model.a_t[t.id] <= model.o_f[t.src_es_id][f.id])
+            else:
+                first_links = model.tc.R[f.id].get_successor_links(t.src_es_id, model.tc)
+                for l in first_links:
+                    model.model.Add(model.a_t[t.id] <= model.o_f[l.id][f.id])
 
 
 def constrain_task_task_dependency(model, t):
@@ -349,12 +319,17 @@ def constrain_stream_MAC_key_release_interval(model, f, l_or_n):
         ):
             if model.mtrees[f.id].is_link_in_tree(l_or_n.src.id, l_or_n.dest.id):
                 a_m_g = model.a_f[l_or_n.id][f.id]
+
+                a_m_g_minus_1 = model.model.NewIntVar(0, model.tc.hyperperiod, f"a_{l_or_n.id}_{f.id}_plus_1")
+                model.model.Add(a_m_g_minus_1 == a_m_g - 1)
+
                 div = model.model.NewIntVar(
                     0,
                     int(model.tc.hyperperiod / model.Pint),
                     "div_{}_{}".format(f.id, l_or_n.id),
                 )
-                model.model.AddDivisionEquality(div, a_m_g, model.Pint)
+                # subtract 1 here so that a stream ending right on the border is allowed
+                model.model.AddDivisionEquality(div, a_m_g_minus_1, model.Pint)
 
                 model.model.Add(div < model.phi_f[f.id])
 

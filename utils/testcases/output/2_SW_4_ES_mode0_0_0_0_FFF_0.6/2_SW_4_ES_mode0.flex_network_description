@@ -1,0 +1,78 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="-1" frame_overhead="-1" key_length="-1" mac_length="-1">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW0" type="Switch"/>
+	<device name="SW1" type="Switch"/>
+	<device name="ES0" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="10"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="SW0" dest="SW1" speed="125.00"/>
+	<link src="SW0" dest="ES0" speed="125.00"/>
+	<link src="SW0" dest="ES1" speed="125.00"/>
+	<link src="SW0" dest="ES2" speed="125.00"/>
+	<link src="SW0" dest="ES3" speed="125.00"/>
+	<link src="SW1" dest="SW0" speed="125.00"/>
+	<link src="SW1" dest="ES0" speed="125.00"/>
+	<link src="SW1" dest="ES1" speed="125.00"/>
+	<link src="SW1" dest="ES2" speed="125.00"/>
+	<link src="SW1" dest="ES3" speed="125.00"/>
+	<link src="ES0" dest="SW0" speed="125.00"/>
+	<link src="ES0" dest="SW1" speed="125.00"/>
+	<link src="ES1" dest="SW0" speed="125.00"/>
+	<link src="ES1" dest="SW1" speed="125.00"/>
+	<link src="ES2" dest="SW0" speed="125.00"/>
+	<link src="ES2" dest="SW1" speed="125.00"/>
+	<link src="ES3" dest="SW0" speed="125.00"/>
+	<link src="ES3" dest="SW1" speed="125.00"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="FreeApp0" period="1000" type="NORMAL">
+		<tasks>
+			<task name="Task_FreeApp0" node="ES0" wcet="31" period="1000" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="FreeApp1" period="1000" type="NORMAL">
+		<tasks>
+			<task name="Task_FreeApp1" node="ES2" wcet="55" period="1000" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="CommApp0" period="1000" type="NORMAL">
+		<tasks>
+			<task name="Task_CommApp0_0" node="ES1" wcet="63" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp0_1" node="ES0" wcet="52" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp0_2" node="ES2" wcet="47" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp0_3" node="ES0" wcet="11" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp0_4" node="ES1" wcet="20" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp0_5" node="ES1" wcet="90" period="1000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="Stream_CommApp0_Task_CommApp0" src="ES1" dest="ES1" sender_task="Task_CommApp0_0" receiver_tasks="Task_CommApp0_5" size="379" period="1000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="CommApp1" period="1000" type="NORMAL">
+		<tasks>
+			<task name="Task_CommApp1_0" node="ES2" wcet="9" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp1_1" node="ES0" wcet="56" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp1_2" node="ES3" wcet="62" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp1_3" node="ES0" wcet="43" period="1000" type="NORMAL"/>
+			<task name="Task_CommApp1_4" node="ES3" wcet="87" period="1000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="Stream_CommApp1_Task_CommApp1" src="ES2" dest="ES0" sender_task="Task_CommApp1_0" receiver_tasks="Task_CommApp1_3" size="923" period="1000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+
+
+
+</NetworkDescription>

@@ -2,90 +2,127 @@ import random as random
 from typing import Tuple, List, Dict
 
 import networkx as nx
-from networkx.drawing.nx_pydot import graphviz_layout
+from networkx import weakly_connected_components
 
 from input.model.application import application, EApplicationType
 from input.model.stream import stream, EStreamType
 from input.model.task import task, ETaskType
+
+import subprocess
+
+import graphviz
+import subprocess
 import matplotlib.pyplot as plt
+import time
 
+def get_dag_from_ggen(task_count: int, tree_depth: int, connection_probability: float):
+    # using https://github.com/perarnau/ggen
+    # run vagrant container
+    # map apps/ folder to /apps on the vagrant box
+    # vagrant global-status to determine id
 
+    cmd = f'vagrant ssh -c "ggen --log-level 0 generate-graph lbl {task_count} {tree_depth} {connection_probability} > /apps/app.dot" a9ff793'
 
-def find_random_es(available_es: Dict[str, float], task_utilization: float, config) -> str:
-    random_es = random.choice(list(available_es.keys()))
-    available_es[random_es] += task_utilization
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
 
-    if available_es[random_es] >= config.max_es_utilization:
-        if available_es[random_es] > 1:
+    process.communicate()
+
+    G = nx.DiGraph(nx.drawing.nx_pydot.read_dot("utils/apps/app.dot"))
+
+    return G
+
+def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: float, config) -> str:
+    random_es = random.choice(list(es_utilization_dict.keys()))
+    es_utilization_dict[random_es] += task_utilization
+
+    if es_utilization_dict[random_es] >= config.max_es_utilization:
+        if es_utilization_dict[random_es] > 1:
             raise ValueError("ES utilization > 1")
-        available_es.pop(random_es)
+        es_utilization_dict.pop(random_es)
 
     return random_es
 
-def create_app(name, config, available_es) -> Tuple[application, List[task], List[stream]]:
-    period = random.choice(config.periods)
-    app = application(name, period, EApplicationType.NORMAL)
-    tasks = []
-    streams = []
-    layers = random.randint(2, config.max_app_depth)
-    task_count = random.randint(layers, layers * config.max_app_width)
+def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int) -> List[Tuple[application, List[task], List[stream]]]:
+    print(f"Creating apps with {task_count} tasks")
 
-    cuts = random.sample(range(1, task_count), layers - 1)
-    cuts.append(0)
-    cuts.append(task_count)
-    cuts = sorted(cuts)
+    # Create a random DAG using the ggen tool
+    G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability)
 
-    G = nx.DiGraph()
+    # Split seperate parts of the DAG into seperate applications
+    sgs = [G.subgraph(c) for c in weakly_connected_components(G)]
 
-    print(f"Layers: {layers}")
-    print(f"Task count: {task_count}")
+    lst = []
+    i = 0
+    for SG in sgs:
+        # Choose a random period
+        period = random.choice(config.periods)
 
-    tasks_for_layer: List[List[task]] = []
+        # Create the application datastructure
+        app = application(app_name_prefix + f"{i}", period, EApplicationType.NORMAL)
+        tasks = {}
+        streams = []
 
-    for i in range(layers):
-        tasks_for_layer.append([])
-        print(f"Layer {i}, creating tasks: ", end="")
-        for j in range(cuts[i], cuts[i + 1]):
-            # Create tasks
-            print(f"{j},", end="")
+        # Create tasks from DAG nodes
+        for n in SG:
             t_wcet = random.randint(1, int(config.max_task_period_percentage * period))
-            t_es_id = find_random_es(available_es, t_wcet / period, config)
-            t = task(f"Task_{app.id}_{j}", app.id, t_es_id, t_wcet, period, ETaskType.NORMAL)
-            tasks_for_layer[i].append(t)
-            tasks.append(t)
-            G.add_node(t.id)
+            t_es_id = find_random_es(es_utilization_dict, t_wcet / period, config)
+            t = task(f"t_{app.id}_{n}", app.id, t_es_id, t_wcet, period, ETaskType.NORMAL)
+            tasks[n] = t
+            SG.nodes[n]["ES"] = t_es_id
 
-        print()
+        # Create streams from DAG edges
+        streams = create_streams(SG, app, config, tasks)
 
-    # If not last layer, connect each task to next layer
-    for i in range(layers-1):
-        for t in tasks_for_layer[i]:
-            conn_count = random.randint(1, min(config.max_multicast_count,len(tasks_for_layer[i+1])))
+        # Draw graph
+        pos = nx.drawing.nx_pydot.graphviz_layout(SG, prog="dot")
+        nx.draw(SG, pos, labels=nx.get_node_attributes(SG, 'ES'), font_size=16 )
+        edge_labels = dict([((n1, n2), SG[n1][n2]["s"])
+                            for n1, n2 in SG.edges if "s" in SG[n1][n2]])
+        nx.draw_networkx_edge_labels(SG, pos=pos, edge_labels=edge_labels)
+        plt.ion()
+        plt.show()
+        plt.pause(0.001)
 
-            dest_tasks = random.sample(tasks_for_layer[i+1], conn_count)
+        lst.append((app, tasks.values(), streams))
 
-            # Create stream
-            receiver_es_ids = [t_dest.src_es_id for t_dest in dest_tasks]
-            receiver_task_ids = [t_dest.id for t_dest in dest_tasks]
+        i += 1
 
-            for rtid in receiver_task_ids:
-                G.add_edge(t.id, rtid)
+    return lst
 
-            if random.randint(1, 100) < config.stream_secure_chance*100:
+
+def create_streams(G: nx.DiGraph, app: application, config, tasks: Dict[str, task]) -> List[stream]:
+    streams = []
+
+    for n in G:
+        t = tasks[n]
+        stream_id = f"s_{t.id}"
+
+        receiver_es_ids = []
+        receiver_task_ids = []
+        for n_recv in G.neighbors(n):
+            if G.nodes[n_recv]["ES"] != G.nodes[n]["ES"]:
+                receiver_es_ids.append(G.nodes[n_recv]["ES"])
+                receiver_task_ids.append(tasks[n_recv].id)
+                G[n][n_recv]["s"] = stream_id
+
+        if len(receiver_task_ids) > 0:
+            if random.randint(1, 100) < config.stream_secure_chance * 100:
                 secure = True
                 rl = random.randint(1, config.stream_max_rl)
-                size = random.randint(1, config.stream_max_size - config.mac_length)
+                message_size = random.randint(1, config.stream_max_size - config.mac_length - config.frame_overhead)
+                mac_size = config.mac_length
+                overhead = config.frame_overhead
             else:
                 secure = False
                 rl = 1
-                size = random.randint(1, config.stream_max_size)
-            s = stream(f"Stream_{app.id}_{t.id}", app.id, t.src_es_id, receiver_es_ids, t.id, receiver_task_ids, size+config.frame_overhead, period, rl, secure, size-config.mac_length, config.mac_length, config.frame_overhead, EStreamType.NORMAL)
+                message_size = random.randint(1, config.stream_max_size - config.frame_overhead)
+                mac_size = 0
+                overhead = config.frame_overhead
+
+            s = stream(stream_id, app.id, t.src_es_id, receiver_es_ids, t.id, receiver_task_ids,
+                       message_size + mac_size + overhead, app.period, rl, secure, message_size, mac_size, overhead, EStreamType.NORMAL)
             streams.append(s)
 
-    plt.figure()
-    pos = graphviz_layout(G, prog="dot")
-    nx.draw(G, pos=pos, with_labels=True)
-    plt.ion()
-    plt.show()
-    plt.pause(0.001)
-    return app, tasks, streams
+    return streams

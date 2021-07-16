@@ -23,6 +23,8 @@ class TimingData:
         self.time_optimizing_scheduling: float = 0
         self.time_optimizing_simulated_annealing: float = 0
 
+        self.time_first_feasible_solution: float = 0
+
         self.time_serializing_solution: float = 0
 
     def get_total_time(self) -> float:

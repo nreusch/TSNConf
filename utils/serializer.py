@@ -6,7 +6,7 @@ from graphviz import Digraph
 from input.model.nodes import switch
 from input.model.task import ETaskType
 from input.testcase import Testcase
-from optimization.sa.task_graph import TaskGraph
+from optimization.sa.task_graph import PrecedenceGraph
 from solution import solution_parser
 from solution.solution import Solution
 import networkx as nx
@@ -19,6 +19,13 @@ def create_flex_network_description(output_file: Path, tc: Testcase):
     f.write(tc.to_flex_network_description())
     f.close()
 
+def aggregate_solution(csv_path: Path, solution: Solution):
+    df = solution_parser.get_solution_results_info_dataframe(solution)
+
+    if not csv_path.exists():
+        df.to_csv(csv_path)
+    else:
+        df.to_csv(csv_path, mode="a", header=False)
 
 def serialize_solution(base_path: Path, solution: Solution) -> Path:
     """
@@ -193,11 +200,10 @@ def serialize_graphs(path: Path, solution: Solution):
     # Application Task DAGs
 
     try:
-        for app in app_list:
-            tg = TaskGraph.from_applications(testcase)
-            pdot = nx.drawing.nx_pydot.to_pydot(tg.DAG)
-            pdot.write(path / ("taskgraph_" + app.id + ".gv"))
-            pdot.write_png(path / ("taskgraph_" + app.id + ".png"))
-            pdot.write_svg(path / ("taskgraph_" + app.id + ".svg"))
+        tg = PrecedenceGraph.from_applications(testcase)
+        pdot = nx.drawing.nx_pydot.to_pydot(tg.DAG)
+        pdot.write(path / ("precgraph" + ".gv"))
+        pdot.write_png(path / ("precgraph" + ".png"))
+        pdot.write_svg(path / ("precgraph" + ".svg"))
     except Exception as e:
         report_exception(e)

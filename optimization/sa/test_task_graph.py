@@ -5,7 +5,7 @@ from input.model.route import route
 from input.model.stream import stream, EStreamType
 from input.model.task import task, ETaskType
 from input.testcase import Testcase
-from optimization.sa.task_graph import TaskGraph, TopologicalTaskGraphOrder
+from optimization.sa.task_graph import PrecedenceGraph, TopologicalTaskGraphOrder
 
 
 def test_get_topological_order():
@@ -28,7 +28,7 @@ def test_get_topological_order():
     r.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id)})
 
     tc.add_to_datastructures(es1, es2, sw1, l1, l2, app, t1, t2, s, r)
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
 
     tgo = task_graph.get_topological_order()
     assert isinstance(tgo, TopologicalTaskGraphOrder)
@@ -72,7 +72,7 @@ def test_get_topological_order2():
     r2.init_from_node_mapping({(es1.id, sw1.id), (sw1.id, es2.id)})
     tc.add_to_datastructures(app2, t11, t22, s2, r2)
 
-    task_graph = TaskGraph.from_applications(tc)
+    task_graph = PrecedenceGraph.from_applications(tc)
 
     tgo = task_graph.get_topological_order()
     assert isinstance(tgo, TopologicalTaskGraphOrder)

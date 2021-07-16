@@ -37,7 +37,7 @@ class TopologicalTaskGraphApp:
     def __init__(self, app_id: str, appDAG: DiGraph, task_graph):
         self.app_id = app_id
         self.appDAG = appDAG
-        self.task_graph: TaskGraph = task_graph
+        self.task_graph: PrecedenceGraph = task_graph
         self.internal_order = []
 
         for tgn_id in nx.topological_sort(appDAG):
@@ -46,7 +46,7 @@ class TopologicalTaskGraphApp:
     def __repr__(self):
         return f"TGA_{self.app_id}"
 
-class TaskGraph:
+class PrecedenceGraph:
     def __init__(self, DAG: DiGraph, nodes: Dict[str, TaskGraphNode]):
         self.DAG: DiGraph = DAG
         self.keyDAGs: List[Tuple[DiGraph, str]] = [] # Tuple[DAG, app.id]

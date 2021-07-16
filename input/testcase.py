@@ -16,13 +16,14 @@ class Testcase:
         self.name: str = name
         self.schedule: schedule = None
 
-        self.Pint: int = 0
+        self.Pint: int = -1
 
         self.W_f_max: int = -1  # MTU
         self.OH: int = -1  # frame overhead
         self.hyperperiod = 0
         self.W_mac: int = -1  # MAC length
         self.key_length: int = -1  # TESLA key length
+        self.highest_communication_depth = -1
 
         self.Periods: set = set()
 
@@ -99,10 +100,12 @@ class Testcase:
         """
         for x in X:
             if isinstance(x, stream):
+                if x.id in self.F:
+                    raise ValueError(f"Cannot add stream {x.id} a second time")
                 self.F[x.id] = x
 
                 if x.app_id != "":
-                    self.A[x.app_id].add_edges(x)
+                    self.A[x.app_id].add_edges(x, self)
 
                 self.F_t_out[x.sender_task_id].append(x)
                 for task_id in x.receiver_task_ids:
@@ -131,6 +134,9 @@ class Testcase:
             elif isinstance(x, schedule):
                 self.schedule = x
             elif isinstance(x, node):
+                if x.id in self.N:
+                    raise ValueError(f"Cannot add node {x.id} a second time")
+
                 self.N[x.id] = x
                 self.N_conn[x.id] = set()
                 self.N_conn_inv[x.id] = set()
@@ -147,15 +153,19 @@ class Testcase:
                 elif isinstance(x, switch):
                     self.SW[x.id] = x
             elif isinstance(x, link):
+                if x.id in self.L:
+                    raise ValueError(f"Cannot add link {x.id} a second time")
                 self.L[x.id] = x
                 self.L_from_nodes[x.src.id][x.dest.id] = x
                 self.N_conn[x.src.id].add(x.dest.id)
                 self.N_conn_inv[x.dest.id].add(x.src.id)
             elif isinstance(x, application):
+                if x.id in self.A:
+                    raise ValueError(f"Cannot add app {x.id} a second time")
                 self.A[x.id] = x
                 if x.period not in self.Periods:
                     self.Periods.add(x.period)
-                    self.hyperperiod = lcm(list(self.Periods))
+                    self.hyperperiod = lcm(list([p for p in self.Periods if p > 0]))
                 if x.type == EApplicationType.NORMAL:
                     self.A_app[x.id] = x
                     #
@@ -165,6 +175,8 @@ class Testcase:
             elif isinstance(x, function_path):
                 self.FP[x.id] = x
             elif isinstance(x, task):
+                if x.id in self.T:
+                    raise ValueError(f"Cannot add task {x.id} a second time")
                 self.T[x.id] = x
                 self.T_g[x.src_es_id].append(x)
                 self.F_t_out[x.id] = []
@@ -245,3 +257,7 @@ class Testcase:
                 s += "\t" + st + "\n"
         s += "</NetworkDescription>"
         return s
+
+    def clear_routes(self):
+        self.R = {}
+        self.R_info = {}

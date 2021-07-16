@@ -7,6 +7,7 @@ import dash_cytoscape as cyto
 import pandas as pd
 import plotly.graph_objs as go
 
+from input.input_parameters import EMode
 from input.model.nodes import end_system
 from input.model.stream import EStreamType
 from input.model.task import key_verification_task
@@ -36,26 +37,22 @@ def get_testcase_application_graphs(solution: Solution) -> Dict[str, str]:
 
     return app_id_graph_b64_map
 
-def get_testcase_application_taskgraphs(solution: Solution) -> Dict[str, str]:
+def get_testcase_application_precgraph(solution: Solution) -> Dict[str, str]:
     """
-    Returns a dictionary mapping app_id's to html.img src strings of the application task graphs
+    Returns a html.img src string of the prec graph
     """
 
-    app_id_graph_b64_map = {}
-
-    for app in solution.tc.A_app.values():
-        svg_file_path = Path(
-            "testcases/output/{}/svg/taskgraph_{}.svg".format(
-                solution.get_folder_name(), app.id
-            )
+    svg_file_path = Path(
+        "testcases/output/{}/svg/precgraph.svg".format(
+            solution.get_folder_name()
         )
+    )
 
-        encoded = base64.b64encode(open(svg_file_path, "rb").read())
-        svg = "data:image/svg+xml;base64,{}".format(encoded.decode())
+    encoded = base64.b64encode(open(svg_file_path, "rb").read())
+    svg = "data:image/svg+xml;base64,{}".format(encoded.decode())
 
-        app_id_graph_b64_map[app.id] = svg
 
-    return app_id_graph_b64_map
+    return svg
 
 def get_testcase_topology_graph(solution: Solution) -> str:
     """
@@ -190,26 +187,6 @@ def get_derived_security_application_graphs(solution: Solution) -> Dict[str, str
 
     return app_id_graph_b64_map
 
-def get_derived_security_application_taskgraphs(solution: Solution) -> Dict[str, str]:
-    """
-    Returns a dictionary mapping app_id's to html.img src strings of the application taskgraphs
-    """
-    app_id_graph_b64_map = {}
-
-    for app in solution.tc.A_sec.values():
-        svg_file_path = Path(
-            "testcases/output/{}/svg/taskgraph_{}.svg".format(
-                solution.get_folder_name(), app.id
-            )
-        )
-
-        encoded = base64.b64encode(open(svg_file_path, "rb").read())
-        svg = "data:image/svg+xml;base64,{}".format(encoded.decode())
-
-        app_id_graph_b64_map[app.id] = svg
-
-    return app_id_graph_b64_map
-
 def get_derived_security_stream_dataframe(solution: Solution) -> pd.DataFrame:
     """
     Returns a dataframe with information about the key streams: columns=["ID","Sender ES", "Receiver ESs", "Sender Task", "Receiver Tasks", "Size", "Period", "Type", "RL", "Secure?"]
@@ -313,7 +290,7 @@ def get_solution_general_info_dataframe(solution: Solution) -> pd.DataFrame:
     columns.append(row)
 
     return pd.DataFrame(
-        columns, columns=["Testcase Name", "# ES", "# Streams", "# Signals", "# Tasks"]
+        columns, columns=["Testcase Name", "# ES", "# Switches", "# Streams", "# Tasks"]
     )
 
 
@@ -327,35 +304,63 @@ def get_solution_mode_description(solution: Solution) -> str:
 
 def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe of the results: columns=["Laxity Sum", "Bandwidth use (Mean,%)", "CPU use (Mean,%)",
+    Returns a dataframe of the results: columns=["Testcase", "Method", "Total cost", "Bandwidth use (Mean,%)", "CPU use (Mean,%)",
     "Optimization Time (ms)", "Total Runtime (ms)", "E2E-Delay Sum", "Pint", "Hyperperiod"]
     """
 
     columns = []
     row = []
 
-    row.append("{:d}".format(solution.laxity_total))
+    row.append("{}".format(solution.tc.name))
+    row.append("{}".format(not solution.input_params.no_security))
+    row.append("{}".format(not solution.input_params.no_redundancy))
+    row.append("{}".format(solution.input_params.mode.name))
+    row.append("{:d}".format(len(solution.tc.ES)))
+    row.append("{:d}".format(len(solution.tc.SW)))
+    row.append("{:d}".format(len(solution.tc.F)))
+    row.append("{:d}".format(sum([len(f.receiver_task_ids) for f in solution.tc.F.values()])))
+    row.append("{:d}".format(len(solution.tc.T)))
+    row.append("{:d}".format(solution.cost_total))
+    row.append("{:d}".format(solution.cost_routing))
+    row.append("{:d}".format(solution.cost_scheduling))
+    row.append("{:d}".format(sum([solution.tc.schedule.app_costs[app] for app in solution.tc.A_app])))
     row.append("{:.2f}".format(solution.bandwidth_used_percentage_total * 100))
     row.append("{:.2f}".format(solution.cpu_used_percentage_total * 100))
     row.append("{:.0f}".format(solution.timing_object.get_optimization_time()))
+    row.append("{:.0f}".format(solution.timing_object.time_first_feasible_solution))
     row.append("{:.0f}".format(solution.timing_object.get_total_time()))
-    row.append("{:d}".format(solution.e2e_delays_total))
-    row.append("{:d}".format(solution.tc.Pint))
-    row.append("{:d}".format(solution.tc.hyperperiod))
+
+
+    row.append("{}/{}".format(solution.infeasible_apps, len(solution.tc.A)))
+    row.append("{:d}".format(solution.total_overlaps_routing))
+    row.append("{:d}".format(solution.total_number_of_stream_that_have_overlap))
 
     columns.append(row)
 
     return pd.DataFrame(
         columns,
         columns=[
-            "Laxity Sum",
+            "Testcase",
+            "Security",
+            "Redundancy",
+            "Method",
+            "# ES",
+            "# Switches",
+            "# Streams",
+            "# Receiver Tasks",
+            "# Tasks",
+            "Total cost",
+            "Routing cost",
+            "Scheduling cost",
+            "Normal application latency",
             "Bandwidth use (Mean,%)",
             "CPU use (Mean,%)",
             "Optimization Time (ms)",
+            "First feasible solution time (ms)",
             "Total Runtime (ms)",
-            "E2E-Delay Sum",
-            "Pint",
-            "Hyperperiod"
+            "Infeasible apps",
+            "Overlapping number",
+            "Stream with overlap"
         ],
     )
 
@@ -377,38 +382,48 @@ def get_solution_results_optimization_status_dataframe(
     return pd.DataFrame(columns, columns=["Routing", "Pint", "Scheduling"])
 
 
-def get_solution_functionpath_dataframe(solution: Solution) -> pd.DataFrame:
+def get_solution_application_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe about functionpaths: columns=["Function Path ID", "Deadline", "Latency", "Laxity"]
+    Returns a dataframe about applications: columns=["ID", "Deadline/Period", "Latency/Cost", "Laxity"]
     """
     columns = []
     row = []
 
-    for fp in solution.tc.FP.values():
+    for app in solution.tc.A.values():
         row = []
-        row.append(fp.id)
+        row.append(app.id)
 
-        row.append(fp.deadline)
+        row.append(app.period)
 
         laxity = -1
         latency = -1
         if solution.tc.schedule != None:
-            if fp.id in solution.tc.schedule.laxities_val:
-                laxity = solution.tc.schedule.laxities_val[fp.id]
-                latency = fp.deadline - laxity
+            if app.id in solution.tc.schedule.app_costs:
+                latency = solution.tc.schedule.app_costs[app.id]
+                laxity = app.period - latency
         row.append(latency)
         row.append(laxity)
         columns.append(row)
 
     return pd.DataFrame(
         columns,
-        columns=["Function Path ID", "Deadline (us)", "Latency (us)", "Laxity (us)"],
+        columns=["ID", "Deadline/Period", "Latency/Cost", "Laxity"],
     )
 
 
-def get_solution_inputparam_info_dataframe(solution: Solution) -> pd.DataFrame:
+def get_solution_parameter_info_dataframe(solution: Solution) -> pd.DataFrame:
     """
-    Returns a dataframe about testcase parameters: columns=["MTU (Byte)", "Frame Overhead (Byte)", "MAC Length (Byte)", "TESLA Key Length (Byte)"]
+    Returns a dataframe about testcase parameters: columns=["MTU (Byte)",
+            "Frame Overhead (Byte)",
+            "MAC Length (Byte)",
+            "TESLA Key Length (Byte)",
+            "Pint (us)",
+            "Hyperperiod (us)",
+            "k",
+            "a",
+            "b",
+            "Timeout Routing (s)",
+            "Timeout Scheduling (s)"]
     """
     columns = []
     row = []
@@ -419,6 +434,20 @@ def get_solution_inputparam_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append(solution.tc.W_mac)
     row.append(solution.tc.key_length)
 
+    row.append(solution.tc.Pint)
+    row.append(solution.tc.hyperperiod)
+    row.append(solution.input_params.k)
+    row.append(solution.input_params.a)
+    row.append(solution.input_params.b)
+
+    if solution.input_params.mode == EMode.SA_ROUTING_SA_SCHEDULING_COMB:
+        row.append("Not applicable")
+    else:
+        row.append(solution.input_params.timeouts.timeout_routing)
+    row.append(solution.input_params.timeouts.timeout_scheduling)
+
+
+
     columns.append(row)
 
     return pd.DataFrame(
@@ -428,6 +457,14 @@ def get_solution_inputparam_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Frame Overhead (Byte)",
             "MAC Length (Byte)",
             "TESLA Key Length (Byte)",
+            "Pint (us)",
+            "Hyperperiod (us)",
+            "k",
+            "a",
+            "b",
+            "Timeout Routing (s)",
+            "Timeout Scheduling (s)"
+
         ],
     )
 
@@ -498,7 +535,9 @@ def get_solution_routing_info_dataframe(solution: Solution) -> pd.DataFrame:
         row = []
 
         row.append(r_info.route.stream.id)
-        row.append(r_info.cost)
+        # TODO: x
+        row.append("TODO")
+        #row.append(r_info.cost)
         row.append(r_info.route_len)
 
         row.append(r_info.overlap_number)
@@ -660,6 +699,7 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
         )
         """
 
+
         block_types = [
             "app_task",
             "key_rel_task",
@@ -682,37 +722,39 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
 
         # Tasks
         for task in solution.tc.T.values():
-            if task.type == ETaskType.NORMAL:
-                index = "app_task"
-            elif task.type == ETaskType.KEY_RELEASE:
-                index = "key_rel_task"
-            elif task.type == ETaskType.KEY_VERIFICATION:
-                index = "key_ver_task"
-            else:
-                index = "INVALID"
+            if task.id in solution.tc.schedule.o_t_val:
+                if task.type == ETaskType.NORMAL:
+                    index = "app_task"
+                elif task.type == ETaskType.KEY_RELEASE:
+                    index = "key_rel_task"
+                elif task.type == ETaskType.KEY_VERIFICATION:
+                    index = "key_ver_task"
+                else:
+                    index = "INVALID"
 
-            for i_period in range(int(solution.tc.hyperperiod / task.period)):
-                offset = (
-                    i_period * task.period + solution.tc.schedule.o_t_val[task.id]
-                )
-                length = task.exec_time
+                for i_period in range(int(solution.tc.hyperperiod / task.period)):
+                    offset = (
+                        i_period * task.period + solution.tc.schedule.o_t_val[task.id]
+                    )
+                    length = task.exec_time
 
-                block_durations[index].append(length)
-                block_hovers[index].append(
-                    "{}\nStart: {}\nEnd: {}".format(task.id, offset, offset + length)
-                )
-                block_linkids[index].append(str(solution.tc.N[task.src_es_id]))
-                block_offsets[index].append(offset)
-                block_texts[index].append(task.id)
+                    block_durations[index].append(length)
+                    block_hovers[index].append(
+                        "{}\nStart: {}\nEnd: {}".format(task.id, offset, offset + length)
+                    )
+                    block_linkids[index].append(str(solution.tc.N[task.src_es_id]))
+                    block_offsets[index].append(offset)
+                    block_texts[index].append(task.id)
 
-            # Streams
-            for l_or_n_id in itertools.chain(
-                solution.tc.L.keys(), solution.tc.N.keys()
-            ):
-                for f in solution.tc.F_routed.values():
-                    if solution.tc.schedule.is_stream_using_link_or_node(
-                        f.id, l_or_n_id
-                    ):
+        # Streams
+        for l_or_n_id in itertools.chain(
+            solution.tc.L.keys(), solution.tc.N.keys()
+        ):
+            for f in solution.tc.F_routed.values():
+                if solution.tc.schedule.is_stream_using_link_or_node(
+                    f.id, l_or_n_id
+                ):
+                    if f.id in solution.tc.schedule.o_f_val[l_or_n_id]:
                         l_or_n = None
                         if l_or_n_id in solution.tc.L:
                             l_or_n = solution.tc.L[l_or_n_id]
@@ -740,7 +782,6 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
                             )
                             block_linkids[index].append(str(l_or_n))
                             block_offsets[index].append(offset)
-
                             block_texts[index].append(f.id)
 
 
@@ -762,7 +803,7 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
                 base=block_offsets[ind],
                 orientation="h",
                 name=ind,
-                textfont=dict(color="white"),
+                textfont=dict(color="white", size=48),
                 text=block_texts[ind],
                 textposition="inside",
                 textangle=0,

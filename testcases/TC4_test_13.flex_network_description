@@ -1,0 +1,50 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<!-- Test case where d=1 is not good-->
+<NetworkDescription mtu="1500" frame_overhead="0" key_length="0" mac_length="0">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW1" type="Switch"/>
+	<device name="SW10" type="Switch"/>
+	<device name="SW2" type="Switch"/>
+	<device name="SW3" type="Switch"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="20"/>
+	<device name="ES10" type="EndSystem" mac_exec_time="20"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="20"/>
+	<device name="ES20" type="EndSystem" mac_exec_time="20"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="ES1" dest="SW1" speed="1.25"/>
+	<link src="SW1" dest="SW2" speed="1.25"/>
+	<link src="SW2" dest="SW3" speed="1.25"/>
+	<link src="SW3" dest="ES2" speed="1.25"/>
+
+	<link src="ES10" dest="SW10" speed="1.25"/>
+	<link src="SW10" dest="ES10" speed="1.25"/>
+	<link src="ES20" dest="SW10" speed="1.25"/>
+	<link src="SW10" dest="ES20" speed="1.25"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="App1" period="1000" type="NORMAL">
+		<tasks>
+			<task name="t1" node="ES1" wcet="100" type="NORMAL"/>
+			<task name="t2" node="ES2" wcet="100" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s1" src="ES1" dest="ES2" sender_task="t1" receiver_tasks="t2" size="125" rl="1" secure="True" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="App2" period="1000" type="NORMAL">
+		<tasks>
+			<task name="t10" node="ES10" wcet="0" type="NORMAL"/>
+			<task name="t20" node="ES20" wcet="0" type="NORMAL"/>
+			<task name="t30" node="ES10" wcet="0" type="NORMAL"/>
+			<task name="t40" node="ES20" wcet="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s10" src="ES10" dest="ES20" sender_task="t10" receiver_tasks="t20" size="0" rl="1" secure="False" type="NORMAL" />
+			<stream name="s20" src="ES20" dest="ES10" sender_task="t20" receiver_tasks="t30" size="0" rl="1" secure="False" type="NORMAL" />
+			<stream name="s30" src="ES10" dest="ES20" sender_task="t30" receiver_tasks="t40" size="0" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+</NetworkDescription>

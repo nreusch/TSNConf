@@ -37,7 +37,7 @@ def _parse_link(n: ET.Element, tc: Testcase):
     tc.add_to_datastructures(l)
 
 
-def _parse_application(n: ET.Element, tc: Testcase, input_params: InputParameters):
+def _parse_application(n: ET.Element, tc: Testcase, redundancy, security):
     app_id = n.attrib["name"]
     app_period = int(n.attrib["period"])
 
@@ -54,18 +54,11 @@ def _parse_application(n: ET.Element, tc: Testcase, input_params: InputParameter
         elif app_node.tag == "streams":
             # Parse STREAMS
             for stream_n in app_node:
-                # We get a list of streams (one copy per RL)
-                s_list = stream.list_from_xml_node(stream_n, tc.T, tc.W_mac, tc.OH, app_id)
+                # We get a list of streams (one copy per RL (except in no_redundancy))
+                s_list = stream.list_from_xml_node(redundancy, security, stream_n, tc.T, tc.W_mac, tc.OH, app_id)
 
                 for s in s_list:
-                    if input_params.no_redundancy:
-                        if s.get_id_prefix() in tc.F_red:
-                            # if no redundancy, skip redundant copies of streams
-                            pass
-                        else:
-                            tc.add_to_datastructures(s)
-                    else:
-                        tc.add_to_datastructures(s)
+                    tc.add_to_datastructures(s)
         else:
             raise NotImplementedError()
 
@@ -86,7 +79,7 @@ def _parse_function_path(n: ET.Element, tc: Testcase):
     tc.add_to_datastructures(fp)
 
 
-def parse_to_model(input_params: InputParameters) -> Testcase:
+def parse_to_model(input_params: InputParameters, redundancy: bool, security: bool) -> Testcase:
     """
     Parses a given testcase file into a testcase object using our model
     """
@@ -127,11 +120,11 @@ def parse_to_model(input_params: InputParameters) -> Testcase:
         elif n.tag == "link":
             _parse_link(n, tc)
         elif n.tag == "application":
-            if "type" in n.attrib and n.attrib["type"] == "KEY" and input_params.no_security:
+            if "type" in n.attrib and n.attrib["type"] == "KEY" and not security:
                 # If no security, don' parse key apps
                 pass
             else:
-                _parse_application(n, tc, input_params)
+                _parse_application(n, tc, redundancy, security)
         elif n.tag == "path":
             _parse_function_path(n, tc)
         elif n.tag == "route":
@@ -140,5 +133,8 @@ def parse_to_model(input_params: InputParameters) -> Testcase:
             _parse_schedule(n, tc)
         else:
             raise NotImplementedError()
+
+    # Finalize
+    tc.highest_communication_depth = max([app.get_communication_depth() for app in tc.A_app.values()])
 
     return tc

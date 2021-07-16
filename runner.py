@@ -17,11 +17,13 @@ def _mode_0(timing_object: TimingData, input_params: InputParameters) -> Solutio
     Mode 0: View/Check the testcase. Doesn't generate/optimize anything
     """
     status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
 
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params)
+        tc = parser.parse_to_model(input_params, security, redundancy)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -30,21 +32,40 @@ def _mode_0(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
     )
 
-    # 2. Create solution object
-    solution_object = Solution(tc, input_params, status_obj, timing_object)
+    # 2. Generate Security applications
+    if security:
+        tc = security_app_generator.run(tc, timing_object)
+        print(
+            "-" * 20
+            + " Created {} Security Applications,  in {:.2f} ms".format(
+                len(tc.A_sec), timing_object.time_creating_secapps
+            )
+        )
+    else:
+        print(
+            "-" * 20
+            + "Skipping generating security applications, because no security wanted"
+        )
+
+    # 3. Create solution object
+    solution_object = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
 
     return solution_object
 
 def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
-    Mode 1: Generate Security Applications, CP Routing, CP Scheduling
+    Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization
     """
     status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
+    allow_overlap = input_params.allow_overlap
+    allow_infeasible_solutions = input_params.allow_infeasible_solutions
 
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params)
+        tc = parser.parse_to_model(input_params, redundancy, security)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -54,7 +75,7 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
     )
 
     # 2. Calculate Pint
-    if not input_params.no_security:
+    if security:
         pint_model = CPPintSolver(tc, timing_object)
         tc, status = pint_model.optimize(input_params, timing_object)
         print(
@@ -65,13 +86,14 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
         status_obj.Pint_status = status
     else:
+        tc.Pint = tc.hyperperiod
         print(
             "-" * 20
             + "Skipping Pint optimization, because no security wanted"
         )
 
     # 3. Generate Security applications
-    if not input_params.no_security:
+    if security:
         tc = security_app_generator.run(tc, timing_object)
         print(
             "-" * 20
@@ -86,7 +108,7 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 5. Find routing
-    routing_model = CPRoutingSolver(tc, timing_object)
+    routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap)
     tc, status = routing_model.optimize(input_params, timing_object)
     print(
         "-" * 20
@@ -95,7 +117,7 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Routing_status = status
 
     # 6. Find scheduling
-    scheduling_model = CPSchedulingSolver(tc, timing_object, input_params)
+    scheduling_model = CPSchedulingSolver(tc, timing_object, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions)
     tc, status = scheduling_model.optimize(input_params, timing_object)
     print(
         "-" * 20
@@ -106,21 +128,22 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 7. Create solution object
-    solution_object = Solution(tc, input_params, status_obj, timing_object)
+    solution_object = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
 
     return solution_object
 
-
-def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solution:
+def _mode_11(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
-    Mode 2: CP Scheduling
+    Mode 21: SA Routing, ASAP Scheduling, Security, Redundancy, Optimization
     """
     status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
 
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params)
+        tc = parser.parse_to_model(input_params, security, redundancy)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -130,61 +153,7 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     )
 
     # 2. Calculate Pint
-    if not input_params.no_security:
-        pint_model = CPPintSolver(tc, timing_object)
-        tc, status = pint_model.optimize(input_params, timing_object)
-        print(
-            "-" * 20
-            + " Found Pint: {},  in {:.2f} ms".format(
-                tc.Pint, timing_object.time_optimizing_pint
-            )
-        )
-        status_obj.Pint_status = status
-    else:
-        print(
-            "-" * 20
-            + "Skipping Pint optimization, because no security wanted"
-        )
-
-    # Don't optimize routing
-    status_obj.Routing_status = EOptimizationStatus.NOT_OPTIMIZED
-
-    # 6. Find scheduling
-    scheduling_model = CPSchedulingSolver(tc, timing_object, input_params)
-    schedule, status = scheduling_model.optimize(input_params, timing_object)
-    print(
-        "-" * 20
-        + " Found Schedule in {:.2f} ms".format(
-            timing_object.time_optimizing_scheduling
-        )
-    )
-    status_obj.Scheduling_status = status
-
-    # 7. Create solution object
-    solution_object = Solution(tc, input_params, status_obj, timing_object)
-
-    return solution_object
-
-def _mode_3(timing_object: TimingData, input_params: InputParameters) -> Solution:
-    """
-    Mode 1: Generate Security Applications, Generate Stream, SA Routing, SA Scheduling
-    """
-    status_obj = StatusObject()
-
-    # 1. Parse the given testcase
-    t = Timer()
-    with t:
-        tc = parser.parse_to_model(input_params)
-    timing_object.time_parsing = t.elapsed_time
-    print(
-        "-" * 20
-        + " Parsed testcase: {}, in {:.2f} ms".format(
-            input_params.tc_name, timing_object.time_parsing
-        )
-    )
-
-    # 2. Calculate Pint
-    if not input_params.no_security:
+    if security:
         pint_model = CPPintSolver(tc, timing_object)
         tc, status = pint_model.optimize(input_params, timing_object)
         print(
@@ -201,7 +170,7 @@ def _mode_3(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 3. Generate Security applications
-    if not input_params.no_security:
+    if security:
         tc = security_app_generator.run(tc, timing_object)
         print(
             "-" * 20
@@ -216,7 +185,7 @@ def _mode_3(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 4. Find routing (SA)
-    routing_solver = SARoutingSolver(tc, timing_object)
+    routing_solver = SARoutingSolver(tc, timing_object, input_params.k, input_params.a)
     tc, status = routing_solver.optimize(input_params, timing_object)
     print(
         "-" * 20
@@ -225,7 +194,7 @@ def _mode_3(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Routing_status = status
 
     # 5. Find scheduling (SA)
-    scheduling_model = SASchedulingSolver(tc, timing_object)
+    scheduling_model = SASchedulingSolver(tc, timing_object, input_params)
     tc, status = scheduling_model.optimize(input_params, timing_object, SAOptimizationMode.SEPERATED_NO_SA)
     print(
         "-" * 20
@@ -236,20 +205,22 @@ def _mode_3(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 6. Create solution object
-    solution_object = Solution(tc, input_params, status_obj, timing_object)
+    solution_object = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
 
     return solution_object
 
-def _mode_4(timing_object: TimingData, input_params: InputParameters) -> Solution:
+def _mode_12(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
-    Mode 4: Generate Security Applications,  SA Routing, SA Scheduling (Seperated)
+    Mode 22: SA Routing, SA Scheduling, Security, Redundancy, Optimization
     """
     status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
 
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params)
+        tc = parser.parse_to_model(input_params, security, redundancy)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -259,7 +230,7 @@ def _mode_4(timing_object: TimingData, input_params: InputParameters) -> Solutio
     )
 
     # 2. Calculate Pint
-    if not input_params.no_security:
+    if security:
         pint_model = CPPintSolver(tc, timing_object)
         tc, status = pint_model.optimize(input_params, timing_object)
         print(
@@ -276,7 +247,7 @@ def _mode_4(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 3. Generate Security applications
-    if not input_params.no_security:
+    if security:
         tc = security_app_generator.run(tc, timing_object)
         print(
             "-" * 20
@@ -291,7 +262,7 @@ def _mode_4(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 4. Find routing (SA)
-    routing_solver = SARoutingSolver(tc, timing_object)
+    routing_solver = SARoutingSolver(tc, timing_object, input_params.k, input_params.a)
     tc, status = routing_solver.optimize(input_params, timing_object)
     print(
         "-" * 20
@@ -300,7 +271,7 @@ def _mode_4(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Routing_status = status
 
     # 5. Find scheduling (SA)
-    scheduling_model = SASchedulingSolver(tc, timing_object)
+    scheduling_model = SASchedulingSolver(tc, timing_object, input_params)
     tc, status = scheduling_model.optimize(input_params, timing_object, SAOptimizationMode.SEPERATED_SA)
     print(
         "-" * 20
@@ -311,20 +282,22 @@ def _mode_4(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 6. Create solution object
-    solution_object = Solution(tc, input_params, status_obj, timing_object)
+    solution_object = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
 
     return solution_object
 
-def _mode_5(timing_object: TimingData, input_params: InputParameters) -> Solution:
+def _mode_13(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
-    Mode 5: Generate Security Applications,  SA Routing, ASAP Scheduling (Combined)
+    Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization
     """
     status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
 
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params)
+        tc = parser.parse_to_model(input_params, security, redundancy)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -334,7 +307,7 @@ def _mode_5(timing_object: TimingData, input_params: InputParameters) -> Solutio
     )
 
     # 2. Calculate Pint
-    if not input_params.no_security:
+    if security:
         pint_model = CPPintSolver(tc, timing_object)
         tc, status = pint_model.optimize(input_params, timing_object)
         print(
@@ -351,7 +324,7 @@ def _mode_5(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 3. Generate Security applications
-    if not input_params.no_security:
+    if security:
         tc = security_app_generator.run(tc, timing_object)
         print(
             "-" * 20
@@ -366,7 +339,7 @@ def _mode_5(timing_object: TimingData, input_params: InputParameters) -> Solutio
         )
 
     # 4. Find scheduling & routing (SA)
-    scheduling_model = SASchedulingSolver(tc, timing_object)
+    scheduling_model = SASchedulingSolver(tc, timing_object, input_params)
     tc, status = scheduling_model.optimize(input_params, timing_object, SAOptimizationMode.COMBINED_SA)
     print(
         "-" * 20
@@ -377,7 +350,7 @@ def _mode_5(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 5. Create solution object
-    solution_object = Solution(tc, input_params, status_obj, timing_object)
+    solution_object = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
 
     return solution_object
 
@@ -386,15 +359,13 @@ def run_mode(
 ) -> Solution:
     if mode is EMode.VIEW:
         return _mode_0(timing_object, input_params)
-    elif mode is EMode.ALL_CP_ROUTING_AND_SECURITY:
+    elif mode is EMode.CP_ROUTING_CP_SCHEDULING:
         return _mode_1(timing_object, input_params)
-    elif mode is EMode.ONLY_CP_SCHEDULING:
-        return _mode_2(timing_object, input_params)
-    elif mode is EMode.HEURISTIC_ROUTING_1_AND_SECURITY:
-        return _mode_3(timing_object, input_params)
-    elif mode is EMode.HEURISTIC_ROUTING_2_AND_SECURITY:
-        return _mode_4(timing_object, input_params)
-    elif mode is EMode.HEURISTIC_ROUTING_3_AND_SECURITY:
-        return _mode_5(timing_object, input_params)
+    elif mode is EMode.SA_ROUTING_ASAP_SCHEDULING:
+        return _mode_11(timing_object, input_params)
+    elif mode is EMode.SA_ROUTING_SA_SCHEDULING:
+        return _mode_12(timing_object, input_params)
+    elif mode is EMode.SA_ROUTING_SA_SCHEDULING_COMB:
+        return _mode_13(timing_object, input_params)
     else:
         raise ValueError(f"Mode {mode} is not supported")

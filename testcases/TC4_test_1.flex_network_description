@@ -11,13 +11,14 @@
 	<link src="SW1" dest="ES2" speed="1.25"/>
 
 	<!-- period&wcet is in us, size in Byte-->
+
 	<application name="App1" period="1000" type="NORMAL">
 		<tasks>
 			<task name="t1" node="ES1" wcet="100" type="NORMAL"/>
 			<task name="t2" node="ES2" wcet="100" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s1" src="ES1" dest="ES2" sender_task="t1" receiver_tasks="t2" size="50" period="1000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s1" src="ES1" dest="ES2" sender_task="t1" receiver_tasks="t2" size="50" period="1000" rl="2" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 

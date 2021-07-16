@@ -1,0 +1,22 @@
+Column1;Column2;Column3;Column11;Column12;Column13;Column14;Column15;Column16;Column17
+;Testcase;Method;Total cost;Routing cost;Scheduling cost;Normal app latency;Bandwidth use (Mean,%);CPU use (Mean,%);Optimization Time (ms)
+0;TC0_example;Both;467;16;451;405;2.46;14.00;319
+0;TC0_example;Security only;451;10;441;395;1.54;13.25;138
+0;TC0_example;Redundancy only;334;8;326;326;2.09;10.00;189
+0;TC0_example;None;331;5;326;326;1.30;10.00;90
+0;TC2_zhao_case_study;Both;3721;30;3691;3537;1.47;19.30;112767
+0;TC2_zhao_case_study;Security only;3744;23;3721;3567;1.04;19.22;258642
+0;TC2_zhao_case_study;Redundancy only;3275;24;3251;3251;0.64;18.59;44313
+0;TC2_zhao_case_study;None;3320;19;3301;3301;0.50;18.59;30745
+0;tiny3;Both;5463;12;5451;5417;0.02;6.83;3131
+0;tiny3;Security only;5439;8;5431;5397;0.02;6.78;463
+0;tiny3;Redundancy only;5292;6;5286;5286;0.02;6.53;184
+0;tiny3;None;5290;4;5286;5286;0.02;6.53;235
+0;small3;Both;18954;30;18924;18906;0.01;15.50;1804915
+0;small3;Security only;18778;16;18762;18745;0.01;15.48;1801937
+0;small3;Redundancy only;18745;20;18725;18725;0.01;15.41;1801762
+0;small3;None;18738;13;18725;18725;0.01;15.41;1801362
+0;medium3;Both;17747;36;17711;17692;0.01;8.99;1804455
+0;medium3;Security only;17724;27;17697;17678;0.01;8.98;1803555
+0;medium3;Redundancy only;16872;24;16848;16848;0.01;8.90;1804470
+0;medium3;None;16708;21;16687;16687;0.01;8.90;1802790

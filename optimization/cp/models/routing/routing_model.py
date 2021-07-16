@@ -24,7 +24,7 @@ def weight(v_int, x_v_val):
 
 
 class CPRoutingSolver:
-    def __init__(self, tc: Testcase, timing_object: TimingData):
+    def __init__(self, tc: Testcase, timing_object: TimingData, redundancy: bool, allow_overlap: bool):
         self.tc = tc
         # Create the model
         self.model = CpModel()
@@ -42,7 +42,7 @@ class CPRoutingSolver:
         # Add constraints to model
         t = Timer()
         with t:
-            routing_model_constraints.add_constraints(self)
+            routing_model_constraints.add_constraints(self, redundancy, allow_overlap)
 
             # Add optimization goal
             routing_model_goals.add_optimization_goal(self)
@@ -152,7 +152,7 @@ class CPRoutingSolver:
                 mt.init_from_x_res_vector(x_res[f.id])
                 self.tc.add_to_datastructures(mt)
 
-                r_info = route_info(mt, costs[f.id], route_lens[f.id], overlap_amounts[f.id], overlap_links[f.id])
+                r_info = route_info(mt, route_lens[f.id], overlap_amounts[f.id], overlap_links[f.id])
                 self.tc.add_to_datastructures(r_info)
         else:
             raise ValueError(

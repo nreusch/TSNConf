@@ -50,7 +50,7 @@ class application:
 
         self._update_roots_and_leafs()
 
-    def add_edges(self, s: stream):
+    def add_edges(self, s: stream, tc):
         for dest_task_id in s.receiver_task_ids:
             if s.id not in self.edges:
                 self.edges[s.id] = [(s.sender_task_id, dest_task_id)]
@@ -65,9 +65,17 @@ class application:
             else:
                 self.edges_from_nodes[s.sender_task_id][dest_task_id].append(s.id)
 
-            self._DAG.add_edge(s.sender_task_id, dest_task_id)
+            # Weigh edges for self-streams as 0, so it is easy to determine the communication depth
+            if tc.T[s.sender_task_id].src_es_id != tc.T[dest_task_id].src_es_id:
+                self._DAG.add_edge(s.sender_task_id, dest_task_id, weight=1)
+            else:
+                self._DAG.add_edge(s.sender_task_id, dest_task_id, weight=0)
 
         self._update_roots_and_leafs()
+
+    def get_communication_depth(self):
+        # Weigh edges for self-streams as 0, so it is easy to determine the communication depth
+        return nx.dag_longest_path_length(self._DAG)
 
     def get_stream_id_list_from_x_to_y(self, x: str, y: str) -> List[str]:
         return self.edges_from_nodes[x][y]
