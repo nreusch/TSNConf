@@ -138,7 +138,7 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     parser.add_argument(
         "--alpha",
         default=0.999,
-        type=int,
+        type=float,
         help="alpha: Cooling factor for SA  metaheuristic (Default: 0.999)",
     )
 
