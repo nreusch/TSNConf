@@ -128,6 +128,7 @@ class SASchedulingSolver:
     def _solve_seperated_sa(self, timeout: int):
         Tstart = 1
         alpha = 0.999
+        temp_reset = False
 
         s_i = self._initial_solution_schedule()
         s_best = s_i
@@ -154,7 +155,15 @@ class SASchedulingSolver:
                     best_cost = new_cost
                     print(f"NEW BEST COST: {str(best_cost)}; INFEASIBLE TGN: {infeasible_tgn}; ORDER: {s_best.order[1]}; TEMP: {temp}")
 
-            temp = temp * alpha
+
+            if not temp_reset:
+                oldtemp = temp
+                temp = temp * alpha
+                print(temp)
+                if temp == 0:
+                    temp = oldtemp
+                    print(f"WARNING: Temperature reached zero due to float limitations. Resetting to prev temp")
+                    temp_reset = True
             step += 1
 
         return s_best
@@ -163,6 +172,7 @@ class SASchedulingSolver:
         Tstart = input_params.Tstart
         alpha = input_params.alpha
         SCHEDULING_MOVE_PROBABILITY = 1 - input_params.Prmv
+        temp_reset = False
 
         s_i = (routingSolver._initial_solution(), self._initial_solution_schedule())
         s_best = s_i
@@ -201,7 +211,13 @@ class SASchedulingSolver:
                         f"NEW BEST COST: {best_cost}; INFEASIBLE TGA: {infeasible_tgn}; ROUTING COST: {routing_cost}; TEMP: {temp}\n")
                     #print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
 
-            temp = temp * alpha
+            if not temp_reset:
+                oldtemp = temp
+                temp = temp * alpha
+                if temp == 0:
+                    temp = oldtemp
+                    print(f"WARNING: Temperature reached zero due to float limitations. Resetting to prev temp")
+                    temp_reset = True
             step += 1
 
         return s_best[0], s_best[1]
