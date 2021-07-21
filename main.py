@@ -128,6 +128,27 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
         help="b: Weight for infeasible stream component of cost function (Default: 1000)",
     )
 
+    parser.add_argument(
+        "--Tstart",
+        default=10,
+        type=int,
+        help="Tstart: Start temperature for SA metaheuristic (Default: 10)",
+    )
+
+    parser.add_argument(
+        "--alpha",
+        default=0.999,
+        type=int,
+        help="alpha: Cooling factor for SA  metaheuristic (Default: 0.999)",
+    )
+
+    parser.add_argument(
+        "--Prmv",
+        default=0.8,
+        type=float,
+        help="Prmv: Probability of a routing move for SA metaheuristic (Default: 0.8)",
+    )
+
     results = parser.parse_args()
 
     input_param_list = []
@@ -160,7 +181,10 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     k = results.k
     a = results.a
     b = results.b
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b))
+    Tstart = results.Tstart
+    alpha = results.alpha
+    Prmv = results.Prmv
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b, Tstart, alpha, Prmv))
 
     return input_param_list, Path(results.testcase_path)
 

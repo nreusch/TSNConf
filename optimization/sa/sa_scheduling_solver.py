@@ -159,14 +159,15 @@ class SASchedulingSolver:
 
         return s_best
 
-    def _solve_combined_sa(self, routingSolver: SARoutingSolver, timing_object: TimingData, timeout: int, a: int):
-        Tstart = 10
-        alpha = 0.999
-        SCHEDULING_MOVE_PROBABILITY = 0.2
+    def _solve_combined_sa(self, routingSolver: SARoutingSolver, timing_object: TimingData, input_params: InputParameters):
+        Tstart = input_params.Tstart
+        alpha = input_params.alpha
+        SCHEDULING_MOVE_PROBABILITY = 1 - input_params.Prmv
 
         s_i = (routingSolver._initial_solution(), self._initial_solution_schedule())
         s_best = s_i
-        best_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_best, a)
+        best_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_best, input_params.a)
+        print(f"Running SA-Combined-Metaheuristic: Tstart {Tstart}, alpha {alpha}, Prmv {input_params.Prmv}, k {input_params.k}, a {input_params.a}, b {input_params.b}")
         print(f"INITIAL COST: {best_cost}; INFEASIBLE TGA: {infeasible_tgn}; ROUTING COST: {routing_cost}\n")
         #print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
         # print_simple_solution(s_i, index_to_core_map)
@@ -177,10 +178,10 @@ class SASchedulingSolver:
 
         first_feasible_time = -1
         start = time.time()
-        while time.time() - start < timeout:
+        while time.time() - start < input_params.timeouts.timeout_scheduling:
             s = self._random_neighbour_combined(s_i, routingSolver, SCHEDULING_MOVE_PROBABILITY)
-            old_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_i, a)
-            new_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s, a)
+            old_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_i, input_params.a)
+            new_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s, input_params.a)
 
             if infeasible_tgn == 0 and overlap_amount == 0 and first_feasible_time == -1:
                 first_feasible_time = time.time() - start
@@ -219,7 +220,7 @@ class SASchedulingSolver:
                 schedule_solution = self._solve_seperated_sa(input_params.timeouts.timeout_scheduling)
             elif mode == SAOptimizationMode.COMBINED_SA:
                 routingSolver = SARoutingSolver(self.tc, timing_object, input_params.k, input_params.a)
-                routing_solution, schedule_solution = self._solve_combined_sa(routingSolver, timing_object, input_params.timeouts.timeout_scheduling, input_params.a)
+                routing_solution, schedule_solution = self._solve_combined_sa(routingSolver, timing_object, input_params)
             else:
                 raise ValueError
         timing_object.time_optimizing_scheduling = t.elapsed_time
