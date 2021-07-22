@@ -249,6 +249,7 @@ class SASchedulingSolver:
             for r_info in R_info.values():
                 self.tc.add_to_datastructures(r_info)
         _, infeasible_tga, output_schedule = self._cost_scheduling(schedule_solution)
+        print(f"Result for ParamILS: SAT, <runtime>, <runlength>, <best sol>,  <seed>")
 
         self.tc.schedule = schedule.from_heuristic_schedule_and_task_graph(output_schedule, self.prec_graph, self.tc, infeasible_tga)
         return self.tc, status

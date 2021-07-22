@@ -330,6 +330,10 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:.0f}".format(solution.timing_object.time_first_feasible_solution))
     row.append("{:.0f}".format(solution.timing_object.get_total_time()))
 
+    row.append("{:d}".format(solution.input_params.Tstart))
+    row.append("{:.0f}".format(solution.input_params.alpha))
+    row.append("{:.0f}".format(solution.input_params.Prmv))
+
 
     row.append("{}/{}".format(solution.infeasible_apps, len(solution.tc.A)))
     row.append("{:d}".format(solution.total_overlaps_routing))
@@ -360,7 +364,10 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Total Runtime (ms)",
             "Infeasible apps",
             "Overlapping number",
-            "Stream with overlap"
+            "Stream with overlap",
+            "Tstart",
+            "alpha",
+            "Prmv"
         ],
     )
 
