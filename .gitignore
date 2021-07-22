@@ -6,3 +6,5 @@ testcases/output/
 .venv_ubuntu/
 .venvubuntu/
 .ipynb_checkpoints/
+*.csv
+out_*.txt
