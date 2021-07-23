@@ -334,8 +334,8 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.total_number_of_stream_that_have_overlap))
 
     row.append("{:d}".format(solution.input_params.Tstart))
-    row.append("{:.0f}".format(solution.input_params.alpha))
-    row.append("{:.0f}".format(solution.input_params.Prmv))
+    row.append("{:.2f}".format(solution.input_params.alpha))
+    row.append("{:.2f}".format(solution.input_params.Prmv))
 
     columns.append(row)
 
