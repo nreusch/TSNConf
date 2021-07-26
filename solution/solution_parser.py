@@ -324,7 +324,7 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.cost_routing))
     row.append("{:d}".format(solution.cost_scheduling))
     if solution.tc.schedule != None:
-        row.append("{:d}".format(sum([solution.tc.schedule.app_costs[app] for app in solution.tc.A_app])))
+        row.append("{:d}".format(sum([solution.tc.schedule.app_costs[app] for app in solution.tc.A_app if app in solution.tc.schedule.app_costs])))
     else:
         row.append("/")
     row.append("{:.2f}".format(solution.bandwidth_used_percentage_total * 100))
