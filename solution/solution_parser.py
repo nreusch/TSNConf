@@ -323,7 +323,10 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.cost_total))
     row.append("{:d}".format(solution.cost_routing))
     row.append("{:d}".format(solution.cost_scheduling))
-    row.append("{:d}".format(sum([solution.tc.schedule.app_costs[app] for app in solution.tc.A_app])))
+    if solution.tc.schedule != None:
+        row.append("{:d}".format(sum([solution.tc.schedule.app_costs[app] for app in solution.tc.A_app])))
+    else:
+        row.append("/")
     row.append("{:.2f}".format(solution.bandwidth_used_percentage_total * 100))
     row.append("{:.2f}".format(solution.cpu_used_percentage_total * 100))
     row.append("{:.0f}".format(solution.timing_object.get_optimization_time()))

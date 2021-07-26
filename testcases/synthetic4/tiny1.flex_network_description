@@ -29,26 +29,33 @@
 	<link src="SW1" dest="ES3" speed="125.00"/>
 
 	<!-- period&wcet is in us, size in Byte-->
-	<application name="app00" period="5000" type="NORMAL">
+	<application name="app00" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t_app00_0" node="ES3" wcet="69" period="5000" type="NORMAL"/>
+			<task name="t-app00-2" node="ES3" wcet="770" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
 	</application>
 	
-	<application name="app01" period="5000" type="NORMAL">
+	<application name="app01" period="15000" type="NORMAL">
 		<tasks>
-			<task name="t_app01_2" node="ES2" wcet="152" period="5000" type="NORMAL"/>
-			<task name="t_app01_1" node="ES3" wcet="40" period="5000" type="NORMAL"/>
-			<task name="t_app01_5" node="ES3" wcet="89" period="5000" type="NORMAL"/>
-			<task name="t_app01_6" node="ES2" wcet="143" period="5000" type="NORMAL"/>
-			<task name="t_app01_3" node="ES0" wcet="119" period="5000" type="NORMAL"/>
-			<task name="t_app01_4" node="ES3" wcet="4" period="5000" type="NORMAL"/>
+			<task name="t-app01-3" node="ES2" wcet="1091" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s_t_app01" src="ES2" dest="ES3,ES3" sender_task="t_app01_2" receiver_tasks="t_app01_1,t_app01_5" size="1449" period="5000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
+	
+	<application name="app02" period="10000" type="NORMAL">
+		<tasks>
+			<task name="t-app02-1" node="ES2" wcet="375" period="10000" type="NORMAL"/>
+			<task name="t-app02-0" node="ES3" wcet="287" period="10000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s-t-app02-1" src="ES2" dest="ES3" sender_task="t-app02-1" receiver_tasks="t-app02-0" size="607" period="10000" rl="1" secure="True" type="NORMAL" />
+		</streams>
+	</application>
+	
+
+
 
 </NetworkDescription>

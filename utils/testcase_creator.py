@@ -117,8 +117,25 @@ def create_testcase(config, path):
 if __name__ == "__main__":
     # Create and run
     # OUTDATED
-    config = testcase_generation_config()
-    path = create_testcase(config, Path("../testcases/synthetic/" + config.name + ".flex_network_description"))
-    print(path)
-    solution_object = main.run(InputParameters(EMode.VIEW, Timeouts(0, 0, 0), path, True, "", 8050, False, False, False))
-    dash_outputter.run(solution_object)
+    tc_name = ["huge1", "huge2", "huge3"]
+    nr_sws = [32, 32, 32]
+    nr_tasks = [100, 125, 150]
+
+    for i in range(3):
+        config = testcase_generation_config()
+
+        config.nr_sw = nr_sws[i]
+        config.stream_max_rl = min(config.nr_sw, 3)
+        config.nr_es = config.nr_sw * 2
+        config.connections_per_sw = min(config.nr_sw - 1, 4)
+        config.connections_per_es = min(config.nr_sw, config.stream_max_rl)
+
+        # 1500 Byte = 12us
+        config.periods = [10000, 15000, 20000, 50000]
+        config.max_task_period_percentage = 0.08
+        config.app_task_connection_probability = 0.6
+        config.nr_tasks = nr_tasks[i]
+        config.nr_dags = (config.nr_tasks // 8) + 1
+
+        config.name = tc_name[i]
+        path = create_testcase(config, Path("testcases/synthetic4/" + config.name + ".flex_network_description"))
