@@ -363,7 +363,7 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Routing cost",
             "Scheduling cost",
             "Normal application latency",
-            "Infeasible Apps"
+            "Infeasible Apps",
             "Bandwidth use (Mean,%)",
             "CPU use (Mean,%)",
             "Optimization Time (ms)",
