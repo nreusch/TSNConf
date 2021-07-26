@@ -49,7 +49,7 @@ class testcase_generation_config:
         self.max_multicast_count = 3
 
         self.stream_max_size = 1500
-        self.stream_max_rl = 3
+        self.stream_max_rl = 2
         self.stream_secure_chance = 0.3
 
         self.name = "name"

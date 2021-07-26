@@ -54,17 +54,49 @@ class SARoutingSolver:
             g.add_edge(l.src.id, l.dest.id)
 
         # For each stream, for each sender ES, receiver ES pair, add k-shortest-paths as possibilities
+        s_prefixes = {}
         for s in self.tc.F_routed.values():
-            self.possible_paths[s.id] = {}
 
-            for es_recv_id in s.receiver_es_ids:
-                excluded_es = set(self.tc.ES.keys())
-                excluded_es.difference_update({s.sender_es_id, es_recv_id})
-                k_shortest_paths = list(
-                    islice(shortest_simple_paths_patched(g, s.sender_es_id, es_recv_id, ignore_nodes_init=excluded_es), k)
-                )
+            if s.get_id_prefix() not in s_prefixes:
+                # First stream
+                self.possible_paths[s.id] = {}
 
-                self.possible_paths[s.id][es_recv_id] = k_shortest_paths
+                for es_recv_id in s.receiver_es_ids:
+                    excluded_es = set(self.tc.ES.keys())
+                    excluded_es.difference_update({s.sender_es_id, es_recv_id})
+                    k_shortest_paths = list(
+                        islice(shortest_simple_paths_patched(g, s.sender_es_id, es_recv_id, ignore_nodes_init=excluded_es), k)
+                    )
+
+                    self.possible_paths[s.id][es_recv_id] = k_shortest_paths
+                s_prefixes[s.get_id_prefix()] = [self.possible_paths[s.id]]
+            else:
+                # Redundant copy
+                self.possible_paths[s.id] = {}
+
+                for es_recv_id in s.receiver_es_ids:
+                    excluded_es = set(self.tc.ES.keys())
+                    excluded_es.difference_update({s.sender_es_id, es_recv_id})
+
+                    # exclude first and last link of redundant copies paths
+                    excluded_links = set()
+
+                    for ppath in s_prefixes[s.get_id_prefix()]:
+                        excluded_links.add((ppath[es_recv_id][0][0], ppath[es_recv_id][0][1]))
+                        excluded_links.add((ppath[es_recv_id][0][-2], ppath[es_recv_id][0][-1]))
+
+                    try:
+                        k_shortest_paths = list(
+                            islice(
+                                shortest_simple_paths_patched(g, s.sender_es_id, es_recv_id, ignore_nodes_init=excluded_es, ignore_edges_init=excluded_links),
+                                k)
+                        )
+                    except nx.exception.NetworkXNoPath:
+                        k_shortest_paths = s_prefixes[s.get_id_prefix()][0][es_recv_id]
+
+                    self.possible_paths[s.id][es_recv_id] = k_shortest_paths
+                s_prefixes[s.get_id_prefix()].append(self.possible_paths[s.id])
+
 
     def _initial_solution(self) -> SARoutingSolution:
         selected_paths = {}
