@@ -336,6 +336,9 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.input_params.Tstart))
     row.append("{}".format(solution.input_params.alpha))
     row.append("{}".format(solution.input_params.Prmv))
+    row.append("{}".format(solution.input_params.k))
+    row.append("{}".format(solution.input_params.a))
+    row.append("{}".format(solution.input_params.b))
 
     columns.append(row)
 
@@ -365,7 +368,10 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Stream with overlap",
             "Tstart",
             "alpha",
-            "Prmv"
+            "Prmv",
+            "k",
+            "a",
+            "b"
         ],
     )
 
