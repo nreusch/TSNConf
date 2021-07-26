@@ -325,7 +325,9 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.cost_scheduling))
     if solution.tc.schedule != None:
         row.append("{:d}".format(sum([solution.tc.schedule.app_costs[app] for app in solution.tc.A_app if app in solution.tc.schedule.app_costs])))
+        row.append("{}".format("+".join([app for app in solution.tc.A_app if app not in solution.tc.schedule.app_costs])))
     else:
+        row.append("/")
         row.append("/")
     row.append("{:.2f}".format(solution.bandwidth_used_percentage_total * 100))
     row.append("{:.2f}".format(solution.cpu_used_percentage_total * 100))
@@ -361,6 +363,7 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Routing cost",
             "Scheduling cost",
             "Normal application latency",
+            "Infeasible Apps"
             "Bandwidth use (Mean,%)",
             "CPU use (Mean,%)",
             "Optimization Time (ms)",

@@ -15,42 +15,47 @@
 	<device name="ES7" type="EndSystem" mac_exec_time="10"/>
 
 	<!-- Links are directional. speed = byte/us -->
-	<link src="ES0" dest="SW1" speed="125.00"/>
+	<link src="ES0" dest="SW0" speed="125.00"/>
 	<link src="ES0" dest="SW2" speed="125.00"/>
 	<link src="ES0" dest="SW3" speed="125.00"/>
+	<link src="ES1" dest="SW0" speed="125.00"/>
 	<link src="ES1" dest="SW1" speed="125.00"/>
 	<link src="ES1" dest="SW2" speed="125.00"/>
-	<link src="ES1" dest="SW3" speed="125.00"/>
 	<link src="ES2" dest="SW0" speed="125.00"/>
 	<link src="ES2" dest="SW1" speed="125.00"/>
 	<link src="ES2" dest="SW3" speed="125.00"/>
+	<link src="ES3" dest="SW0" speed="125.00"/>
 	<link src="ES3" dest="SW1" speed="125.00"/>
 	<link src="ES3" dest="SW2" speed="125.00"/>
-	<link src="ES3" dest="SW3" speed="125.00"/>
-	<link src="ES4" dest="SW1" speed="125.00"/>
+	<link src="ES4" dest="SW0" speed="125.00"/>
 	<link src="ES4" dest="SW2" speed="125.00"/>
 	<link src="ES4" dest="SW3" speed="125.00"/>
+	<link src="ES5" dest="SW0" speed="125.00"/>
 	<link src="ES5" dest="SW1" speed="125.00"/>
 	<link src="ES5" dest="SW2" speed="125.00"/>
-	<link src="ES5" dest="SW3" speed="125.00"/>
+	<link src="ES6" dest="SW0" speed="125.00"/>
 	<link src="ES6" dest="SW1" speed="125.00"/>
 	<link src="ES6" dest="SW2" speed="125.00"/>
-	<link src="ES6" dest="SW3" speed="125.00"/>
+	<link src="ES7" dest="SW0" speed="125.00"/>
 	<link src="ES7" dest="SW1" speed="125.00"/>
 	<link src="ES7" dest="SW2" speed="125.00"/>
-	<link src="ES7" dest="SW3" speed="125.00"/>
 	<link src="SW0" dest="SW1" speed="125.00"/>
 	<link src="SW0" dest="SW3" speed="125.00"/>
 	<link src="SW0" dest="SW2" speed="125.00"/>
+	<link src="SW0" dest="ES0" speed="125.00"/>
+	<link src="SW0" dest="ES1" speed="125.00"/>
 	<link src="SW0" dest="ES2" speed="125.00"/>
+	<link src="SW0" dest="ES3" speed="125.00"/>
+	<link src="SW0" dest="ES4" speed="125.00"/>
+	<link src="SW0" dest="ES5" speed="125.00"/>
+	<link src="SW0" dest="ES6" speed="125.00"/>
+	<link src="SW0" dest="ES7" speed="125.00"/>
 	<link src="SW1" dest="SW0" speed="125.00"/>
-	<link src="SW1" dest="SW3" speed="125.00"/>
 	<link src="SW1" dest="SW2" speed="125.00"/>
-	<link src="SW1" dest="ES0" speed="125.00"/>
+	<link src="SW1" dest="SW3" speed="125.00"/>
 	<link src="SW1" dest="ES1" speed="125.00"/>
 	<link src="SW1" dest="ES2" speed="125.00"/>
 	<link src="SW1" dest="ES3" speed="125.00"/>
-	<link src="SW1" dest="ES4" speed="125.00"/>
 	<link src="SW1" dest="ES5" speed="125.00"/>
 	<link src="SW1" dest="ES6" speed="125.00"/>
 	<link src="SW1" dest="ES7" speed="125.00"/>
@@ -68,33 +73,41 @@
 	<link src="SW3" dest="SW1" speed="125.00"/>
 	<link src="SW3" dest="SW2" speed="125.00"/>
 	<link src="SW3" dest="ES0" speed="125.00"/>
-	<link src="SW3" dest="ES1" speed="125.00"/>
 	<link src="SW3" dest="ES2" speed="125.00"/>
-	<link src="SW3" dest="ES3" speed="125.00"/>
 	<link src="SW3" dest="ES4" speed="125.00"/>
-	<link src="SW3" dest="ES5" speed="125.00"/>
-	<link src="SW3" dest="ES6" speed="125.00"/>
-	<link src="SW3" dest="ES7" speed="125.00"/>
 
 	<!-- period&wcet is in us, size in Byte-->
 	<application name="app00" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app00-2" node="ES6" wcet="497" period="50000" type="NORMAL"/>
-			<task name="t-app00-0" node="ES7" wcet="875" period="50000" type="NORMAL"/>
-			<task name="t-app00-1" node="ES6" wcet="2966" period="50000" type="NORMAL"/>
-			<task name="t-app00-3" node="ES4" wcet="2153" period="50000" type="NORMAL"/>
-			<task name="t-app00-5" node="ES7" wcet="3198" period="50000" type="NORMAL"/>
-			<task name="t-app00-4" node="ES4" wcet="3788" period="50000" type="NORMAL"/>
+			<task name="t-app00-0" node="ES5" wcet="49" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app00-2" src="ES6" dest="ES7,ES4,ES7" sender_task="t-app00-2" receiver_tasks="t-app00-0,t-app00-3,t-app00-5" size="378" period="50000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app00-4" src="ES4" dest="ES7,ES6" sender_task="t-app00-4" receiver_tasks="t-app00-0,t-app00-1" size="506" period="50000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
-	<application name="app10" period="50000" type="NORMAL">
+	<application name="app01" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app10-0" node="ES6" wcet="3249" period="50000" type="NORMAL"/>
+			<task name="t-app01-1" node="ES7" wcet="246" period="50000" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="app02" period="50000" type="NORMAL">
+		<tasks>
+			<task name="t-app02-5" node="ES2" wcet="2331" period="50000" type="NORMAL"/>
+			<task name="t-app02-2" node="ES3" wcet="1286" period="50000" type="NORMAL"/>
+			<task name="t-app02-3" node="ES0" wcet="1565" period="50000" type="NORMAL"/>
+			<task name="t-app02-4" node="ES2" wcet="2487" period="50000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s-t-app02-5" src="ES2" dest="ES3,ES0" sender_task="t-app02-5" receiver_tasks="t-app02-2,t-app02-3" size="812" period="50000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app10" period="15000" type="NORMAL">
+		<tasks>
+			<task name="t-app10-2" node="ES3" wcet="218" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
@@ -102,53 +115,67 @@
 	
 	<application name="app11" period="10000" type="NORMAL">
 		<tasks>
-			<task name="t-app11-2" node="ES2" wcet="444" period="10000" type="NORMAL"/>
-			<task name="t-app11-3" node="ES4" wcet="428" period="10000" type="NORMAL"/>
-			<task name="t-app11-4" node="ES6" wcet="521" period="10000" type="NORMAL"/>
-			<task name="t-app11-5" node="ES7" wcet="423" period="10000" type="NORMAL"/>
-			<task name="t-app11-1" node="ES5" wcet="201" period="10000" type="NORMAL"/>
+			<task name="t-app11-3" node="ES3" wcet="123" period="10000" type="NORMAL"/>
+			<task name="t-app11-1" node="ES5" wcet="320" period="10000" type="NORMAL"/>
+			<task name="t-app11-4" node="ES0" wcet="499" period="10000" type="NORMAL"/>
+			<task name="t-app11-0" node="ES2" wcet="106" period="10000" type="NORMAL"/>
+			<task name="t-app11-5" node="ES1" wcet="432" period="10000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app11-2" src="ES2" dest="ES4,ES6" sender_task="t-app11-2" receiver_tasks="t-app11-3,t-app11-4" size="77" period="10000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app11-5" src="ES7" dest="ES5,ES4" sender_task="t-app11-5" receiver_tasks="t-app11-1,t-app11-3" size="804" period="10000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app11-3" src="ES3" dest="ES5" sender_task="t-app11-3" receiver_tasks="t-app11-1" size="950" period="10000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app11-4" src="ES0" dest="ES2,ES5" sender_task="t-app11-4" receiver_tasks="t-app11-0,t-app11-1" size="1431" period="10000" rl="2" secure="True" type="NORMAL" />
+			<stream name="s-t-app11-5" src="ES1" dest="ES5" sender_task="t-app11-5" receiver_tasks="t-app11-1" size="868" period="10000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
-	<application name="app20" period="15000" type="NORMAL">
+	<application name="app20" period="10000" type="NORMAL">
 		<tasks>
-			<task name="t-app20-1" node="ES4" wcet="246" period="15000" type="NORMAL"/>
-			<task name="t-app20-0" node="ES7" wcet="439" period="15000" type="NORMAL"/>
-			<task name="t-app20-4" node="ES6" wcet="817" period="15000" type="NORMAL"/>
-			<task name="t-app20-5" node="ES5" wcet="781" period="15000" type="NORMAL"/>
-			<task name="t-app20-2" node="ES7" wcet="39" period="15000" type="NORMAL"/>
-			<task name="t-app20-3" node="ES2" wcet="341" period="15000" type="NORMAL"/>
+			<task name="t-app20-1" node="ES3" wcet="303" period="10000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app20-1" src="ES4" dest="ES7,ES6,ES5" sender_task="t-app20-1" receiver_tasks="t-app20-0,t-app20-4,t-app20-5" size="125" period="15000" rl="1" secure="True" type="NORMAL" />
-			<stream name="s-t-app20-4" src="ES6" dest="ES5" sender_task="t-app20-4" receiver_tasks="t-app20-5" size="414" period="15000" rl="2" secure="True" type="NORMAL" />
-			<stream name="s-t-app20-2" src="ES7" dest="ES6" sender_task="t-app20-2" receiver_tasks="t-app20-4" size="907" period="15000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app20-3" src="ES2" dest="ES6,ES5" sender_task="t-app20-3" receiver_tasks="t-app20-4,t-app20-5" size="1034" period="15000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app21" period="15000" type="NORMAL">
+		<tasks>
+			<task name="t-app21-2" node="ES0" wcet="612" period="15000" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="app22" period="10000" type="NORMAL">
+		<tasks>
+			<task name="t-app22-3" node="ES2" wcet="277" period="10000" type="NORMAL"/>
+			<task name="t-app22-0" node="ES2" wcet="181" period="10000" type="NORMAL"/>
+			<task name="t-app22-5" node="ES3" wcet="337" period="10000" type="NORMAL"/>
+			<task name="t-app22-4" node="ES7" wcet="7" period="10000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s-t-app22-3" src="ES2" dest="ES3" sender_task="t-app22-3" receiver_tasks="t-app22-5" size="1295" period="10000" rl="2" secure="True" type="NORMAL" />
+			<stream name="s-t-app22-4" src="ES7" dest="ES3" sender_task="t-app22-4" receiver_tasks="t-app22-5" size="1315" period="10000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
 	<application name="app30" period="20000" type="NORMAL">
 		<tasks>
-			<task name="t-app30-1" node="ES1" wcet="23" period="20000" type="NORMAL"/>
+			<task name="t-app30-0" node="ES0" wcet="215" period="20000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
 	</application>
 	
-	<application name="app31" period="20000" type="NORMAL">
+	<application name="app31" period="15000" type="NORMAL">
 		<tasks>
-			<task name="t-app31-3" node="ES3" wcet="587" period="20000" type="NORMAL"/>
-			<task name="t-app31-0" node="ES3" wcet="874" period="20000" type="NORMAL"/>
-			<task name="t-app31-2" node="ES1" wcet="112" period="20000" type="NORMAL"/>
-			<task name="t-app31-4" node="ES1" wcet="1063" period="20000" type="NORMAL"/>
-			<task name="t-app31-5" node="ES2" wcet="141" period="20000" type="NORMAL"/>
+			<task name="t-app31-2" node="ES4" wcet="728" period="15000" type="NORMAL"/>
+			<task name="t-app31-1" node="ES0" wcet="268" period="15000" type="NORMAL"/>
+			<task name="t-app31-3" node="ES3" wcet="698" period="15000" type="NORMAL"/>
+			<task name="t-app31-5" node="ES0" wcet="394" period="15000" type="NORMAL"/>
+			<task name="t-app31-4" node="ES6" wcet="177" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app31-3" src="ES3" dest="ES1,ES1,ES2" sender_task="t-app31-3" receiver_tasks="t-app31-2,t-app31-4,t-app31-5" size="841" period="20000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app31-2" src="ES4" dest="ES0,ES3,ES0" sender_task="t-app31-2" receiver_tasks="t-app31-1,t-app31-3,t-app31-5" size="668" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app31-4" src="ES6" dest="ES0" sender_task="t-app31-4" receiver_tasks="t-app31-1" size="41" period="15000" rl="2" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
