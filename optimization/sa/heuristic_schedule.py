@@ -375,6 +375,9 @@ class heuristic_schedule:
             # TODO: make more efficient. We only have to recalculate for the links/ES from the current es_recv path
             self._block_queues(tgn)
 
+        sender_task_tgn: TaskGraphNode_Task = self.task_graph.get_task_tgn(s.sender_task_id)
+        self._block_queues(sender_task_tgn)
+
     def _get_feasible_region(self, f: frame, l_or_es: Union[link, end_system])  -> List[Interval]:
         # returns a sorted list of intervals
         if isinstance(l_or_es, end_system):
@@ -423,6 +426,12 @@ class heuristic_schedule:
 
             for l_or_es in l_or_es_list:
                 start_time = self.frames[tgn.id][l_or_es.id].offset
+
+                if l_or_es.id == "ES3" and start_time == 3987:
+                    print()
+                if l_or_es.id == "ES3" and start_time == 4643:
+                    print()
+
                 if isinstance(l_or_es, link):
                     l : link = l_or_es
                     offsets = [start_time + i*s.period for i in range(0, int(self.tc.hyperperiod/s.period))]
