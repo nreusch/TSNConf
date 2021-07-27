@@ -193,7 +193,7 @@ class SASchedulingSolver:
             old_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_i, input_params.a)
             new_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s, input_params.a)
 
-            if infeasible_tgn == 0 and overlap_amount == 0 and first_feasible_time == -1:
+            if len(infeasible_tgn) == 0 and overlap_amount == 0 and first_feasible_time == -1:
                 first_feasible_time = time.time() - start
                 print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
                 timing_object.time_first_feasible_solution = first_feasible_time
