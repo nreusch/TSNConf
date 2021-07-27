@@ -54,13 +54,10 @@ class testcase_generation_config:
 
         self.name = "name"
 
-
-
-def create_testcase(config, path):
+def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es):
     random.seed(time.time())
 
     es_utilization_dict = {}
-    G, points_sw, points_es = topology_creator.generate_topology(config.nr_sw, config.nr_es, config.connections_per_sw, config.connections_per_es)
 
     tc = Testcase(config.name)
     tc.W_f_max = config.mtu
@@ -94,7 +91,7 @@ def create_testcase(config, path):
 
     for i in range(config.nr_dags):
         # communicating apps
-        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app)
+        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, True)
 
         for el in lst:
             app = el[0]
@@ -109,10 +106,16 @@ def create_testcase(config, path):
     tc.highest_communication_depth = max([app.get_communication_depth() for app in tc.A_app.values()])
     serializer.create_flex_network_description(path, tc)
     print(f"Created testcase at: {path.absolute()}")
-    print(f"Tasks {len(tc.T)}; Streams {len(tc.F)}; Apps {len(tc.A)}; Average ES utilization {sum(es_utilization_dict.values())/len(es_utilization_dict.values())}")
-    print("-"*50)
+    print(
+        f"Tasks {len(tc.T)}; Streams {len(tc.F)}; Apps {len(tc.A)}; Average ES utilization {sum(es_utilization_dict.values()) / len(es_utilization_dict.values())}")
+    print("-" * 50)
 
     return path
+
+def create_testcase(config, path):
+    G, points_sw, points_es = topology_creator.generate_topology(config.nr_sw, config.nr_es, config.connections_per_sw,
+                                                                 config.connections_per_es)
+    return create_testcase_with_topology(config, path, G, points_sw, points_es)
 
 if __name__ == "__main__":
     # Create and run

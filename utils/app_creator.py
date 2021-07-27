@@ -33,6 +33,24 @@ def get_dag_from_ggen(task_count: int, tree_depth: int, connection_probability: 
 
     return G
 
+def create_dags(task_count: int, tree_depth: int, connection_probability: float, app_name):
+    # using https://github.com/perarnau/ggen
+    # run vagrant container
+    # map apps/ folder to /apps on the vagrant box
+    # vagrant global-status to determine id
+
+    cmd = f'vagrant ssh -c "ggen --log-level 0 generate-graph lbl {task_count} {tree_depth} {connection_probability} > /apps/{app_name}.dot" a9ff793'
+
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+
+    process.communicate()
+
+    G = nx.DiGraph(nx.drawing.nx_pydot.read_dot("utils/apps/app.dot"))
+
+    return G
+
 def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: float, config) -> str:
     random_es = random.choice(list(es_utilization_dict.keys()))
     es_utilization_dict[random_es] += task_utilization
@@ -44,11 +62,15 @@ def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: floa
 
     return random_es
 
-def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int) -> List[Tuple[application, List[task], List[stream]]]:
+def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int, use_existing_dag) -> List[Tuple[application, List[task], List[stream]]]:
     print(f"Creating apps with {task_count} tasks")
 
     # Create a random DAG using the ggen tool
-    G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability)
+    if not use_existing_dag:
+        G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability)
+    else:
+        r = random.randint(0, 9)
+        G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(f"utils/apps/dag{r}.dot"))
 
     # Split seperate parts of the DAG into seperate applications
     sgs = [G.subgraph(c) for c in weakly_connected_components(G)]
@@ -117,7 +139,7 @@ def create_streams(G: nx.DiGraph, app: application, config, tasks: Dict[str, tas
             else:
                 secure = False
                 rl = 1
-                message_size = random.randint(1, config.stream_max_size - config.frame_overhead)
+                message_size = random.randint(config.stream_min_size, config.stream_max_size - config.frame_overhead)
                 mac_size = 0
                 overhead = config.frame_overhead
 
