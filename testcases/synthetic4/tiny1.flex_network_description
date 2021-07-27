@@ -48,16 +48,10 @@
 	<application name="app02" period="15000" type="NORMAL">
 		<tasks>
 			<task name="t-app02-2" node="ES2" wcet="322" period="15000" type="NORMAL"/>
+			<task name="t-app02-3" node="ES0" wcet="369" period="10000" type="NORMAL"/>
 		</tasks>
 		<streams>
-		</streams>
-	</application>
-	
-	<application name="app03" period="10000" type="NORMAL">
-		<tasks>
-			<task name="t-app03-3" node="ES0" wcet="369" period="10000" type="NORMAL"/>
-		</tasks>
-		<streams>
+			<stream name="s-t-app02-0" src="ES2" dest="ES0" sender_task="t-app02-2" receiver_tasks="t-app02-3" size="744" period="15000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
