@@ -329,8 +329,8 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     else:
         row.append("/")
         row.append("/")
-    row.append("{:.2f}".format(solution.bandwidth_used_percentage_total * 100))
-    row.append("{:.2f}".format(solution.cpu_used_percentage_total * 100))
+    row.append("{}".format(solution.bandwidth_used_percentage_total * 100))
+    row.append("{}".format(solution.cpu_used_percentage_total * 100))
     row.append("{:.0f}".format(solution.timing_object.get_optimization_time()))
     row.append("{:.0f}".format(solution.timing_object.time_first_feasible_solution))
     row.append("{:.0f}".format(solution.timing_object.get_total_time()))
