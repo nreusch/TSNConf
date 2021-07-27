@@ -427,11 +427,6 @@ class heuristic_schedule:
             for l_or_es in l_or_es_list:
                 start_time = self.frames[tgn.id][l_or_es.id].offset
 
-                if l_or_es.id == "ES3" and start_time == 3987:
-                    print()
-                if l_or_es.id == "ES3" and start_time == 4643:
-                    print()
-
                 if isinstance(l_or_es, link):
                     l : link = l_or_es
                     offsets = [start_time + i*s.period for i in range(0, int(self.tc.hyperperiod/s.period))]
