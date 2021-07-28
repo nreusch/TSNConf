@@ -8,11 +8,15 @@ def cost_SA_scheduling_solution(sol, tc, b, infeasible_tga, latencies: Dict[str,
 def cost_SA_routing_solution(sol, tc, a):
     total_cost = 0
     overlap_amount = 0
+    overlapping_streams = []
     for s in tc.F_routed.values():
         route_len, overlap_amount, overlap_links = cost_parameters_for_stream(s, sol, tc)
+        if overlap_amount > 0:
+            overlapping_streams.append(s.id)
         total_cost += a * overlap_amount + route_len
 
-    return total_cost, overlap_amount
+
+    return total_cost, overlap_amount, overlapping_streams
 
 def cost_routing(tc, a):
     total_cost = 0

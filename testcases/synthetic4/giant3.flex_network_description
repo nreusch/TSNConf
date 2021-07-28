@@ -3910,7 +3910,7 @@
 		</tasks>
 		<streams>
 			<stream name="s-t-app40-0" src="ES234" dest="ES102" sender_task="t-app40-0" receiver_tasks="t-app40-4" size="1161" period="50000" rl="3" secure="True" type="NORMAL" />
-			<stream name="s-t-app40-1" src="ES16" dest="ES200,ES102,ES14" sender_task="t-app40-1" receiver_tasks="t-app40-3,t-app40-4,t-app40-6" size="1147" period="50000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app40-1" src="ES16" dest="ES200,ES102,ES14" sender_task="t-app40-1" receiver_tasks="t-app40-3,t-app40-4,t-app40-6" size="1147" period="50000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app40-2" src="ES156" dest="ES200,ES14" sender_task="t-app40-2" receiver_tasks="t-app40-3,t-app40-6" size="200" period="50000" rl="3" secure="True" type="NORMAL" />
 			<stream name="s-t-app40-5" src="ES191" dest="ES102" sender_task="t-app40-5" receiver_tasks="t-app40-4" size="423" period="50000" rl="1" secure="False" type="NORMAL" />
 		</streams>
@@ -3985,7 +3985,7 @@
 		</tasks>
 		<streams>
 			<stream name="s-t-app71-3" src="ES177" dest="ES55" sender_task="t-app71-3" receiver_tasks="t-app71-1" size="220" period="15000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app71-5" src="ES137" dest="ES55" sender_task="t-app71-5" receiver_tasks="t-app71-1" size="861" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app71-5" src="ES137" dest="ES55" sender_task="t-app71-5" receiver_tasks="t-app71-1" size="861" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app71-6" src="ES23" dest="ES55,ES177" sender_task="t-app71-6" receiver_tasks="t-app71-1,t-app71-3" size="1198" period="15000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
@@ -4015,7 +4015,7 @@
 			<task name="t-app82-6" node="ES241" wcet="6" period="20000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app82-3" src="ES201" dest="ES15,ES146,ES128,ES241" sender_task="t-app82-3" receiver_tasks="t-app82-1,t-app82-2,t-app82-5,t-app82-6" size="279" period="20000" rl="2" secure="True" type="NORMAL" />
+			<stream name="s-t-app82-3" src="ES201" dest="ES15,ES146,ES128,ES241" sender_task="t-app82-3" receiver_tasks="t-app82-1,t-app82-2,t-app82-5,t-app82-6" size="279" period="20000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
@@ -4056,7 +4056,7 @@
 		<streams>
 			<stream name="s-t-app100-0" src="ES54" dest="ES146,ES141" sender_task="t-app100-0" receiver_tasks="t-app100-2,t-app100-6" size="569" period="10000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app100-2" src="ES146" dest="ES141" sender_task="t-app100-2" receiver_tasks="t-app100-6" size="1016" period="10000" rl="1" secure="True" type="NORMAL" />
-			<stream name="s-t-app100-1" src="ES83" dest="ES146,ES60,ES153" sender_task="t-app100-1" receiver_tasks="t-app100-2,t-app100-4,t-app100-5" size="1139" period="10000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app100-1" src="ES83" dest="ES146,ES60,ES153" sender_task="t-app100-1" receiver_tasks="t-app100-2,t-app100-4,t-app100-5" size="1139" period="10000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app100-4" src="ES60" dest="ES141" sender_task="t-app100-4" receiver_tasks="t-app100-6" size="1306" period="10000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app100-3" src="ES50" dest="ES60,ES141" sender_task="t-app100-3" receiver_tasks="t-app100-4,t-app100-6" size="516" period="10000" rl="3" secure="True" type="NORMAL" />
 		</streams>
@@ -4419,7 +4419,7 @@
 			<task name="t-app260-6" node="ES242" wcet="588" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app260-1" src="ES250" dest="ES106" sender_task="t-app260-1" receiver_tasks="t-app260-0" size="311" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app260-1" src="ES250" dest="ES106" sender_task="t-app260-1" receiver_tasks="t-app260-0" size="311" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app260-3" src="ES148" dest="ES106" sender_task="t-app260-3" receiver_tasks="t-app260-0" size="380" period="15000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app260-4" src="ES69" dest="ES106,ES150" sender_task="t-app260-4" receiver_tasks="t-app260-0,t-app260-2" size="866" period="15000" rl="2" secure="True" type="NORMAL" />
 			<stream name="s-t-app260-5" src="ES88" dest="ES150" sender_task="t-app260-5" receiver_tasks="t-app260-2" size="1372" period="15000" rl="1" secure="False" type="NORMAL" />
@@ -4813,7 +4813,7 @@
 			<task name="t-app431-2" node="ES91" wcet="11" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app431-0" src="ES228" dest="ES202,ES71,ES113" sender_task="t-app431-0" receiver_tasks="t-app431-3,t-app431-5,t-app431-6" size="381" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app431-0" src="ES228" dest="ES202,ES71,ES113" sender_task="t-app431-0" receiver_tasks="t-app431-3,t-app431-5,t-app431-6" size="381" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app431-1" src="ES209" dest="ES202" sender_task="t-app431-1" receiver_tasks="t-app431-3" size="1224" period="15000" rl="3" secure="True" type="NORMAL" />
 			<stream name="s-t-app431-2" src="ES91" dest="ES202" sender_task="t-app431-2" receiver_tasks="t-app431-3" size="717" period="15000" rl="1" secure="True" type="NORMAL" />
 		</streams>
@@ -5020,7 +5020,7 @@
 		</tasks>
 		<streams>
 			<stream name="s-t-app531-3" src="ES164" dest="ES57,ES122" sender_task="t-app531-3" receiver_tasks="t-app531-5,t-app531-6" size="746" period="10000" rl="2" secure="True" type="NORMAL" />
-			<stream name="s-t-app531-4" src="ES149" dest="ES206,ES136,ES122" sender_task="t-app531-4" receiver_tasks="t-app531-0,t-app531-1,t-app531-6" size="809" period="10000" rl="2" secure="True" type="NORMAL" />
+			<stream name="s-t-app531-4" src="ES149" dest="ES206,ES136,ES122" sender_task="t-app531-4" receiver_tasks="t-app531-0,t-app531-1,t-app531-6" size="809" period="10000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
@@ -5071,7 +5071,7 @@
 		<streams>
 			<stream name="s-t-app560-0" src="ES203" dest="ES147,ES67" sender_task="t-app560-0" receiver_tasks="t-app560-3,t-app560-4" size="297" period="15000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app560-1" src="ES140" dest="ES67" sender_task="t-app560-1" receiver_tasks="t-app560-4" size="746" period="15000" rl="2" secure="True" type="NORMAL" />
-			<stream name="s-t-app560-2" src="ES137" dest="ES67,ES192,ES12" sender_task="t-app560-2" receiver_tasks="t-app560-4,t-app560-5,t-app560-6" size="272" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app560-2" src="ES137" dest="ES67,ES192,ES12" sender_task="t-app560-2" receiver_tasks="t-app560-4,t-app560-5,t-app560-6" size="272" period="15000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
@@ -5277,7 +5277,7 @@
 			<task name="t-app660-6" node="ES219" wcet="1618" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app660-0" src="ES201" dest="ES94" sender_task="t-app660-0" receiver_tasks="t-app660-5" size="774" period="50000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app660-0" src="ES201" dest="ES94" sender_task="t-app660-0" receiver_tasks="t-app660-5" size="774" period="50000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app660-1" src="ES110" dest="ES126,ES94" sender_task="t-app660-1" receiver_tasks="t-app660-2,t-app660-5" size="106" period="50000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app660-3" src="ES37" dest="ES94" sender_task="t-app660-3" receiver_tasks="t-app660-5" size="308" period="50000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app660-4" src="ES19" dest="ES94" sender_task="t-app660-4" receiver_tasks="t-app660-5" size="707" period="50000" rl="3" secure="True" type="NORMAL" />
@@ -5917,7 +5917,7 @@
 		<streams>
 			<stream name="s-t-app930-0" src="ES84" dest="ES43" sender_task="t-app930-0" receiver_tasks="t-app930-6" size="1095" period="50000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app930-1" src="ES91" dest="ES43" sender_task="t-app930-1" receiver_tasks="t-app930-6" size="273" period="50000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app930-2" src="ES149" dest="ES43" sender_task="t-app930-2" receiver_tasks="t-app930-6" size="148" period="50000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app930-2" src="ES149" dest="ES43" sender_task="t-app930-2" receiver_tasks="t-app930-6" size="148" period="50000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app930-3" src="ES202" dest="ES40,ES185" sender_task="t-app930-3" receiver_tasks="t-app930-4,t-app930-5" size="1168" period="50000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app930-4" src="ES40" dest="ES43" sender_task="t-app930-4" receiver_tasks="t-app930-6" size="52" period="50000" rl="1" secure="False" type="NORMAL" />
 		</streams>
@@ -5988,7 +5988,7 @@
 			<task name="t-app970-4" node="ES123" wcet="174" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app970-1" src="ES57" dest="ES137,ES53,ES49,ES1,ES28" sender_task="t-app970-1" receiver_tasks="t-app970-0,t-app970-2,t-app970-3,t-app970-5,t-app970-6" size="198" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app970-1" src="ES57" dest="ES137,ES53,ES49,ES1,ES28" sender_task="t-app970-1" receiver_tasks="t-app970-0,t-app970-2,t-app970-3,t-app970-5,t-app970-6" size="198" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app970-4" src="ES123" dest="ES49,ES1,ES28" sender_task="t-app970-4" receiver_tasks="t-app970-3,t-app970-5,t-app970-6" size="1271" period="15000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>

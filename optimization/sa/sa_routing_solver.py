@@ -134,8 +134,8 @@ class SARoutingSolver:
         return s
 
     def _cost(self, sol: SARoutingSolution):
-        total_cost, overlap_amount = cost.cost_SA_routing_solution(sol, self.tc, self.a)
-        return total_cost, overlap_amount
+        total_cost, overlap_amount, overlapping_streams = cost.cost_SA_routing_solution(sol, self.tc, self.a)
+        return total_cost, overlap_amount, overlapping_streams
 
     def _solve(self, timeout) -> SARoutingSolution:
         # returns Dict[stream.id, Dict(receiver_es_id -> path)]

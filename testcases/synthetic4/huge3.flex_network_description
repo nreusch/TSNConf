@@ -1153,7 +1153,7 @@
 			<stream name="s-t-app90-0" src="ES5" dest="ES53,ES23" sender_task="t-app90-0" receiver_tasks="t-app90-2,t-app90-6" size="110" period="15000" rl="1" secure="False" type="NORMAL" />
 			<stream name="s-t-app90-3" src="ES15" dest="ES32,ES23" sender_task="t-app90-3" receiver_tasks="t-app90-1,t-app90-6" size="677" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app90-4" src="ES50" dest="ES15,ES23" sender_task="t-app90-4" receiver_tasks="t-app90-3,t-app90-6" size="774" period="15000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app90-5" src="ES31" dest="ES32,ES53,ES15" sender_task="t-app90-5" receiver_tasks="t-app90-1,t-app90-2,t-app90-3" size="1133" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app90-5" src="ES31" dest="ES32,ES53,ES15" sender_task="t-app90-5" receiver_tasks="t-app90-1,t-app90-2,t-app90-3" size="1133" period="15000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	

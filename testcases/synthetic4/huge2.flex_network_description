@@ -1201,7 +1201,7 @@
 			<task name="t-app120-6" node="ES20" wcet="413" period="15000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app120-1" src="ES44" dest="ES42,ES4,ES22" sender_task="t-app120-1" receiver_tasks="t-app120-0,t-app120-4,t-app120-5" size="334" period="15000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app120-1" src="ES44" dest="ES42,ES4,ES22" sender_task="t-app120-1" receiver_tasks="t-app120-0,t-app120-4,t-app120-5" size="334" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app120-2" src="ES0" dest="ES42,ES53,ES22" sender_task="t-app120-2" receiver_tasks="t-app120-0,t-app120-3,t-app120-5" size="1207" period="15000" rl="1" secure="True" type="NORMAL" />
 			<stream name="s-t-app120-6" src="ES20" dest="ES53,ES22" sender_task="t-app120-6" receiver_tasks="t-app120-3,t-app120-5" size="962" period="15000" rl="1" secure="False" type="NORMAL" />
 		</streams>

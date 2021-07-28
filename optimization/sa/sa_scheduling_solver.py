@@ -101,7 +101,7 @@ class SASchedulingSolver:
     def _cost_combined(self, sol: Tuple[SARoutingSolution, SASchedulingSolution], a):
         # TODO: Fix cost calculation
         # 1. Calculate routing cost of routing solution
-        route_cost, overlap_amount = cost_SA_routing_solution(sol[0], self.tc, a)
+        route_cost, overlap_amount, overlapping_streams = cost_SA_routing_solution(sol[0], self.tc, a)
 
         # 2. Clear the old routing and add current routing solution
         self.tc.clear_routes()
@@ -117,7 +117,7 @@ class SASchedulingSolver:
         # 4. Calculate total cost
         cost = route_cost + scheduling_cost
 
-        return cost, infeasible_tga, route_cost, overlap_amount
+        return cost, infeasible_tga, route_cost, overlap_amount, overlapping_streams
 
     def _probability_check(self, delta, t):
         return random.uniform(0, 1) < self.p(delta, t)
@@ -178,9 +178,10 @@ class SASchedulingSolver:
 
         s_i = (routingSolver._initial_solution(), self._initial_solution_schedule())
         s_best = s_i
-        best_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_best, input_params.a)
+        best_cost, infeasible_tgn, routing_cost, overlap_amount, overlapping_streams = self._cost_combined(s_best, input_params.a)
         print(f"Running SA-Combined-Metaheuristic: Tstart {Tstart}, alpha {alpha}, Prmv {input_params.Prmv}, k {input_params.k}, a {input_params.a}, b {input_params.b}, w {input_params.w}")
         print(f"INITIAL COST: {best_cost}; INFEASIBLE TGA: {infeasible_tgn}; ROUTING COST: {routing_cost}\n")
+        print(f"Overlapping streams: {overlapping_streams}")
 
         if len(infeasible_tgn) == 0 and overlap_amount == 0 and first_feasible_time == -1:
             first_feasible_time = time.time() - start
@@ -197,8 +198,8 @@ class SASchedulingSolver:
 
         while time.time() - start < input_params.timeouts.timeout_scheduling:
             s = self._random_neighbour_combined(s_i, routingSolver, SCHEDULING_MOVE_PROBABILITY)
-            old_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_i, input_params.a)
-            new_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s, input_params.a)
+            old_cost, infeasible_tgn, routing_cost, overlap_amount, overlapping_streams = self._cost_combined(s_i, input_params.a)
+            new_cost, infeasible_tgn, routing_cost, overlap_amount, overlapping_streams = self._cost_combined(s, input_params.a)
 
             if len(infeasible_tgn) == 0 and overlap_amount == 0 and first_feasible_time == -1:
                 first_feasible_time = time.time() - start
@@ -217,6 +218,7 @@ class SASchedulingSolver:
                     print(
                         f"NEW BEST COST: {best_cost}; INFEASIBLE TGA: {infeasible_tgn}; ROUTING COST: {routing_cost}; TEMP: {temp}\n")
                     #print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
+                    print(f"Overlapping streams: {overlapping_streams}")
 
             if not temp_reset:
                 oldtemp = temp

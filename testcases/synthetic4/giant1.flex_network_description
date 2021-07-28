@@ -2088,7 +2088,7 @@
 			<task name="t-app71-1" node="ES109" wcet="2274" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app71-2" src="ES96" dest="ES40,ES87,ES114" sender_task="t-app71-2" receiver_tasks="t-app71-0,t-app71-4,t-app71-6" size="328" period="50000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app71-2" src="ES96" dest="ES40,ES87,ES114" sender_task="t-app71-2" receiver_tasks="t-app71-0,t-app71-4,t-app71-6" size="328" period="50000" rl="2" secure="True" type="NORMAL" />
 			<stream name="s-t-app71-3" src="ES69" dest="ES109,ES96,ES114" sender_task="t-app71-3" receiver_tasks="t-app71-1,t-app71-2,t-app71-6" size="1040" period="50000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
