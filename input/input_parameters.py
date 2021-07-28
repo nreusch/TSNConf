@@ -52,7 +52,7 @@ class EMode(Enum):
 
 @dataclass
 class InputParameters:
-    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, visualize: bool, aggregate_path: str, port: int, no_redundancy: bool, no_security: bool, allow_overlap: bool, allow_infeasible_solutions: bool, k: int, a: int, b: int, Tstart: int, alpha: float, Prmv: float):
+    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, visualize: bool, aggregate_path: str, port: int, no_redundancy: bool, no_security: bool, allow_overlap: bool, allow_infeasible_solutions: bool, k: int, a: int, b: int, Tstart: int, alpha: float, Prmv: float, w: int):
         self.mode = mode
 
         self.timeouts = timeouts
@@ -78,6 +78,7 @@ class InputParameters:
         self.Tstart = Tstart
         self.alpha = alpha
         self.Prmv = Prmv
+        self.w = w
 
     def get_summary_string(self) -> str:
         """

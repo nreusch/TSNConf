@@ -149,6 +149,13 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
         help="Prmv: Probability of a routing move for SA metaheuristic (Default: 0.8)",
     )
 
+    parser.add_argument(
+        "--w",
+        default=10,
+        type=int,
+        help="w: Weight for punishing overlap in k-shortest-paths for SA heuristic (Default: 10)",
+    )
+
     results = parser.parse_args()
 
     input_param_list = []
@@ -184,7 +191,8 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     Tstart = results.Tstart
     alpha = results.alpha
     Prmv = results.Prmv
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b, Tstart, alpha, Prmv))
+    w = results.w
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b, Tstart, alpha, Prmv, w))
 
     return input_param_list, Path(results.testcase_path)
 

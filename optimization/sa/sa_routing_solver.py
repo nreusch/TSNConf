@@ -29,7 +29,7 @@ class SARoutingSolution:
         return self.__repr__()
 
 class SARoutingSolver:
-    def __init__(self, tc: Testcase, timing_object: TimingData, k: int, a: int):
+    def __init__(self, tc: Testcase, timing_object: TimingData, k: int, a: int, w: int):
         self.tc = tc
 
         self.possible_paths : Dict[str, Dict[str, List[List[str]]]] = {} # stream_id -> Dict(receiver_es_id -> List[path])
@@ -40,18 +40,18 @@ class SARoutingSolver:
         # Create variables
         t = Timer()
         with t:
-            self._create_variables(k)
+            self._create_variables(k, w)
         timing_object.time_creating_vars_pint = t.elapsed_time
 
         self.a = a
 
 
-    def _create_variables(self, k):
+    def _create_variables(self, k, w):
         # Create networkx digraph with all edges & links
         g = nx.DiGraph()
         g.add_nodes_from(self.tc.N.keys())
         for l in self.tc.L.values():
-            g.add_edge(l.src.id, l.dest.id)
+            g.add_edge(l.src.id, l.dest.id, weight=1)
 
         # For each stream, for each sender ES, receiver ES pair, add k-shortest-paths as possibilities
         s_prefixes = {}
@@ -74,24 +74,27 @@ class SARoutingSolver:
                 # Redundant copy
                 self.possible_paths[s.id] = {}
 
+                g_weighted = g.copy()
+                # For each other exising redundant copy
+                for es_recv_id in s.receiver_es_ids:
+                    for ppath in s_prefixes[s.get_id_prefix()]:
+                        for i in range(len(ppath[es_recv_id][0]) - 1):
+                            n1 = ppath[es_recv_id][0][i]
+                            n2 = ppath[es_recv_id][0][i + 1]
+                            g_weighted[n1][n2]["weight"] = w
+
                 for es_recv_id in s.receiver_es_ids:
                     excluded_es = set(self.tc.ES.keys())
                     excluded_es.difference_update({s.sender_es_id, es_recv_id})
 
-                    # exclude first and last link of redundant copies paths
-                    excluded_links = set()
-
-                    for ppath in s_prefixes[s.get_id_prefix()]:
-                        excluded_links.add((ppath[es_recv_id][0][0], ppath[es_recv_id][0][1]))
-                        excluded_links.add((ppath[es_recv_id][0][-2], ppath[es_recv_id][0][-1]))
-
                     try:
                         k_shortest_paths = list(
                             islice(
-                                shortest_simple_paths_patched(g, s.sender_es_id, es_recv_id, ignore_nodes_init=excluded_es, ignore_edges_init=excluded_links),
+                                shortest_simple_paths_patched(g_weighted, s.sender_es_id, es_recv_id, ignore_nodes_init=excluded_es, weight="weight"),
                                 k)
                         )
                     except nx.exception.NetworkXNoPath:
+                        # If there exists no other path, use the same paths
                         k_shortest_paths = s_prefixes[s.get_id_prefix()][0][es_recv_id]
 
                     self.possible_paths[s.id][es_recv_id] = k_shortest_paths

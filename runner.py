@@ -185,7 +185,7 @@ def _mode_11(timing_object: TimingData, input_params: InputParameters) -> Soluti
         )
 
     # 4. Find routing (SA)
-    routing_solver = SARoutingSolver(tc, timing_object, input_params.k, input_params.a)
+    routing_solver = SARoutingSolver(tc, timing_object, input_params.k, input_params.a, input_params.w)
     tc, status = routing_solver.optimize(input_params, timing_object)
     print(
         "-" * 20
@@ -262,7 +262,7 @@ def _mode_12(timing_object: TimingData, input_params: InputParameters) -> Soluti
         )
 
     # 4. Find routing (SA)
-    routing_solver = SARoutingSolver(tc, timing_object, input_params.k, input_params.a)
+    routing_solver = SARoutingSolver(tc, timing_object, input_params.k, input_params.a, input_params.w)
     tc, status = routing_solver.optimize(input_params, timing_object)
     print(
         "-" * 20

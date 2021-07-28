@@ -344,6 +344,7 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{}".format(solution.input_params.k))
     row.append("{}".format(solution.input_params.a))
     row.append("{}".format(solution.input_params.b))
+    row.append("{}".format(solution.input_params.w))
 
     columns.append(row)
 
@@ -377,7 +378,8 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Prmv",
             "k",
             "a",
-            "b"
+            "b",
+            "w"
         ],
     )
 

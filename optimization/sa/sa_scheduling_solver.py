@@ -173,12 +173,20 @@ class SASchedulingSolver:
         alpha = input_params.alpha
         SCHEDULING_MOVE_PROBABILITY = 1 - input_params.Prmv
         temp_reset = False
+        start = time.time()
+        first_feasible_time = -1
 
         s_i = (routingSolver._initial_solution(), self._initial_solution_schedule())
         s_best = s_i
         best_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_best, input_params.a)
-        print(f"Running SA-Combined-Metaheuristic: Tstart {Tstart}, alpha {alpha}, Prmv {input_params.Prmv}, k {input_params.k}, a {input_params.a}, b {input_params.b}")
+        print(f"Running SA-Combined-Metaheuristic: Tstart {Tstart}, alpha {alpha}, Prmv {input_params.Prmv}, k {input_params.k}, a {input_params.a}, b {input_params.b}, w {input_params.w}")
         print(f"INITIAL COST: {best_cost}; INFEASIBLE TGA: {infeasible_tgn}; ROUTING COST: {routing_cost}\n")
+
+        if len(infeasible_tgn) == 0 and overlap_amount == 0 and first_feasible_time == -1:
+            first_feasible_time = time.time() - start
+            print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
+            timing_object.time_first_feasible_solution = first_feasible_time
+
         #print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
         # print_simple_solution(s_i, index_to_core_map)
         debug_print("")
@@ -186,8 +194,7 @@ class SASchedulingSolver:
         temp = Tstart
         step = 0
 
-        first_feasible_time = -1
-        start = time.time()
+
         while time.time() - start < input_params.timeouts.timeout_scheduling:
             s = self._random_neighbour_combined(s_i, routingSolver, SCHEDULING_MOVE_PROBABILITY)
             old_cost, infeasible_tgn, routing_cost, overlap_amount = self._cost_combined(s_i, input_params.a)
@@ -235,7 +242,7 @@ class SASchedulingSolver:
             elif mode == SAOptimizationMode.SEPERATED_SA:
                 schedule_solution = self._solve_seperated_sa(input_params.timeouts.timeout_scheduling)
             elif mode == SAOptimizationMode.COMBINED_SA:
-                routingSolver = SARoutingSolver(self.tc, timing_object, input_params.k, input_params.a)
+                routingSolver = SARoutingSolver(self.tc, timing_object, input_params.k, input_params.a, input_params.w)
                 routing_solution, schedule_solution = self._solve_combined_sa(routingSolver, timing_object, input_params)
             else:
                 raise ValueError
