@@ -635,7 +635,7 @@
 			<task name="t-app10-2" node="ES31" wcet="144" period="2000" type="NORMAL"/>
 			<task name="t-app10-3" node="ES10" wcet="195" period="2000" type="NORMAL"/>
 			<task name="t-app10-4" node="ES15" wcet="20" period="2000" type="NORMAL"/>
-			<task name="t-app10-5" node="ES1" wcet="250" period="2000" type="NORMAL"/>
+			<task name="t-app10-5" node="ES1" wcet="249" period="2000" type="NORMAL"/>
 		</tasks>
 		<streams>
 			<stream name="s-t-app10-0" src="ES5" dest="ES25" sender_task="t-app10-0" receiver_tasks="t-app10-1" size="1138" period="2000" rl="1" secure="False" type="NORMAL" />

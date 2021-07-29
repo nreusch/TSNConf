@@ -5,6 +5,7 @@ from typing import Dict, Union, Tuple, List, Optional
 from intervaltree import IntervalTree, Interval
 
 from input import testcase
+from input.input_parameters import InputParameters
 from input.model.link import link
 from input.model.nodes import end_system
 from input.model.route import route
@@ -37,13 +38,15 @@ class KeyFrameDoesNotExistError(Exception):
 
 
 class heuristic_schedule:
-    def __init__(self, tc: testcase, task_graph: PrecedenceGraph):
+    def __init__(self, tc: testcase, task_graph: PrecedenceGraph, input_params: InputParameters):
         self.tc: testcase = tc
         self.task_graph = task_graph
         self.StartTimes: Dict[str, List[Tuple[int, int]]] = {} # Dict[tgn.id -> List[offset]]
         self.Blocks: Dict[str, Dict[int, IntervalTree]] = {}  # l_or_es.id -> (T -> IntervalTree)
         self.frames : Dict[str, Dict[str, frame]] = {} # Dict[tgn.id -> Dict[link_or_es.id, frame]]
         self.all_frames_on_link : Dict[str, List[frame]] = {} # Dict[l_or_es.id -> List[frame]]
+
+        self.no_security = input_params.no_security
 
         for l_or_es_id in itertools.chain(tc.L.keys(), tc.ES.keys()):
             self.Blocks[l_or_es_id] = {}
@@ -65,7 +68,7 @@ class heuristic_schedule:
             return tgn.t, [self.tc.ES[tgn.t.src_es_id]]
         elif isinstance(tgn, TaskGraphNode_Stream):
             s: stream = tgn.s
-            if s.is_secure:
+            if s.is_secure and not self.no_security:
                 return s, self.tc.R[s.id].get_all_es_and_links_dfs(self.tc)
             else:
                 return s, self.tc.R[s.id].get_all_links_dfs(self.tc)
@@ -105,7 +108,7 @@ class heuristic_schedule:
             # For consecutive stream instances, set the lower bound to the max end-time of the stream on the previous links
             r: route = self.tc.R[frm.s_or_t.id]
 
-            if frm.s_or_t.is_secure:
+            if frm.s_or_t.is_secure and not self.no_security:
                 previous_links_or_es = r.get_predeccessor_link_or_es(l_or_es.id, self.tc)
             else:
                 previous_links_or_es = r.get_predeccessor_link(l_or_es.id, self.tc)
@@ -185,7 +188,7 @@ class heuristic_schedule:
                 s: stream = s_or_t
                 r: route = self.tc.R[s.id]
 
-                if s.is_secure:
+                if s.is_secure and not self.no_security:
                     previous_links_or_es = r.get_predeccessor_link_or_es(l_or_es.id, self.tc)
                 else:
                     previous_links_or_es = r.get_predeccessor_link(l_or_es.id, self.tc)
@@ -278,7 +281,7 @@ class heuristic_schedule:
         for s_id in app_stream_ids:
             s : stream = self.tc.F[s_id]
 
-            if not s.is_self_stream() and s.is_secure and s.get_id_prefix() not in handled_streams:
+            if not s.is_self_stream() and s.is_secure and s.get_id_prefix() not in handled_streams and not self.no_security:
                 if s.rl > 1:
                     for s_red in self.tc.F_red[s.get_id_prefix()]:
                         if s_red.id != s.id:
@@ -316,7 +319,7 @@ class heuristic_schedule:
         # repeat until not prev_frame available
         j = 0
         for recv_es_id in s.receiver_es_ids:
-            if s.is_secure:
+            if s.is_secure and not self.no_security:
                 f = self.frames[tgn.id][recv_es_id]
                 incoming_f = f.prev_frame
                 t_key_verify: key_verification_task = self.tc.T_verify[s.sender_es_id][recv_es_id]
@@ -562,7 +565,7 @@ class heuristic_schedule:
         elif isinstance(frm.s_or_t, stream):
             if frm.l_or_es.id == frm.s_or_t.sender_es_id:
                 return True
-            if isinstance(frm.l_or_es, link) and frm.l_or_es.src.id == frm.s_or_t.sender_es_id and not frm.s_or_t.is_secure:
+            if isinstance(frm.l_or_es, link) and frm.l_or_es.src.id == frm.s_or_t.sender_es_id and not frm.s_or_t.is_secure and not self.no_security:
                 return True
         return False
 

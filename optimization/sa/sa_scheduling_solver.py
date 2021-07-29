@@ -48,6 +48,7 @@ class SASchedulingSolver:
             self._create_variables()
         timing_object.time_creating_vars_scheduling = t.elapsed_time
 
+        self.input_params = input_params
         self.b = input_params.b
 
 
@@ -63,7 +64,7 @@ class SASchedulingSolver:
 
     def _cost_scheduling(self, sol: SASchedulingSolution):
         # 3. Schedule scheduling solution
-        my_schedule = heuristic_schedule(self.tc, self.prec_graph)
+        my_schedule = heuristic_schedule(self.tc, self.prec_graph, self.input_params)
 
         infeasible_tga = {}
         latencies = {}

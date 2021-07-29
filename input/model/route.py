@@ -94,8 +94,6 @@ class route:
                         alredy_added.append(tpl[1])
         return l
 
-        return l
-
     def get_all_es_and_links(self, tc) -> List[Union[node, link]]:
         es = self.get_all_nodes(tc)
         links = self.get_all_links(tc)
