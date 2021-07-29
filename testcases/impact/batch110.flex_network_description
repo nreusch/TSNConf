@@ -660,7 +660,7 @@
 	<application name="app11" period="2000" type="NORMAL">
 		<tasks>
 			<task name="t-app11-2" node="ES19" wcet="155" period="2000" type="NORMAL"/>
-			<task name="t-app11-5" node="ES30" wcet="250" period="2000" type="NORMAL"/>
+			<task name="t-app11-5" node="ES30" wcet="249" period="2000" type="NORMAL"/>
 			<task name="t-app11-3" node="ES26" wcet="124" period="2000" type="NORMAL"/>
 			<task name="t-app11-0" node="ES23" wcet="10" period="2000" type="NORMAL"/>
 			<task name="t-app11-4" node="ES18" wcet="296" period="2000" type="NORMAL"/>

@@ -681,7 +681,7 @@
 		<tasks>
 			<task name="t-app31-2" node="ES10" wcet="235" period="2000" type="NORMAL"/>
 			<task name="t-app31-0" node="ES0" wcet="344" period="2000" type="NORMAL"/>
-			<task name="t-app31-1" node="ES24" wcet="250" period="2000" type="NORMAL"/>
+			<task name="t-app31-1" node="ES24" wcet="249" period="2000" type="NORMAL"/>
 			<task name="t-app31-4" node="ES17" wcet="255" period="2000" type="NORMAL"/>
 			<task name="t-app31-5" node="ES18" wcet="276" period="2000" type="NORMAL"/>
 		</tasks>
