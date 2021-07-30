@@ -517,7 +517,7 @@
 		</tasks>
 		<streams>
 			<stream name="s-t-app02-2" src="ES20" dest="ES18,ES16" sender_task="t-app02-2" receiver_tasks="t-app02-0,t-app02-5" size="48" period="50000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app02-4" src="ES30" dest="ES18,ES16,ES7" sender_task="t-app02-4" receiver_tasks="t-app02-0,t-app02-5,t-app02-6" size="476" period="50000" rl="3" secure="True" type="NORMAL" />
+			<stream name="s-t-app02-4" src="ES30" dest="ES18,ES16,ES7" sender_task="t-app02-4" receiver_tasks="t-app02-0,t-app02-5,t-app02-6" size="476" period="50000" rl="1" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	
