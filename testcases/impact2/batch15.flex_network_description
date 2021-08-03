@@ -283,7 +283,7 @@
 		</streams>
 	</application>
 	
-	<application name="app20" period="20000" type="NORMAL">
+	<application name="app20" period="50000" type="NORMAL">
 		<tasks>
 			<task name="t-app20-0" node="ES8" wcet="28" period="20000" type="NORMAL"/>
 			<task name="t-app20-2" node="ES8" wcet="305" period="20000" type="NORMAL"/>
