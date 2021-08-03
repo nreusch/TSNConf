@@ -263,7 +263,7 @@
 	
 	<application name="app02" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app02-4" node="ES1" wcet="4153" period="50000" type="NORMAL"/>
+			<task name="t-app02-4" node="ES1" wcet="2153" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>

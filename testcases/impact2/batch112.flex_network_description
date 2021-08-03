@@ -317,9 +317,9 @@
 	<application name="app31" period="50000" type="NORMAL">
 		<tasks>
 			<task name="t-app31-2" node="ES6" wcet="1374" period="50000" type="NORMAL"/>
-			<task name="t-app31-5" node="ES9" wcet="3671" period="50000" type="NORMAL"/>
-			<task name="t-app31-3" node="ES3" wcet="3948" period="50000" type="NORMAL"/>
-			<task name="t-app31-0" node="ES15" wcet="4285" period="50000" type="NORMAL"/>
+			<task name="t-app31-5" node="ES9" wcet="1671" period="50000" type="NORMAL"/>
+			<task name="t-app31-3" node="ES3" wcet="1948" period="50000" type="NORMAL"/>
+			<task name="t-app31-0" node="ES15" wcet="1285" period="50000" type="NORMAL"/>
 			<task name="t-app31-4" node="ES4" wcet="2759" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>

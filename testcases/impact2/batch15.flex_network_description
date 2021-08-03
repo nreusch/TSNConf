@@ -299,9 +299,9 @@
 		</streams>
 	</application>
 	
-	<application name="app30" period="15000" type="NORMAL">
+	<application name="app30" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app30-1" node="ES1" wcet="1360" period="15000" type="NORMAL"/>
+			<task name="t-app30-1" node="ES1" wcet="1360" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>

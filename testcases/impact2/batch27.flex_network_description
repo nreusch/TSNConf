@@ -304,11 +304,11 @@
 	
 	<application name="app30" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app30-0" node="ES3" wcet="2857" period="50000" type="NORMAL"/>
+			<task name="t-app30-0" node="ES3" wcet="1857" period="50000" type="NORMAL"/>
 			<task name="t-app30-1" node="ES1" wcet="2410" period="50000" type="NORMAL"/>
-			<task name="t-app30-2" node="ES5" wcet="2814" period="50000" type="NORMAL"/>
-			<task name="t-app30-4" node="ES6" wcet="4241" period="50000" type="NORMAL"/>
-			<task name="t-app30-3" node="ES15" wcet="3866" period="50000" type="NORMAL"/>
+			<task name="t-app30-2" node="ES5" wcet="1814" period="50000" type="NORMAL"/>
+			<task name="t-app30-4" node="ES6" wcet="1241" period="50000" type="NORMAL"/>
+			<task name="t-app30-3" node="ES15" wcet="1866" period="50000" type="NORMAL"/>
 			<task name="t-app30-5" node="ES12" wcet="276" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>

@@ -255,10 +255,10 @@
 	
 	<application name="app01" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app01-2" node="ES1" wcet="4602" period="50000" type="NORMAL"/>
-			<task name="t-app01-5" node="ES12" wcet="4162" period="50000" type="NORMAL"/>
-			<task name="t-app01-3" node="ES11" wcet="3449" period="50000" type="NORMAL"/>
-			<task name="t-app01-0" node="ES5" wcet="4078" period="50000" type="NORMAL"/>
+			<task name="t-app01-2" node="ES1" wcet="1602" period="50000" type="NORMAL"/>
+			<task name="t-app01-5" node="ES12" wcet="1162" period="50000" type="NORMAL"/>
+			<task name="t-app01-3" node="ES11" wcet="1449" period="50000" type="NORMAL"/>
+			<task name="t-app01-0" node="ES5" wcet="1078" period="50000" type="NORMAL"/>
 			<task name="t-app01-4" node="ES10" wcet="1566" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>

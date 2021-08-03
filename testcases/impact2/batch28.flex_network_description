@@ -281,12 +281,12 @@
 	
 	<application name="app20" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app20-0" node="ES13" wcet="3393" period="50000" type="NORMAL"/>
-			<task name="t-app20-1" node="ES0" wcet="3720" period="50000" type="NORMAL"/>
+			<task name="t-app20-0" node="ES13" wcet="1393" period="50000" type="NORMAL"/>
+			<task name="t-app20-1" node="ES0" wcet="1720" period="50000" type="NORMAL"/>
 			<task name="t-app20-2" node="ES1" wcet="2364" period="50000" type="NORMAL"/>
-			<task name="t-app20-3" node="ES9" wcet="3035" period="50000" type="NORMAL"/>
+			<task name="t-app20-3" node="ES9" wcet="1035" period="50000" type="NORMAL"/>
 			<task name="t-app20-4" node="ES9" wcet="330" period="50000" type="NORMAL"/>
-			<task name="t-app20-5" node="ES12" wcet="3553" period="50000" type="NORMAL"/>
+			<task name="t-app20-5" node="ES12" wcet="1553" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 			<stream name="s-t-app20-0" src="ES13" dest="ES0,ES1" sender_task="t-app20-0" receiver_tasks="t-app20-1,t-app20-2" size="1222" period="50000" rl="1" secure="False" type="NORMAL" />

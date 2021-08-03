@@ -247,7 +247,7 @@
 	<!-- period&wcet is in us, size in Byte-->
 	<application name="app00" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app00-3" node="ES7" wcet="4497" period="50000" type="NORMAL"/>
+			<task name="t-app00-3" node="ES7" wcet="1497" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
@@ -255,10 +255,10 @@
 	
 	<application name="app01" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app01-2" node="ES6" wcet="3069" period="50000" type="NORMAL"/>
-			<task name="t-app01-0" node="ES6" wcet="4515" period="50000" type="NORMAL"/>
-			<task name="t-app01-1" node="ES8" wcet="4411" period="50000" type="NORMAL"/>
-			<task name="t-app01-4" node="ES3" wcet="2709" period="50000" type="NORMAL"/>
+			<task name="t-app01-2" node="ES6" wcet="1069" period="50000" type="NORMAL"/>
+			<task name="t-app01-0" node="ES6" wcet="1515" period="50000" type="NORMAL"/>
+			<task name="t-app01-1" node="ES8" wcet="1411" period="50000" type="NORMAL"/>
+			<task name="t-app01-4" node="ES3" wcet="1709" period="50000" type="NORMAL"/>
 			<task name="t-app01-5" node="ES5" wcet="2133" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
@@ -309,11 +309,11 @@
 	
 	<application name="app31" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app31-2" node="ES11" wcet="3869" period="50000" type="NORMAL"/>
-			<task name="t-app31-0" node="ES4" wcet="2878" period="50000" type="NORMAL"/>
-			<task name="t-app31-1" node="ES12" wcet="3284" period="50000" type="NORMAL"/>
-			<task name="t-app31-4" node="ES2" wcet="4158" period="50000" type="NORMAL"/>
-			<task name="t-app31-5" node="ES15" wcet="2828" period="50000" type="NORMAL"/>
+			<task name="t-app31-2" node="ES11" wcet="1869" period="50000" type="NORMAL"/>
+			<task name="t-app31-0" node="ES4" wcet="1878" period="50000" type="NORMAL"/>
+			<task name="t-app31-1" node="ES12" wcet="1284" period="50000" type="NORMAL"/>
+			<task name="t-app31-4" node="ES2" wcet="1158" period="50000" type="NORMAL"/>
+			<task name="t-app31-5" node="ES15" wcet="1828" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 			<stream name="s-t-app31-2" src="ES11" dest="ES4,ES12,ES2,ES15" sender_task="t-app31-2" receiver_tasks="t-app31-0,t-app31-1,t-app31-4,t-app31-5" size="140" period="50000" rl="1" secure="True" type="NORMAL" />

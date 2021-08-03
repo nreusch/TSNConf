@@ -339,12 +339,12 @@
 	
 	<application name="app30" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app30-0" node="ES3" wcet="4975" period="50000" type="NORMAL"/>
-			<task name="t-app30-1" node="ES10" wcet="4953" period="50000" type="NORMAL"/>
+			<task name="t-app30-0" node="ES3" wcet="1975" period="50000" type="NORMAL"/>
+			<task name="t-app30-1" node="ES10" wcet="1953" period="50000" type="NORMAL"/>
 			<task name="t-app30-2" node="ES12" wcet="3392" period="50000" type="NORMAL"/>
-			<task name="t-app30-3" node="ES11" wcet="4817" period="50000" type="NORMAL"/>
-			<task name="t-app30-4" node="ES0" wcet="4865" period="50000" type="NORMAL"/>
-			<task name="t-app30-5" node="ES9" wcet="4875" period="50000" type="NORMAL"/>
+			<task name="t-app30-3" node="ES11" wcet="1817" period="50000" type="NORMAL"/>
+			<task name="t-app30-4" node="ES0" wcet="1865" period="50000" type="NORMAL"/>
+			<task name="t-app30-5" node="ES9" wcet="1875" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 			<stream name="s-t-app30-0" src="ES3" dest="ES10,ES12" sender_task="t-app30-0" receiver_tasks="t-app30-1,t-app30-2" size="1452" period="50000" rl="3" secure="True" type="NORMAL" />

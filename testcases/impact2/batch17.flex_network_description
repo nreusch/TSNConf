@@ -307,19 +307,19 @@
 		</streams>
 	</application>
 	
-	<application name="app30" period="15000" type="NORMAL">
+	<application name="app30" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app30-0" node="ES3" wcet="1250" period="15000" type="NORMAL"/>
-			<task name="t-app30-1" node="ES2" wcet="146" period="15000" type="NORMAL"/>
-			<task name="t-app30-2" node="ES4" wcet="584" period="15000" type="NORMAL"/>
-			<task name="t-app30-4" node="ES3" wcet="809" period="15000" type="NORMAL"/>
-			<task name="t-app30-5" node="ES7" wcet="1007" period="15000" type="NORMAL"/>
-			<task name="t-app30-3" node="ES2" wcet="256" period="15000" type="NORMAL"/>
+			<task name="t-app30-0" node="ES3" wcet="1250" period="50000" type="NORMAL"/>
+			<task name="t-app30-1" node="ES2" wcet="146" period="50000" type="NORMAL"/>
+			<task name="t-app30-2" node="ES4" wcet="584" period="50000" type="NORMAL"/>
+			<task name="t-app30-4" node="ES3" wcet="809" period="50000" type="NORMAL"/>
+			<task name="t-app30-5" node="ES7" wcet="1007" period="50000" type="NORMAL"/>
+			<task name="t-app30-3" node="ES2" wcet="256" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app30-0" src="ES3" dest="ES2" sender_task="t-app30-0" receiver_tasks="t-app30-1" size="1383" period="15000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app30-2" src="ES4" dest="ES2,ES3" sender_task="t-app30-2" receiver_tasks="t-app30-1,t-app30-4" size="1051" period="15000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app30-5" src="ES7" dest="ES2,ES2,ES3" sender_task="t-app30-5" receiver_tasks="t-app30-1,t-app30-3,t-app30-4" size="1095" period="15000" rl="2" secure="True" type="NORMAL" />
+			<stream name="s-t-app30-0" src="ES3" dest="ES2" sender_task="t-app30-0" receiver_tasks="t-app30-1" size="1383" period="50000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app30-2" src="ES4" dest="ES2,ES3" sender_task="t-app30-2" receiver_tasks="t-app30-1,t-app30-4" size="1051" period="50000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app30-5" src="ES7" dest="ES2,ES2,ES3" sender_task="t-app30-5" receiver_tasks="t-app30-1,t-app30-3,t-app30-4" size="1095" period="50000" rl="2" secure="True" type="NORMAL" />
 		</streams>
 	</application>
 	

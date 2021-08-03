@@ -269,9 +269,9 @@
 		</streams>
 	</application>
 	
-	<application name="app10" period="15000" type="NORMAL">
+	<application name="app10" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app10-5" node="ES0" wcet="693" period="15000" type="NORMAL"/>
+			<task name="t-app10-5" node="ES0" wcet="693" period="50000" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
@@ -279,9 +279,9 @@
 	
 	<application name="app11" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app11-0" node="ES3" wcet="4165" period="50000" type="NORMAL"/>
-			<task name="t-app11-1" node="ES14" wcet="4405" period="50000" type="NORMAL"/>
-			<task name="t-app11-3" node="ES4" wcet="3877" period="50000" type="NORMAL"/>
+			<task name="t-app11-0" node="ES3" wcet="1165" period="50000" type="NORMAL"/>
+			<task name="t-app11-1" node="ES14" wcet="1405" period="50000" type="NORMAL"/>
+			<task name="t-app11-3" node="ES4" wcet="1877" period="50000" type="NORMAL"/>
 			<task name="t-app11-2" node="ES10" wcet="1955" period="50000" type="NORMAL"/>
 			<task name="t-app11-4" node="ES1" wcet="3247" period="50000" type="NORMAL"/>
 		</tasks>
@@ -329,7 +329,7 @@
 		</streams>
 	</application>
 	
-	<application name="app30" period="15000" type="NORMAL">
+	<application name="app30" period="50000" type="NORMAL">
 		<tasks>
 			<task name="t-app30-0" node="ES6" wcet="979" period="15000" type="NORMAL"/>
 			<task name="t-app30-1" node="ES0" wcet="1430" period="15000" type="NORMAL"/>
