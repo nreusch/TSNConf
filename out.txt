@@ -1,5 +1,10 @@
-usage: main.py [-h] [--mode MODE] [--aggregate AGGREGATE] [--visualize] [--port PORT] [--no_redundancy] [--no_security] [--allow_overlap] [--allow_infeasible] [--timeout_routing TIMEOUT_ROUTING]
-               [--timeout_scheduling TIMEOUT_SCHEDULING] [--timeout_pint TIMEOUT_PINT] [--k K] [--a A] [--b B]
+usage: main.py [-h] [--mode MODE] [--aggregate AGGREGATE] [--visualize]
+               [--port PORT] [--no_redundancy] [--no_security]
+               [--allow_overlap] [--allow_infeasible]
+               [--timeout_routing TIMEOUT_ROUTING]
+               [--timeout_scheduling TIMEOUT_SCHEDULING]
+               [--timeout_pint TIMEOUT_PINT] [--k K] [--a A] [--b B]
+               [--Tstart TSTART] [--alpha ALPHA] [--Prmv PRMV] [--w W]
                testcase_path
 
 test
@@ -27,6 +32,10 @@ optional arguments:
   --k K                 K: Parameter for k-shortest-paths heuristic (Default: 3)
   --a A                 a: Weight for routing overlap component of cost function (Default: 5000)
   --b B                 b: Weight for infeasible stream component of cost function (Default: 1000)
+  --Tstart TSTART       Tstart: Start temperature for SA metaheuristic (Default: 10)
+  --alpha ALPHA         alpha: Cooling factor for SA  metaheuristic (Default: 0.999)
+  --Prmv PRMV           Prmv: Probability of a routing move for SA metaheuristic (Default: 0.8)
+  --w W                 w: Weight for punishing overlap in k-shortest-paths for SA heuristic (Default: 10)
 
 Available Modes:
 - Mode 0: View/Check the testcase. Doesn't generate/optimize anything

@@ -52,9 +52,9 @@ def run(tc: Testcase, timing_object: TimingData) -> Testcase:
                                 "s_key_{}".format(src_es_id),
                                 secapp.id,
                                 src_es_id,
-                                set(),
+                                {},
                                 key_rel_task.id,
-                                set(),
+                                {},
                                 tc.key_length + tc.OH,
                                 tc.Pint,
                                 f.rl,
@@ -80,8 +80,8 @@ def run(tc: Testcase, timing_object: TimingData) -> Testcase:
                             )
 
                             key_stream = es_to_secapp_map[src_es_id][1]
-                            key_stream.receiver_es_ids.add(dest_es_id)
-                            key_stream.receiver_task_ids.add(key_verify_task.id)
+                            key_stream.receiver_es_ids[dest_es_id] = None
+                            key_stream.receiver_task_ids[key_verify_task.id] = None
                             key_stream.rl = max(key_stream.rl, f.rl)
 
                             es_to_secapp_map[src_es_id][2].append(key_verify_task)

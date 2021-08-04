@@ -25,8 +25,8 @@ class application:
         self.edges_from_nodes: Dict[str, Dict[str, List[str]]] = {}  # task1.id => (task2.id => List[stream.id])
         self._DAG: DiGraph = DiGraph()
 
-        self.root_vertex_ids: Set[str] = set()
-        self.leaf_vertex_ids: Set[str] = set()
+        self.root_vertex_ids: Dict[str, None] = {}
+        self.leaf_vertex_ids: Dict[str, None] = {}
 
     def __repr__(self):
         return "app({})".format(self.id)
@@ -40,9 +40,9 @@ class application:
 
         for t_id in self.verticies.keys():
             if self.in_degree(t_id) == 0:
-                self.root_vertex_ids.add(t_id)
+                self.root_vertex_ids[t_id] = None
             if self.out_degree(t_id) == 0:
-                self.leaf_vertex_ids.add(t_id)
+                self.leaf_vertex_ids[t_id] = None
 
     def add_vertex(self, t: task):
         self.verticies[t.id] = t

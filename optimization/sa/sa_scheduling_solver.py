@@ -189,7 +189,7 @@ class SASchedulingSolver:
             print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
             timing_object.time_first_feasible_solution = first_feasible_time
 
-        #print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
+        print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
         # print_simple_solution(s_i, index_to_core_map)
         debug_print("")
 

@@ -19,10 +19,10 @@ class stream:
     app_id: str
 
     sender_es_id: str
-    receiver_es_ids: Set[str]
+    receiver_es_ids: Dict[str, None]
 
     sender_task_id: str
-    receiver_task_ids: Set[str]
+    receiver_task_ids: Dict[str, None]
 
     size: int # message_size + mac_size + OH
     period: int  # =Pint for security streams
@@ -36,10 +36,10 @@ class stream:
     type: EStreamType
 
     def is_self_stream(self):
-        if len(self.receiver_es_ids) > 1:
+        if len(self.receiver_es_ids.keys()) > 1:
             return False
         else:
-            return list(self.receiver_es_ids)[0] == self.sender_es_id
+            return list(self.receiver_es_ids.keys())[0] == self.sender_es_id
 
     def get_id_prefix(self):
         spl = self.id.split("_")
@@ -72,7 +72,7 @@ class stream:
             rl = 1
 
         sender_task_id = n.attrib["sender_task"]
-        receiver_task_ids = set(n.attrib["receiver_tasks"].replace(" ", "").split(","))
+        receiver_task_ids = dict.fromkeys(n.attrib["receiver_tasks"].replace(" ", "").split(","))
 
         if "src" in n.attrib:
             src_es_id = n.attrib["src"]
@@ -80,9 +80,9 @@ class stream:
             src_es_id = tc_T[sender_task_id].src_es_id
 
         if "dest" in n.attrib:
-            receiver_es_ids = set(n.attrib["dest"].replace(" ", "").split(","))
+            receiver_es_ids = dict.fromkeys(n.attrib["dest"].replace(" ", "").split(","))
         else:
-            receiver_es_ids = set([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
+            receiver_es_ids = dict.fromkeys([tc_T[t_id].src_es_id for t_id in receiver_task_ids])
 
         message_size = int(n.attrib["size"])
 
