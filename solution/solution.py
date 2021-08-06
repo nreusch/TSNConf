@@ -116,6 +116,7 @@ class Solution:
         self.bandwidth_used_percentage_total = perc_sum / len(self.tc.L.values())
 
     def calculate_cpu(self):
+        print(self.tc.schedule.cpu_use)
         perc_sum = sum([v for v in self.tc.schedule.cpu_use.values()])
 
         self.cpu_used_percentage_total = perc_sum / len(self.tc.ES.values())

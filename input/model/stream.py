@@ -101,7 +101,6 @@ class stream:
             else:
                 is_secure = False
                 mac_size = 0
-
         else:
             is_secure = False
             mac_size = 0

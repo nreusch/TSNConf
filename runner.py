@@ -23,7 +23,7 @@ def _mode_0(timing_object: TimingData, input_params: InputParameters) -> Solutio
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params, security, redundancy)
+        tc = parser.parse_to_model(input_params, redundancy, security)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -143,7 +143,7 @@ def _mode_11(timing_object: TimingData, input_params: InputParameters) -> Soluti
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params, security, redundancy)
+        tc = parser.parse_to_model(input_params, redundancy, security)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -220,7 +220,7 @@ def _mode_12(timing_object: TimingData, input_params: InputParameters) -> Soluti
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params, security, redundancy)
+        tc = parser.parse_to_model(input_params, redundancy, security)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
@@ -297,7 +297,7 @@ def _mode_13(timing_object: TimingData, input_params: InputParameters) -> Soluti
     # 1. Parse the given testcase
     t = Timer()
     with t:
-        tc = parser.parse_to_model(input_params, security, redundancy)
+        tc = parser.parse_to_model(input_params, redundancy, security)
     timing_object.time_parsing = t.elapsed_time
     print(
         "-" * 20
