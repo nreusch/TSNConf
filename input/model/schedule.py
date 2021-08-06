@@ -36,12 +36,27 @@ class schedule:
                                 c.c_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].length
                                 c.a_f_val[l_or_es.id][f.id] = heu_sched.frames[tgn.id][l_or_es.id].offset + heu_sched.frames[tgn.id][l_or_es.id].length
 
+                                if isinstance(l_or_es, end_system):
+                                    if l_or_es.id not in c.cpu_use:
+                                        c.cpu_use[l_or_es.id] = heu_sched.frames[tgn.id][l_or_es.id].length / heu_sched.frames[tgn.id][l_or_es.id].period
+                                    else:
+                                        c.cpu_use[l_or_es.id] += heu_sched.frames[tgn.id][l_or_es.id].length / heu_sched.frames[tgn.id][l_or_es.id].period
+                                elif isinstance(l_or_es, link):
+                                    if l_or_es.id not in c.bw_use:
+                                        c.bw_use[l_or_es.id] = heu_sched.frames[tgn.id][l_or_es.id].length / heu_sched.frames[tgn.id][l_or_es.id].period
+                                    else:
+                                        c.bw_use[l_or_es.id] += heu_sched.frames[tgn.id][l_or_es.id].length / heu_sched.frames[tgn.id][l_or_es.id].period
         for t in tc.T.values():
             tgn = task_graph.get_task_tgn(t.id)
             if tgn.id in heu_sched.frames:
                 if t.src_es_id in heu_sched.frames[tgn.id]:
                     c.o_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset
                     c.a_t_val[t.id] = heu_sched.frames[tgn.id][t.src_es_id].offset + heu_sched.frames[tgn.id][t.src_es_id].length
+
+                    if t.src_es_id not in c.cpu_use:
+                        c.cpu_use[t.src_es_id] = heu_sched.frames[tgn.id][t.src_es_id].length / heu_sched.frames[tgn.id][t.src_es_id].period
+                    else:
+                        c.cpu_use[t.src_es_id] += heu_sched.frames[tgn.id][t.src_es_id].length / heu_sched.frames[tgn.id][t.src_es_id].period
 
         for app in tc.A.values():
             if app.id not in infeasible_tga:
@@ -72,9 +87,32 @@ class schedule:
                     scheduling_model.a_f[l_or_n_id][f.id]
                 )
 
+                length = c.c_f_val[l_or_n_id][f.id]
+                period = f.period
+                if l_or_n_id in tc.ES:
+                    l_or_es = tc.ES[l_or_n_id]
+                    if l_or_es.id not in c.cpu_use:
+                        c.cpu_use[l_or_es.id] = length / period
+                    else:
+                        c.cpu_use[l_or_es.id] += length / period
+                elif l_or_n_id in tc.L:
+                    l_or_es = tc.L[l_or_n_id]
+                    if l_or_es.id not in c.bw_use:
+                        c.bw_use[l_or_es.id] = length / period
+                    else:
+                        c.bw_use[l_or_es.id] += length / period
+
         for t in scheduling_model.tc.T.values():
             c.o_t_val[t.id] = solver.Value(scheduling_model.o_t[t.id])
             c.a_t_val[t.id] = solver.Value(scheduling_model.a_t[t.id])
+
+            l_or_es = tc.ES[t.src_es_id]
+            length = c.a_t_val[t.id] - c.o_t_val[t.id]
+            period = t.period
+            if l_or_es.id not in c.cpu_use:
+                c.cpu_use[l_or_es.id] = length / period
+            else:
+                c.cpu_use[l_or_es.id] += length / period
 
         for app in scheduling_model.tc.A.values():
             c.app_costs[app.id] = max([c.a_t_val[t_id] for t_id in app.verticies.keys()]) - min([c.o_t_val[t_id] for t_id in app.verticies.keys()])
@@ -96,6 +134,14 @@ class schedule:
         self.app_costs: Dict[
             str, int
         ] = {}  # Dict(app.id -> val)
+
+        self.bw_use: Dict[
+            str, float
+        ] = {} # Dict(link.id -> val)
+
+        self.cpu_use: Dict[
+            str, float
+        ] = {}  # Dict(es.id -> val)
 
     def is_stream_using_link_or_node(self, f_id, l_or_n_id):
         if l_or_n_id in self.c_f_val and f_id in self.c_f_val[l_or_n_id]:

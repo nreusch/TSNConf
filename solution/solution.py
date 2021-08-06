@@ -111,36 +111,12 @@ class Solution:
 
 
     def calculate_bandwidth(self):
-        perc_sum = 0
-        for l in self.tc.L.values():
-            bw_used = 0
-            for f in self.tc.F_routed.values():
-                if self.tc.R[f.id].is_in_tree(l.id, self.tc):
-                    bw_used += f.size / f.period  # B/us
-            perc = bw_used / l.speed
-            assert perc <= 1
-            perc_sum += perc
+        perc_sum = sum([v for v in self.tc.schedule.bw_use.values()])
 
         self.bandwidth_used_percentage_total = perc_sum / len(self.tc.L.values())
 
     def calculate_cpu(self):
-        perc_sum = 0
-        for es in self.tc.ES.values():
-            cpu_used = 0
-            for t in self.tc.T_g[es.id]:
-                cpu_used += t.exec_time / t.period
-
-            for f in self.tc.F_g_out[es.id]:
-                if f.is_secure:
-                    cpu_used += es.mac_exec_time / f.period
-
-            for f in self.tc.F_g_in[es.id]:
-                if f.is_secure:
-                    cpu_used += es.mac_exec_time / f.period
-
-            perc = cpu_used
-            assert perc <= 1
-            perc_sum += perc
+        perc_sum = sum([v for v in self.tc.schedule.cpu_use.values()])
 
         self.cpu_used_percentage_total = perc_sum / len(self.tc.ES.values())
 
