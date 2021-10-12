@@ -10,7 +10,8 @@ from input.model.route import route
 from input.model.stream import stream
 from input.model.task import task
 from optimization.sa.task_graph import PrecedenceGraph
-from utils.utilities import sorted_complement
+from utils.utilities import sorted_complement, debug_print
+
 
 class schedule:
     @classmethod
@@ -148,6 +149,54 @@ class schedule:
             return self.c_f_val[l_or_n_id][f_id] != 0
         else:
             return False
+
+    def get_Extensibility_metrics(self, tc):
+        res = {}
+
+        for es in tc.ES.values():
+            if not es.is_prover():
+                ivs = []
+                for t in tc.T_g[es.id]:
+                    ivs.append((self.o_t_val[t.id], self.a_t_val[t.id]))
+                iv_tree = IntervalTree.from_tuples(ivs)
+                iv_tree.merge_overlaps(strict=False)
+                iv_lengths = [iv.end - iv.begin for iv in iv_tree]
+                worst_case_response_time = max(iv_lengths) if len(iv_lengths) > 0 else 0
+
+                average_response_time = 0
+                for iv_length in iv_lengths:
+                    average_response_time += (iv_length*(iv_length+1)) / 2
+                average_response_time = average_response_time / len(iv_lengths)
+                debug_print(f"{es.id}")
+                debug_print(f"Intervals: {iv_tree}")
+                debug_print(f"{(worst_case_response_time, average_response_time)}")
+                res[es.id] = (worst_case_response_time, average_response_time)
+
+        return res
+
+    def get_RA_metrics(self, tc):
+        # average longest time interval not attested
+        # average time spent attesting
+        res = {}
+
+        for es_prover in tc.ES_prover.values():
+            ivs = []
+            for t in tc.T_g[es_prover.id]:
+                ivs.append((self.o_t_val[t.id], self.a_t_val[t.id]))
+            iv_tree = IntervalTree.from_tuples(ivs)
+            iv_tree.merge_overlaps(strict=False)
+            iv_lengths = [iv.end - iv.begin for iv in iv_tree]
+            max_non_attested_time = max(iv_lengths) if len(iv_lengths) > 0 else 0
+            slacks = sorted_complement(iv_tree, start=0, end=tc.hyperperiod)
+            slack_lengths = [iv.end - iv.begin for iv in slacks]
+            block_length = min(slack_lengths)
+            time_spent_attesting = block_length * len(slack_lengths)
+            debug_print(f"{es_prover.id}")
+            debug_print(f"Slacks: {slacks}")
+            debug_print(f"{(max_non_attested_time, time_spent_attesting, block_length)}")
+            res[es_prover.id] = (max_non_attested_time, time_spent_attesting, block_length)
+
+        return res
 
     def xml_string(self, tc):
         # Preperation

@@ -55,7 +55,7 @@ class testcase_generation_config:
 
         self.name = "name"
 
-def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es):
+def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es, container_id):
     random.seed(time.time())
 
     es_utilization_dict = {}
@@ -92,7 +92,7 @@ def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es
 
     for i in range(config.nr_dags):
         # communicating apps
-        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, True)
+        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, True, container_id)
 
         for el in lst:
             app = el[0]
@@ -113,7 +113,7 @@ def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es
 
     return path
 
-def create_testcase(config, path):
+def create_testcase(config, path, container_id):
     G, points_sw, points_es = topology_creator.generate_topology(config.nr_sw, config.nr_es, config.connections_per_sw,
                                                                  config.connections_per_es)
     random.seed(time.time())
@@ -152,7 +152,7 @@ def create_testcase(config, path):
 
     for i in range(config.nr_dags):
         # communicating apps
-        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, False)
+        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, False, container_id)
 
         for el in lst:
             app = el[0]
@@ -197,4 +197,4 @@ if __name__ == "__main__":
         config.nr_dags = (config.nr_tasks // 8) + 1
 
         config.name = tc_name[i]
-        path = create_testcase(config, Path("testcases/synthetic4/" + config.name + ".flex_network_description"))
+        path = create_testcase(config, Path("testcases/scalability/" + config.name + ".flex_network_description"))

@@ -23,9 +23,9 @@ class tesla_parameters:
 
 def _parse_device(n: ET.Element, tc: Testcase):
     nd = None
-    if n.attrib["type"] == "topo:EndSystem" or n.attrib["type"] == "EndSystem":
+    if n.attrib["type"] == "topo:EndSystem" or n.attrib["type"] == "EndSystem" or n.attrib["type"] == "EndSystem_Verifier" or n.attrib["type"] == "EndSystem_Prover":
         nd = end_system.from_xml_node(n)
-    elif n.attrib["type"] == "topo:Switch" or n.attrib["type"] == "Switch":
+    elif n.attrib["type"] == "topo:Switch" or n.attrib["type"] == "Switch" :
         nd = switch.from_xml_node(n)
     assert nd != None
 
@@ -78,18 +78,33 @@ def _parse_function_path(n: ET.Element, tc: Testcase):
     fp = function_path.from_xml_node(n, tc.T)
     tc.add_to_datastructures(fp)
 
+def parse_extra_applications_to_model(tc, extra_app_path: str, redundancy: bool, security: bool) -> Testcase:
+    xml_tree = ET.parse(Path(extra_app_path))
+    xml_root = xml_tree.getroot()
 
-def parse_to_model(input_params: InputParameters, redundancy: bool, security: bool) -> Testcase:
+    for n in xml_root:
+        if n.tag == "application":
+            if "type" in n.attrib and n.attrib["type"] == "KEY" and not security:
+                # If no security, don' parse key apps
+                pass
+            else:
+                _parse_application(n, tc, redundancy, security)
+        else:
+            raise NotImplementedError()
+
+    return tc
+
+def parse_to_model(tc_name:str, tc_path: str, redundancy: bool, security: bool) -> Testcase:
     """
     Parses a given testcase file into a testcase object using our model
     """
 
     # 1. Initialize testcase object
-    tc = Testcase(input_params.tc_name)
+    tc = Testcase(tc_name)
 
     # 2. Parse
     # noinspection PyTypeChecker
-    xml_tree = ET.parse(Path(input_params.tc_path))
+    xml_tree = ET.parse(Path(tc_path))
     xml_root = xml_tree.getroot()
 
     # 2.1 Parse root tag

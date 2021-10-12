@@ -1,0 +1,17 @@
+,Batch name,Security,Redundancy,Cost,Bandwidth,CPU
+0,"batch0 - large streams, small tasks",no,no,3822.08,0.09,1.44
+1,,no,yes,+1.34%,+25.45%,+0.00%
+2,,yes,no,+256.25%,+5.49%,+12.99%
+3,,yes,yes,+258.10%,+36.64%,+15.93%
+4,"batch1 - large streams, large tasks",no,no,17721.32,0.08,7.06
+5,,no,yes,+-0.00%,+15.91%,+0.00%
+6,,yes,no,+64.31%,+3.18%,+1.39%
+7,,yes,yes,+64.98%,+22.16%,+1.75%
+8,"batch2 - small streams, large tasks",no,no,18547.6,0.01,7.51
+9,,no,yes,+0.06%,+31.29%,+0.00%
+10,,yes,no,+52.86%,+33.92%,+0.21%
+11,,yes,yes,+53.12%,+97.96%,+0.70%
+12,"batch3 - small streams, small tasks",no,no,3713.32,0.01,1.55
+13,,no,yes,+0.37%,+26.62%,+0.00%
+14,,yes,no,+238.77%,+27.73%,+8.54%
+15,,yes,yes,+245.32%,+85.57%,+10.57%

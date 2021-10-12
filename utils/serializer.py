@@ -97,7 +97,7 @@ def serialize_graphs(path: Path, solution: Solution):
             dot.node(node.id, label=node.id + " (SW)", shape="circle")
         else:
             task_list = testcase.T_g[node.id]
-            task_list = [task for task in task_list if task.type == ETaskType.NORMAL]
+            task_list = [task for task in task_list if task.type == ETaskType.NORMAL or task.type == ETaskType.NORMAL]
             # Create task rows
             task_rows = []
 
@@ -141,7 +141,7 @@ def serialize_graphs(path: Path, solution: Solution):
             dot.node(node.id, label=node.id + " (SW)", shape="circle")
         else:
             task_list = testcase.T_g[node.id]
-            task_list = [task for task in task_list if not task.type == ETaskType.NORMAL]
+            task_list = [task for task in task_list if not task.type == ETaskType.NORMAL or task.type == ETaskType.NORMAL]
             # Create task rows
             task_rows = []
 

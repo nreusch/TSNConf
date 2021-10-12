@@ -28,6 +28,7 @@ class Timeouts:
 class EMode(Enum):
     VIEW = 0
     CP_ROUTING_CP_SCHEDULING = 1
+    CP_ROUTING_CP_SCHEDULING_EXT = 2
     SA_ROUTING_ASAP_SCHEDULING = 11
     SA_ROUTING_SA_SCHEDULING = 12
     SA_ROUTING_SA_SCHEDULING_COMB = 13
@@ -36,7 +37,9 @@ class EMode(Enum):
         if self.value == 0:
             return "Mode 0: View/Check the testcase. Doesn't generate/optimize anything"
         elif self.value == 1:
-            return "Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization"
+            return "Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize laxity)"
+        elif self.value == 2:
+            return "Mode 2: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize laxity + extensibility)"
         elif self.value == 11:
             return "Mode 11: SA Routing, ASAP Scheduling, Security, Redundancy, Optimization"
         elif self.value == 12:
@@ -52,12 +55,13 @@ class EMode(Enum):
 
 @dataclass
 class InputParameters:
-    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, visualize: bool, aggregate_path: str, port: int, no_redundancy: bool, no_security: bool, allow_overlap: bool, allow_infeasible_solutions: bool, k: int, a: int, b: int, Tstart: int, alpha: float, Prmv: float, w: int):
+    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, extra_apps_path: str, visualize: bool, aggregate_path: str, port: int, no_redundancy: bool, no_security: bool, allow_overlap: bool, allow_infeasible_solutions: bool, k: int, a: int, b: int, Tstart: int, alpha: float, Prmv: float, w: int):
         self.mode = mode
 
         self.timeouts = timeouts
 
         self.tc_path = tc_path
+        self.extra_apps_path = extra_apps_path
         self.tc_name = Path(tc_path).stem
 
         if aggregate_path != "":

@@ -1,0 +1,3 @@
+,Index,Testcase,Security,Redundancy,Method,# ES,# Switches,# Streams,# Receiver Tasks,# Tasks,Total cost,Routing cost,Scheduling cost,Normal application latency,Infeasible Apps,"Bandwidth use (Mean,%)","CPU use (Mean,%)",Optimization Time (ms),First feasible solution time (ms),Total Runtime (ms),Infeasible apps,Overlapping number,Stream with overlap,Tstart,alpha,Prmv,k,a,b,w
+17,0,TC1_automotive_redundant,True,True,SA_ROUTING_SA_SCHEDULING_COMB,20,32,84,102,74,38031,397,37634,37135,,0.10202322580645157,3.0800000000000014,583458,3,583505,0/19,0,0,1,0.99,0.1,30,50000,10000,10
+0,0,TC2_zhao_case_study,True,True,SA_ROUTING_SA_SCHEDULING_COMB,6,2,29,31,28,6114,30,6084,5930,,1.465,19.30208333333333,580068,0,580105,0/5,0,0,10000,0.999999,0.1,5,50000,10000,5

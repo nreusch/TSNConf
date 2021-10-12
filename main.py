@@ -19,9 +19,9 @@ from utils.utilities import Timer
 class MyArgParser(argparse.ArgumentParser):
     def error(self, message):
         sys.stderr.write("error: %s\n" % message)
-        f = open("out.txt", "w")
+        #f = open("out.txt", "w")
         self.print_help(f)
-        f.close()
+        #f.close()
         self.print_help()
         sys.exit(2)
 
@@ -44,6 +44,9 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
 
     parser.add_argument('--aggregate', type=str, default=False,
                        help='Aggregate results to [path]')
+
+    parser.add_argument('--extra_apps_path', type=str, default=False,
+                        help='Extra applications to apply onto initial schedule')
 
     parser.add_argument(
         "--visualize",
@@ -171,6 +174,11 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
         results.timeout_scheduling,
     )
     tc_path = results.testcase_path
+
+    if results.extra_apps_path == False:
+        extra_apps_path = ""
+    else:
+        extra_apps_path = results.extra_apps_path
     if results.aggregate == False:
         aggregate = ""
     else:
@@ -192,7 +200,7 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     alpha = results.alpha
     Prmv = results.Prmv
     w = results.w
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b, Tstart, alpha, Prmv, w))
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, extra_apps_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b, Tstart, alpha, Prmv, w))
 
     return input_param_list, Path(results.testcase_path)
 
@@ -241,11 +249,13 @@ def run(input_params: InputParameters) -> Solution:
             )
     except Exception as e:
         print("Error in Step 2: Serializing the solution")
-        raise e
+        print(e)
+        #raise e
 
     # 4. Print results
     try:
         print("-" * 10 + " 3. Printing results")
+
         print(solution.get_result_string())
         print(solution_parser.get_solution_results_info_dataframe(solution).to_string())
     except Exception as e:

@@ -85,7 +85,7 @@ def print_model_stats(model_stats_string: str):
 def set_to_string(s: set):
     return ", ".join([str(x) for x in s])
 
-def sorted_complement(tree, f, start=None, end=None) -> List[Interval]:
+def sorted_complement(tree, f=None, start=None, end=None) -> List[Interval]:
     result = IntervalTree()
     if start is None:
         start = tree.begin()
@@ -94,9 +94,12 @@ def sorted_complement(tree, f, start=None, end=None) -> List[Interval]:
 
     result.addi(start, end)  # using input tree bounds
     for iv in tree:
-        if  iv.begin == f.offset and iv.end == f.offset + f.length:
-            pass
+        if f != None:
             # don't chop out the block of the frame itself (useful for latency optimization where f is already scheuduled somewhere)
+            if  iv.begin == f.offset and iv.end == f.offset + f.length:
+                pass
+            else:
+                result.chop(iv[0], iv[1])
         else:
             result.chop(iv[0], iv[1])
     return sorted(result)

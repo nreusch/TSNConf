@@ -12,6 +12,7 @@ from input.model.task import task
 class EApplicationType(Enum):
     NORMAL = 1
     KEY = 2
+    EDGE = 3
 
 class application:
     def __init__(self, id: str, period: int, type: EApplicationType, authed_es_id: str = ""):
@@ -106,7 +107,7 @@ class application:
 
     def xml_string(self, tc_F: Dict[str, stream]):
         s = ""
-        if self.type == EApplicationType.NORMAL:
+        if self.type == EApplicationType.NORMAL or self.type == EApplicationType.EDGE:
             s = '<application name="{}" period="{}" type="{}">\n'.format(
                 self.id, self.period, self.type.name
             )

@@ -1,8 +1,7 @@
 
 from ortools.sat.python.cp_model import Domain
 
-
-def init_optimization_variables(model):
+def init_optimization_variables(model, existing_routes = None):
     # link capacity
     for v_int in range(model.max_node_int):
         model.v_to_u_capc_use_of_f.append([])
@@ -13,8 +12,8 @@ def init_optimization_variables(model):
             u_id = model._IntToNodeIDMap[u_int]
 
             if (
-                u_id in model.tc.N_conn_inv[v_id]
-                and v_id in model.tc.L_from_nodes[u_id]
+                    u_id in model.tc.N_conn_inv[v_id]
+                    and v_id in model.tc.L_from_nodes[u_id]
             ):
                 # If there is link from u to v
                 l = model.tc.L_from_nodes[u_id][v_id]
@@ -113,9 +112,12 @@ def init_optimization_variables(model):
             model.x_v_has_successor[f_int].append(x_v_has_s)
 
 
-def init_helper_variables(model):
+def init_helper_variables(model, existing_routes):
     int_id = 0
     for f_id in model.tc.F_routed.keys():
+        if existing_routes != None:
+            if f_id in existing_routes:
+                continue
         model._StreamIDToIntMap[f_id] = int_id
         model._IntToStreamIDMap[int_id] = f_id
         int_id += 1

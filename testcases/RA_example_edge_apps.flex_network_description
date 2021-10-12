@@ -1,0 +1,101 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
+	<application name="EdgeApp_ES1" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES1_t" node="ES1" wcet="23" period="2000" arrival_time="274" type="EDGE"/>
+			<task name="EdgeApp_ES1_t2" node="ES2" wcet="11" period="2000" arrival_time="524" type="EDGE"/>
+		</tasks>
+		<streams>
+					<stream name="EdgeApp_ES1_s" src="ES1" dest="ES2" sender_task="EdgeApp_ES1_t" receiver_tasks="EdgeApp_ES1_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="EdgeApp_ES1_2" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES1_2_t" node="ES1" wcet="3" period="2000" arrival_time="501" type="EDGE"/>
+			<task name="EdgeApp_ES1_2_t2" node="ES3" wcet="45" period="2000" arrival_time="551" type="EDGE"/>
+		</tasks>
+		<streams>
+					<stream name="EdgeApp_ES1_2_s" src="ES1" dest="ES3" sender_task="EdgeApp_ES1_2_t" receiver_tasks="EdgeApp_ES1_2_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="EdgeApp_Verifier1" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_Verifier1_t" node="Verifier1" wcet="36" period="2000" arrival_time="1051" type="EDGE"/>
+			<task name="EdgeApp_Verifier1_t2" node="Verifier2" wcet="11" period="2000" arrival_time="1101" type="EDGE"/>
+		</tasks>
+		<streams>
+					<stream name="EdgeApp_Verifier1_s" src="Verifier1" dest="Verifier2" sender_task="EdgeApp_Verifier1_t" receiver_tasks="EdgeApp_Verifier1_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="EdgeApp_ES3" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES3_t" node="ES3" wcet="47" period="2000" arrival_time="458" type="EDGE"/>
+			<task name="EdgeApp_ES3_t2" node="ES2" wcet="16" period="2000" arrival_time="508" type="EDGE"/>
+		</tasks>
+		<streams>
+					<stream name="EdgeApp_ES3_s" src="ES3" dest="ES2" sender_task="EdgeApp_ES3_t" receiver_tasks="EdgeApp_ES3_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="EdgeApp_Verifier2_ES4" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_Verifier2_ES4_t" node="Verifier2" wcet="48" period="2000" arrival_time="1831" type="EDGE"/>
+			<task name="EdgeApp_Verifier2_ES4_t2" node="ES4" wcet="23" period="2000" arrival_time="1881" type="EDGE"/>
+		</tasks>
+		<streams>
+					<stream name="EdgeApp_ES4_s" src="Verifier2" dest="ES4" sender_task="EdgeApp_Verifier2_ES4_t" receiver_tasks="EdgeApp_Verifier2_ES4_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="EdgeApp_ES1_nocomm" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES1_nocomm_t" node="ES1" wcet="3" period="2000" arrival_time="415" type="EDGE"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+	<application name="EdgeApp_ES2_nocomm" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES2_nocomm_t" node="ES2" wcet="40" period="2000" arrival_time="904" type="EDGE"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+	<application name="EdgeApp_ES3_nocomm" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES3_nocomm_t" node="ES3" wcet="25" period="2000" arrival_time="1032" type="EDGE"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+	<application name="EdgeApp_ES4_nocomm" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_ES4_nocomm_t" node="ES4" wcet="7" period="2000" arrival_time="473" type="EDGE"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+	<application name="EdgeApp_Verifier1_nocomm" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_Verifier1_nocomm_t" node="Verifier1" wcet="11" period="2000" arrival_time="1269" type="EDGE"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+	<application name="EdgeApp_Verifier2_nocomm" period="2000" type="EDGE">
+		<tasks>
+			<task name="EdgeApp_Verifier2_nocomm_t" node="Verifier2" wcet="30" period="2000" arrival_time="768" type="EDGE"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+</NetworkDescription>

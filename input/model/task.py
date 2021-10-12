@@ -6,6 +6,7 @@ class ETaskType(Enum):
     NORMAL = 1
     KEY_RELEASE = 2
     KEY_VERIFICATION = 3
+    EDGE = 4
 
 
 @dataclass
@@ -15,14 +16,16 @@ class task:
     src_es_id: str
     exec_time: int
     period: int
+    arrival_time: int
     type: ETaskType
 
     def xml_string(self):
-        return '<task name="{}" node="{}" wcet="{}" period="{}" type="{}"/>\n'.format(
+        return '<task name="{}" node="{}" wcet="{}" period="{}" arrival_time="{}" type="{}"/>\n'.format(
             self.id,
             self.src_es_id,
             self.exec_time,
             self.period,
+            self.arrival_time,
             self.type.name,
         )
 
@@ -42,8 +45,13 @@ class task:
         else:
             type = ETaskType["NORMAL"]
 
+        if "arrival_time" in n.attrib:
+            arrival_time = int(n.attrib["arrival_time"])
+        else:
+            arrival_time = 0
+
         return cls(
-            id, app_id, src_es_id, wcet, period, type
+            id, app_id, src_es_id, wcet, period, arrival_time, type
         )
 
 
@@ -52,11 +60,12 @@ class key_verification_task(task):
     corr_release_task_es_id: str
 
     def xml_string(self):
-        return '<task name="{}" node="{}" wcet="{}" period="{}" type="{}" release_es="{}"/>\n'.format(
+        return '<task name="{}" node="{}" wcet="{}" period="{}" arrival_time="{}" type="{}" release_es="{}"/>\n'.format(
             self.id,
             self.src_es_id,
             self.exec_time,
             self.period,
+            self.arrival_time,
             self.type.name,
             self.corr_release_task_es_id,
         )

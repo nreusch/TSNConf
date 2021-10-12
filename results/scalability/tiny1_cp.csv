@@ -1,0 +1,2 @@
+,Testcase,Security,Redundancy,Method,# ES,# Switches,# Streams,# Receiver Tasks,# Tasks,Total cost,Routing cost,Scheduling cost,Normal application latency,Infeasible Apps,"Bandwidth use (Mean,%)","CPU use (Mean,%)",Optimization Time (ms),First feasible solution time (ms),Total Runtime (ms),Infeasible apps,Overlapping number,Stream with overlap,Tstart,alpha,Prmv,k,a,b,w
+0,tiny1,True,True,CP_ROUTING_CP_SCHEDULING,4,2,2,2,6,1708,4,1704,1687,,0.005202962962962963,1.8853333333333333,162,0,202,0/4,0,0,10,0.999,0.8,5,50000,10000,10

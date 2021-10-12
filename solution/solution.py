@@ -1,4 +1,4 @@
-
+from input.model.application import EApplicationType
 from input.testcase import Testcase
 from input.input_parameters import InputParameters, EMode
 from solution.solution_optimization_status import StatusObject
@@ -34,10 +34,18 @@ class Solution:
         self.total_overlaps_routing: int = -1
         self.total_number_of_stream_that_have_overlap: int = -1
 
+        self.ra_avg_max_unattested_time: float = -1
+        self.ra_avg_time_spent_attesting: float = -1
+        self.ext_avg_worst_case_resp_time: float = -1
+        self.ext_avg_avg_case_resp_time: float = -1
+
+        self.avg_edge_application_latency: float = -1
+
         if not input_params.mode == EMode.VIEW:
             self.calculate_cost()
             self.calculate_bandwidth()
             self.calculate_cpu()
+            self.calculate_ra_and_extensibility_metrics()
 
 
     def get_folder_name(self) -> str:
@@ -121,3 +129,21 @@ class Solution:
 
         self.cpu_used_percentage_total = perc_sum / len(self.tc.ES.values())
 
+    def calculate_ra_and_extensibility_metrics(self):
+        ra_metrics = self.tc.schedule.get_RA_metrics(self.tc)
+        extensibility_metrics = self.tc.schedule.get_Extensibility_metrics(self.tc)
+
+        self.ra_avg_max_unattested_time = sum([ram[0] for ram in ra_metrics.values()]) / len(ra_metrics)
+        self.ra_avg_time_spent_attesting = sum([ram[1] for ram in ra_metrics.values()]) / len(ra_metrics)
+        self.ext_avg_worst_case_resp_time = sum([em[0] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
+        self.ext_avg_avg_case_resp_time = sum([em[1] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
+
+        if self.input_params.extra_apps_path != "":
+            nr_edge_apps = 0
+            for app in self.tc.A.values():
+                if app.type == EApplicationType.EDGE:
+                    self.avg_edge_application_latency += (max([self.tc.schedule.a_t_val[t.id] for t in app.verticies.values()]) - min([t.arrival_time for t in app.verticies.values()]))
+                    nr_edge_apps += 1
+
+            if nr_edge_apps != 0:
+                self.avg_edge_application_latency = self.avg_edge_application_latency / nr_edge_apps

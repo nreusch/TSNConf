@@ -1,5 +1,6 @@
 import itertools
 
+from input.model.application import EApplicationType
 from input.model.link import link
 from input.model.nodes import end_system, switch
 from input.model.stream import EStreamType
@@ -108,15 +109,18 @@ def constrain_app_latency(model, app, do_allow_infeasible_solutions):
     end_times = []
     for t_id in app.verticies:
         start_times.append(model.o_t[t_id])
-        end_times.append(model.o_t[t_id])
+        end_times.append(model.a_t[t_id])
 
-    min_start_time = model.model.NewIntVar(0, model.tc.hyperperiod, f"min_start_time_{app.id}")
-    max_end_time = model.model.NewIntVar(0, model.tc.hyperperiod, f"max_end_time_{app.id}")
+    model.min_start_time[app.id] = model.model.NewIntVar(0, model.tc.hyperperiod, f"min_start_time_{app.id}")
+    model.max_end_time[app.id] = model.model.NewIntVar(0, model.tc.hyperperiod, f"max_end_time_{app.id}")
 
-    model.model.AddMinEquality(min_start_time, start_times)
-    model.model.AddMaxEquality(max_end_time, start_times)
+    model.model.AddMinEquality(model.min_start_time[app.id], start_times)
+    model.model.AddMaxEquality(model.max_end_time[app.id], end_times)
 
-    model.model.Add(model.app_cost[app.id] == max_end_time - min_start_time)
+    if app.type == EApplicationType.EDGE:
+        model.model.Add(model.app_cost[app.id] == model.max_end_time[app.id] - min([t.arrival_time for t in app.verticies.values()]))
+    else:
+        model.model.Add(model.app_cost[app.id] == model.max_end_time[app.id] - model.min_start_time[app.id])
 
     if not do_allow_infeasible_solutions:
         model.model.Add(model.app_cost[app.id] <= app.period)

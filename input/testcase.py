@@ -59,6 +59,8 @@ class Testcase:
         ] = {}  # All nodes. n.id => Set of nodes that point at n. Includes n
 
         self.ES: Dict[str, end_system] = {}  # All end systems. es.id => end_system
+        self.ES_verifier: Dict[str, end_system] = {}  # All end systems. es.id => end_system
+        self.ES_prover: Dict[str, end_system] = {}  # All end systems. es.id => end_system
 
         self.SW: Dict[str, switch] = {}  # All switches. sw.id => switch
         self.L: Dict[str, link] = {}  # All links. link.id => link
@@ -146,6 +148,10 @@ class Testcase:
                     self.N_conn[x.id].add(x.id)
                     self.N_conn_inv[x.id].add(x.id)
                     self.ES[x.id] = x
+                    if x.is_verifier():
+                        self.ES_verifier[x.id] = x
+                    elif x.is_prover():
+                        self.ES_prover[x.id] = x
                     self.F_g_in[x.id] = []
                     self.F_g_out[x.id] = []
                     self.T_g[x.id] = []
@@ -166,7 +172,7 @@ class Testcase:
                 if x.period not in self.Periods:
                     self.Periods.add(x.period)
                     self.hyperperiod = lcm(list([p for p in self.Periods if p > 0]))
-                if x.type == EApplicationType.NORMAL:
+                if x.type == EApplicationType.NORMAL or x.type == EApplicationType.EDGE:
                     self.A_app[x.id] = x
                     #
                     self.T_normal[x.id] = []
@@ -186,7 +192,7 @@ class Testcase:
                     self.T_standalone[x.id] = x
                 else:
                     self.A[x.app_id].add_vertex(x)
-                    if x.type == ETaskType.NORMAL:
+                    if x.type == ETaskType.NORMAL or x.type == ETaskType.EDGE:
                         self.T_normal[x.app_id].append(x)
 
                 if x.type == ETaskType.KEY_RELEASE:

@@ -1,4 +1,5 @@
 import itertools
+from enum import Enum
 from typing import Dict, Tuple
 
 from ortools.sat.python import cp_model
@@ -16,7 +17,12 @@ from input.testcase import Testcase
 from input.input_parameters import InputParameters
 from solution.solution_optimization_status import EOptimizationStatus
 from solution.solution_timing_data import TimingData
-from utils.utilities import Timer, print_model_stats, report_exception, list_gcd
+from utils.utilities import Timer, print_model_stats, report_exception, list_gcd, debug_print
+
+
+class EOptimizationGoal(Enum):
+    MAXIMIZE_LAXITY = 1
+    MAXIMIZE_LAXITY_AND_EXTENSIBLITY = 2
 
 
 class CPSchedulingSolver:
@@ -24,8 +30,10 @@ class CPSchedulingSolver:
         self,
         tc: Testcase,
         timing_object: TimingData,
+        optimization_goal: EOptimizationGoal,
+        existing_schedule: schedule = None,
         do_security: bool = True,
-        do_allow_infeasible_solutions: bool = True,
+        do_allow_infeasible_solutions: bool = False,
     ):
         self.tc: testcase = tc
 
@@ -45,7 +53,7 @@ class CPSchedulingSolver:
         t = Timer()
         with t:
             self._create_variables()
-            scheduling_model_variables.init_variables(self, do_security)
+            scheduling_model_variables.init_variables(self, existing_schedule, do_security)
         timing_object.time_creating_vars_scheduling = t.elapsed_time
 
         # Add constraints to CP model
@@ -54,7 +62,12 @@ class CPSchedulingSolver:
             scheduling_model_constraints.add_constraints(self, do_security, do_allow_infeasible_solutions)
 
             # Add optimization goal
-            scheduling_model_goals.maximize_laxity(self)
+            if optimization_goal == EOptimizationGoal.MAXIMIZE_LAXITY_AND_EXTENSIBLITY:
+                scheduling_model_goals.maximize_laxity_and_extensibility(self)
+            elif optimization_goal == EOptimizationGoal.MAXIMIZE_LAXITY:
+                scheduling_model_goals.maximize_laxity(self)
+            else:
+                raise ValueError
 
         timing_object.time_creating_constraints_scheduling = t.elapsed_time
 
@@ -85,6 +98,16 @@ class CPSchedulingSolver:
 
         # Dict(app.id -> IntVar)
         self.app_cost: Dict[str, IntVar] = {} # cost of app
+        self.min_start_time: Dict[str, IntVar] = {} # min start time of app
+        self.max_end_time: Dict[str, IntVar] = {} # max end time of app
+
+        self.cost: IntVar = None
+
+        self.actual_distances: Dict[str, IntVar] = {} # distance of task to closest next task
+        self.inverse_distances: Dict[str, IntVar] = {} # hyperperiod - actual distance (so we can minimize)
+
+
+
 
     def optimize(
         self, input_params, timing_object: TimingData
@@ -120,6 +143,7 @@ class CPSchedulingSolver:
             solver_status = -1
         timing_object.time_optimizing_scheduling = t.elapsed_time
 
+        print(solver.StatusName(solver_status))
         status = EOptimizationStatus.INFEASIBLE
 
         if solver_status == OPTIMAL:
@@ -137,6 +161,17 @@ class CPSchedulingSolver:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
+            debug_print(f"Total Cost: {solver.Value(self.cost)}")
+            for app in self.tc.A.values():
+                debug_print(f"Cost {app.id} = {solver.Value(self.app_cost[app.id])}")
+                debug_print(f"MinStartTime {app.id} = {solver.Value(self.min_start_time[app.id])}")
+                debug_print(f"MaxEndTime {app.id} = {solver.Value(self.max_end_time[app.id])}")
+            for t in self.tc.T.values():
+                if len(self.actual_distances) > 0:
+                    debug_print(f"Distance {t.id} = {solver.Value(self.actual_distances[t.id])}")
+                    debug_print(f"Inverse Distance {t.id} = {solver.Value(self.inverse_distances[t.id])}")
+                debug_print(f"o_t {t.id} = {solver.Value(self.o_t[t.id])}")
+                debug_print(f"a_t {t.id} = {solver.Value(self.a_t[t.id])}")
             schdl = schedule.from_cp_solver(solver, self, self.tc)
             self.tc.add_to_datastructures(schdl)
             return self.tc, status

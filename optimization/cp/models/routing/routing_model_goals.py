@@ -1,13 +1,15 @@
+from typing import Dict
+
 from utils.utilities import flatten
 
 
-def add_optimization_goal(model):
+def add_optimization_goal(model, existing_routes):
     # max route length + 10 * max amount of overlaps
     upper_bound_stream_cost = model.max_node_int + 10 * (model.max_stream_int * model.max_node_int)
     upper_bound_total_cost = model.max_stream_int * upper_bound_stream_cost
 
     _create_cost_variable_route_length(model)
-    _create_cost_variable_overlap(model)
+    _create_cost_variable_overlap(model, existing_routes)
 
 
     # Set cost for each stream
@@ -42,11 +44,14 @@ def _create_cost_variable_route_length(model):
         model.stream_route_lens[f.id] = stream_route_len
 
 
-def _create_cost_variable_overlap(model):
+def _create_cost_variable_overlap(model, existing_routes):
     for stream_id_prefix, stream_list in model.tc.F_red.items():
         for stream in stream_list:
             model.stream_overlaps[stream.id] = []
-        f_int_list = [model._StreamIDToIntMap[s.id] for s in stream_list]
+        if existing_routes != None:
+            f_int_list = [model._StreamIDToIntMap[s.id] for s in stream_list if s.id not in existing_routes]
+        else:
+            f_int_list = [model._StreamIDToIntMap[s.id] for s in stream_list]
         model.link_occupations[stream_id_prefix] = {}
 
         for v_int in range(model.max_node_int):

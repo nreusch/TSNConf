@@ -1,3 +1,0 @@
-run large1-giant2 with double scheduling time for SA
-
-run automotive_redundant with 1h/2h

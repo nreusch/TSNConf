@@ -76,7 +76,7 @@ def get_testcase_task_dataframe(solution: Solution) -> pd.DataFrame:
     """
     columns = []
     for task in solution.tc.T.values():
-        if task.type == ETaskType.NORMAL:
+        if task.type == ETaskType.NORMAL or task.type == ETaskType.EDGE:
             row = []
 
             row.append(task.id)
@@ -338,6 +338,12 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.total_overlaps_routing))
     row.append("{:d}".format(solution.total_number_of_stream_that_have_overlap))
 
+    row.append("{:.2f}".format(solution.ra_avg_max_unattested_time))
+    row.append("{:.2f}".format(solution.ra_avg_time_spent_attesting))
+    row.append("{:.2f}".format(solution.ext_avg_worst_case_resp_time))
+    row.append("{:.2f}".format(solution.ext_avg_avg_case_resp_time))
+    row.append("{:.2f}".format(solution.avg_edge_application_latency))
+
     row.append("{:d}".format(solution.input_params.Tstart))
     row.append("{}".format(solution.input_params.alpha))
     row.append("{}".format(solution.input_params.Prmv))
@@ -373,6 +379,11 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Infeasible apps",
             "Overlapping number",
             "Stream with overlap",
+            "Avg. maximum unattested time",
+            "Avg. time spent attesting",
+            "Avg. worst case response time",
+            "Avg. avg response time",
+            "Avg. edge app latency",
             "Tstart",
             "alpha",
             "Prmv",
@@ -742,7 +753,7 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
         # Tasks
         for task in solution.tc.T.values():
             if task.id in solution.tc.schedule.o_t_val:
-                if task.type == ETaskType.NORMAL:
+                if task.type == ETaskType.NORMAL or task.type == ETaskType.EDGE:
                     index = "app_task"
                 elif task.type == ETaskType.KEY_RELEASE:
                     index = "key_rel_task"

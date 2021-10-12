@@ -22,7 +22,8 @@ def generate_result_structures(model, solver):
 
     solver.Value(model.total_cost)
 
-    for f_id in model.tc.F_routed.keys():
+    for f_int in range(model.max_stream_int):
+        f_id = model._IntToStreamIDMap[f_int]
         x_res[
             f_id
         ] = {}  # x_res[f_id][n1_id] = n2_id, stream f_id uses link for n2_id to n1_id
@@ -104,8 +105,8 @@ def generate_result_structures(model, solver):
             n_int = model._NodeIDToIntMap[n_id]
             conn_n_int = model._NodeIDToIntMap[conn_n_id]
 
-            for f_id in model.tc.F_routed.keys():
-                f_int = model._StreamIDToIntMap[f_id]
+            for f_int in range(model.max_stream_int):
+                f_id = model._IntToStreamIDMap[f_int]
                 capac_use_res[n_id][conn_n_id][f_id] = solver.Value(
                     model.v_to_u_capc_use_of_f[conn_n_int][n_int][f_int]
                 )

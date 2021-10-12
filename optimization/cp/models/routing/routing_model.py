@@ -24,7 +24,7 @@ def weight(v_int, x_v_val):
 
 
 class CPRoutingSolver:
-    def __init__(self, tc: Testcase, timing_object: TimingData, redundancy: bool, allow_overlap: bool):
+    def __init__(self, tc: Testcase, timing_object: TimingData, redundancy: bool, allow_overlap: bool, existing_routes: Dict[str, route] = None):
         self.tc = tc
         # Create the model
         self.model = CpModel()
@@ -34,8 +34,8 @@ class CPRoutingSolver:
         with t:
             self._create_helper_variables()
             self._create_optimization_variables()
-            routing_model_variables.init_helper_variables(self)
-            routing_model_variables.init_optimization_variables(self)
+            routing_model_variables.init_helper_variables(self, existing_routes)
+            routing_model_variables.init_optimization_variables(self, existing_routes)
 
         timing_object.time_creating_vars_routing = t.elapsed_time
 
@@ -45,7 +45,7 @@ class CPRoutingSolver:
             routing_model_constraints.add_constraints(self, redundancy, allow_overlap)
 
             # Add optimization goal
-            routing_model_goals.add_optimization_goal(self)
+            routing_model_goals.add_optimization_goal(self, existing_routes)
 
             timing_object.time_creating_constraints_routing = t.elapsed_time
 
@@ -147,7 +147,9 @@ class CPRoutingSolver:
         ):
             x_res, costs, route_lens, overlap_amounts, overlap_links = routing_model_results.generate_result_structures(self, solver)
 
-            for f in self.tc.F_routed.values():
+            for f_int in range(self.max_stream_int):
+                f_id = self._IntToStreamIDMap[f_int]
+                f = self.tc.F[f_id]
                 mt = route(f)
                 mt.init_from_x_res_vector(x_res[f.id])
                 self.tc.add_to_datastructures(mt)

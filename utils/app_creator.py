@@ -15,13 +15,13 @@ import subprocess
 import matplotlib.pyplot as plt
 import time
 
-def get_dag_from_ggen(task_count: int, tree_depth: int, connection_probability: float):
+def get_dag_from_ggen(task_count: int, tree_depth: int, connection_probability: float, container_id):
     # using https://github.com/perarnau/ggen
     # run vagrant container
     # map apps/ folder to /apps on the vagrant box
     # vagrant global-status to determine id
 
-    cmd = f'vagrant ssh -c "ggen --log-level 0 generate-graph lbl {task_count} {tree_depth} {connection_probability} > /apps/app.dot" a9ff793'
+    cmd = f'vagrant ssh -c "ggen --log-level 0 generate-graph lbl {task_count} {tree_depth} {connection_probability} > /apps/app.dot" {container_id}'
 
     process = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -33,13 +33,13 @@ def get_dag_from_ggen(task_count: int, tree_depth: int, connection_probability: 
 
     return G
 
-def create_dags(task_count: int, tree_depth: int, connection_probability: float, app_name):
+def create_dags(task_count: int, tree_depth: int, connection_probability: float, app_name, container_id):
     # using https://github.com/perarnau/ggen
     # run vagrant container
     # map apps/ folder to /apps on the vagrant box
     # vagrant global-status to determine id
 
-    cmd = f'vagrant ssh -c "ggen --log-level 0 generate-graph lbl {task_count} {tree_depth} {connection_probability} > /apps/{app_name}.dot" a9ff793'
+    cmd = f'vagrant ssh -c "ggen --log-level 0 generate-graph lbl {task_count} {tree_depth} {connection_probability} > /apps/{app_name}.dot" {container_id}'
 
     process = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -62,12 +62,12 @@ def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: floa
 
     return random_es
 
-def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int, use_existing_dag) -> List[Tuple[application, List[task], List[stream]]]:
+def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int, use_existing_dag, container_id) -> List[Tuple[application, List[task], List[stream]]]:
     print(f"Creating apps with {task_count} tasks")
 
     # Create a random DAG using the ggen tool
     if not use_existing_dag:
-        G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability)
+        G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability, container_id)
     else:
         r = random.randint(0, 9)
         G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(f"utils/apps/dag{r}.dot"))
