@@ -4,6 +4,11 @@ Try the online [DEMO](https://tsnconf-demo.herokuapp.com/).
 
 This tool is still under development. Feel free to contact me with issues & feedback.
 
+## Paper
+
+This work is part of the paper [Dependability-Aware Routing and Scheduling for Time-Sensitive Networking
+](https://arxiv.org/abs/2109.05883).
+
 ## Acknowledgement
 This application was developed at the Technical University of Denmark as part of my [PhD project](https://orbit.dtu.dk/en/persons/niklas-reusch/publications/).
 Many thanks to my supervisor Paul Pop and Silviu S. Craciunas for their feedback and support.
@@ -15,6 +20,9 @@ Many thanks to my supervisor Paul Pop and Silviu S. Craciunas for their feedback
 - On Windows: 
     - Build Tools for Visual Studio: https://visualstudio.microsoft.com/downloads/ (required for some libraries) 
         - Only default C++ build tools necessary
+
+## Optional requirements
+- [GGen](https://github.com/perarnau/ggen) (If you want to generate your own testcases)
 
 ## Setup
 - It is recommended to setup a [python virtual environment](https://docs.python.org/3/library/venv.html) before installing the requirements.

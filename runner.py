@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from optimization.cp.models.routing.routing_model import CPRoutingSolver
 from optimization.sa.sa_routing_solver import SARoutingSolver
 from optimization.sa.sa_scheduling_solver import SASchedulingSolver, SAOptimizationMode
@@ -10,10 +12,11 @@ from input.input_parameters import EMode, InputParameters
 from solution.solution_optimization_status import EOptimizationStatus, StatusObject
 from solution.solution import Solution
 from solution.solution_timing_data import TimingData
+from utils.serializer import deserialize_solution
 from utils.utilities import Timer
 
 def _run_edge_apps(timing_object: TimingData, input_params: InputParameters, tc, redundancy, security, allow_infeasible_solutions, allow_overlap, status_obj):
-    print("-" * 10 + " 1.1 Running the chosen mode again")
+    print("-" * 10 + " 1. Running edge apps")
 
     t = Timer()
     with t:
@@ -207,20 +210,15 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 7. Create solution object
-    solution_initial = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
+    solution = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
 
-    solution_final = None
-    if input_params.extra_apps_path != "":
-        print(solution_initial.get_result_string())
-        print(f"Avg. maximum unattested time: {solution_initial.ra_avg_max_unattested_time}")
-        print(f"Avg. time spent on attestation: {solution_initial.ra_avg_time_spent_attesting}")
+    print(solution.get_result_string())
+    print(f"Avg. maximum unattested time: {solution.ra_avg_max_unattested_time}")
+    print(f"Avg. time spent on attestation: {solution.ra_avg_time_spent_attesting}")
 
-        print(f"Avg. worst case response time: {solution_initial.ext_avg_worst_case_resp_time}")
-        print(f"Avg. avg. response time: {solution_initial.ext_avg_avg_case_resp_time}")
-
-        solution_final = _run_edge_apps(timing_object, input_params, tc, redundancy, security, allow_infeasible_solutions, allow_overlap, status_obj)
-        print(f"Avg. edge app latency: {solution_final.avg_edge_application_latency}")
-    return solution_final
+    print(f"Avg. worst case response time: {solution.ext_avg_worst_case_resp_time}")
+    print(f"Avg. avg. response time: {solution.ext_avg_avg_case_resp_time}")
+    return solution
 
 def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
@@ -298,23 +296,20 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 7. Create solution object
-    solution_initial = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
+    solution = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
     solution_final = None
     # -------------------
 
     # 7. Parse extra applications
     if input_params.extra_apps_path != "":
-        print(solution_initial.get_result_string())
-        print(f"Avg. maximum unattested time: {solution_initial.ra_avg_max_unattested_time}")
-        print(f"Avg. time spent on attestation: {solution_initial.ra_avg_time_spent_attesting}")
+        print(solution.get_result_string())
+        print(f"Avg. maximum unattested time: {solution.ra_avg_max_unattested_time}")
+        print(f"Avg. time spent on attestation: {solution.ra_avg_time_spent_attesting}")
 
-        print(f"Avg. worst case response time: {solution_initial.ext_avg_worst_case_resp_time}")
-        print(f"Avg. avg. response time: {solution_initial.ext_avg_avg_case_resp_time}")
+        print(f"Avg. worst case response time: {solution.ext_avg_worst_case_resp_time}")
+        print(f"Avg. avg. response time: {solution.ext_avg_avg_case_resp_time}")
 
-        solution_final = _run_edge_apps(timing_object, input_params, tc, redundancy, security, allow_infeasible_solutions, allow_overlap, status_obj)
-        print(f"Avg. edge app latency: {solution_final.avg_edge_application_latency}")
-
-    return solution_final
+    return solution
 
 def _mode_11(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
@@ -538,6 +533,24 @@ def _mode_13(timing_object: TimingData, input_params: InputParameters) -> Soluti
 
     return solution_object
 
+def _mode_99(timing_object: TimingData, input_params: InputParameters) -> Solution:
+    """
+    Mode 99: Check edge applications
+    """
+    status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
+    allow_overlap = input_params.allow_overlap
+    allow_infeasible_solutions = input_params.allow_infeasible_solutions
+
+
+    existing_solution = deserialize_solution(Path(input_params.tc_path))
+    solution = _run_edge_apps(timing_object, input_params, existing_solution.tc, redundancy, security, allow_infeasible_solutions, allow_overlap, status_obj)
+
+    print(f"Avg. edge app latency: {solution.avg_edge_application_latency}")
+
+    return solution
+
 def run_mode(
     mode: EMode, timing_object: TimingData, input_params: InputParameters
 ) -> Solution:
@@ -553,5 +566,7 @@ def run_mode(
         return _mode_12(timing_object, input_params)
     elif mode is EMode.SA_ROUTING_SA_SCHEDULING_COMB:
         return _mode_13(timing_object, input_params)
+    elif mode is EMode.CHECK_EDGE_APPLICATIONS:
+        return _mode_99(timing_object, input_params)
     else:
         raise ValueError(f"Mode {mode} is not supported")

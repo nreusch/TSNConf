@@ -20,7 +20,7 @@ class MyArgParser(argparse.ArgumentParser):
     def error(self, message):
         sys.stderr.write("error: %s\n" % message)
         #f = open("out.txt", "w")
-        self.print_help(f)
+        #self.print_help(f)
         #f.close()
         self.print_help()
         sys.exit(2)

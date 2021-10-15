@@ -1,0 +1,102 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="16" key_length="16" mac_length="22">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="Verifier1_AppComm0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-Verifier1_AppComm0" node="Verifier1" wcet="14" period="2000" arrival_time="513" type="EDGE"/>
+			<task name="t2-Verifier1_AppComm0" node="ES1" wcet="25" period="2000" arrival_time="563" type="EDGE"/>
+		</tasks>
+		<streams>
+			<stream name="s-Verifier1" src="Verifier1" dest="ES1" sender_task="t1-Verifier1_AppComm0" receiver_tasks="t2-Verifier1_AppComm0" size="72" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="Verifier1_AppFree0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-Verifier1_AppFree0" node="Verifier1" wcet="10" period="2000" arrival_time="222" type="EDGE"/>
+		</tasks>
+	</application>
+
+	<application name="Verifier2_AppComm0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-Verifier2_AppComm0" node="Verifier2" wcet="4" period="2000" arrival_time="611" type="EDGE"/>
+			<task name="t2-Verifier2_AppComm0" node="Verifier1" wcet="23" period="2000" arrival_time="661" type="EDGE"/>
+		</tasks>
+		<streams>
+			<stream name="s-Verifier2" src="Verifier2" dest="Verifier1" sender_task="t1-Verifier2_AppComm0" receiver_tasks="t2-Verifier2_AppComm0" size="72" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="Verifier2_AppFree0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-Verifier2_AppFree0" node="Verifier2" wcet="12" period="2000" arrival_time="120" type="EDGE"/>
+		</tasks>
+	</application>
+
+	<application name="ES1_AppComm0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES1_AppComm0" node="ES1" wcet="17" period="2000" arrival_time="795" type="EDGE"/>
+			<task name="t2-ES1_AppComm0" node="ES2" wcet="15" period="2000" arrival_time="845" type="EDGE"/>
+		</tasks>
+		<streams>
+			<stream name="s-ES1" src="ES1" dest="ES2" sender_task="t1-ES1_AppComm0" receiver_tasks="t2-ES1_AppComm0" size="72" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="ES1_AppFree0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES1_AppFree0" node="ES1" wcet="12" period="2000" arrival_time="838" type="EDGE"/>
+		</tasks>
+	</application>
+
+	<application name="ES2_AppComm0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES2_AppComm0" node="ES2" wcet="28" period="2000" arrival_time="859" type="EDGE"/>
+			<task name="t2-ES2_AppComm0" node="ES1" wcet="20" period="2000" arrival_time="909" type="EDGE"/>
+		</tasks>
+		<streams>
+			<stream name="s-ES2" src="ES2" dest="ES1" sender_task="t1-ES2_AppComm0" receiver_tasks="t2-ES2_AppComm0" size="72" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="ES2_AppFree0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES2_AppFree0" node="ES2" wcet="32" period="2000" arrival_time="792" type="EDGE"/>
+		</tasks>
+	</application>
+
+	<application name="ES3_AppComm0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES3_AppComm0" node="ES3" wcet="3" period="2000" arrival_time="105" type="EDGE"/>
+			<task name="t2-ES3_AppComm0" node="Verifier1" wcet="14" period="2000" arrival_time="155" type="EDGE"/>
+		</tasks>
+		<streams>
+			<stream name="s-ES3" src="ES3" dest="Verifier1" sender_task="t1-ES3_AppComm0" receiver_tasks="t2-ES3_AppComm0" size="72" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="ES3_AppFree0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES3_AppFree0" node="ES3" wcet="43" period="2000" arrival_time="548" type="EDGE"/>
+		</tasks>
+	</application>
+
+	<application name="ES4_AppComm0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES4_AppComm0" node="ES4" wcet="20" period="2000" arrival_time="25" type="EDGE"/>
+			<task name="t2-ES4_AppComm0" node="Verifier2" wcet="12" period="2000" arrival_time="75" type="EDGE"/>
+		</tasks>
+		<streams>
+			<stream name="s-ES4" src="ES4" dest="Verifier2" sender_task="t1-ES4_AppComm0" receiver_tasks="t2-ES4_AppComm0" size="72" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="ES4_AppFree0" period="2000" type="EDGE">
+		<tasks>
+			<task name="t1-ES4_AppFree0" node="ES4" wcet="48" period="2000" arrival_time="432" type="EDGE"/>
+		</tasks>
+	</application>
+
+</NetworkDescription>

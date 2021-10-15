@@ -45,6 +45,7 @@ def run(tc: Testcase, timing_object: TimingData) -> Testcase:
                                 src_es_id,
                                 wcet,
                                 tc.Pint,
+                                0,
                                 ETaskType.KEY_RELEASE,
                             )
 

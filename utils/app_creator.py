@@ -90,7 +90,7 @@ def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, flo
         for n in SG:
             t_wcet = random.randint(1, int(config.max_task_period_percentage * period))
             t_es_id = find_random_es(es_utilization_dict, t_wcet / period, config)
-            t = task(f"t-{app.id}-{n}", app.id, t_es_id, t_wcet, period, ETaskType.NORMAL) # Don't use underscores in task name
+            t = task(f"t-{app.id}-{n}", app.id, t_es_id, t_wcet, period, 0, ETaskType.NORMAL) # Don't use underscores in task name
             tasks[n] = t
             SG.nodes[n]["ES"] = t_es_id
 

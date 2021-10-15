@@ -312,6 +312,7 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row = []
 
     row.append("{}".format(solution.tc.name))
+    row.append("{}".format(solution.input_params.extra_apps_path))
     row.append("{}".format(not solution.input_params.no_security))
     row.append("{}".format(not solution.input_params.no_redundancy))
     row.append("{}".format(solution.input_params.mode.name))
@@ -358,6 +359,7 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
         columns,
         columns=[
             "Testcase",
+            "Edge Applications used",
             "Security",
             "Redundancy",
             "Method",

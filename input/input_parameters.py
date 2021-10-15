@@ -32,6 +32,7 @@ class EMode(Enum):
     SA_ROUTING_ASAP_SCHEDULING = 11
     SA_ROUTING_SA_SCHEDULING = 12
     SA_ROUTING_SA_SCHEDULING_COMB = 13
+    CHECK_EDGE_APPLICATIONS = 99
 
     def describe(self) -> str:
         if self.value == 0:
@@ -46,6 +47,8 @@ class EMode(Enum):
             return "Mode 12: SA Routing, SA Scheduling, Security, Redundancy, Optimization"
         elif self.value == 13:
             return "Mode 13: SA Routing+Scheduling, Security, Redundancy, Optimization"
+        elif self.value == 99:
+            return "Mode 99: Check Edge applicaitons against existing solution (Provide solution.pickle as path and extra_apps using --extra_apps_path"
         return ""
 
     @classmethod

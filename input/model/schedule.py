@@ -189,11 +189,26 @@ class schedule:
             max_non_attested_time = max(iv_lengths) if len(iv_lengths) > 0 else 0
             slacks = sorted_complement(iv_tree, start=0, end=tc.hyperperiod)
             slack_lengths = [iv.end - iv.begin for iv in slacks]
-            block_length = min(slack_lengths)
-            time_spent_attesting = block_length * len(slack_lengths)
-            debug_print(f"{es_prover.id}")
-            debug_print(f"Slacks: {slacks}")
-            debug_print(f"{(max_non_attested_time, time_spent_attesting, block_length)}")
+
+            # Calculate the best block size for the maximum attestation time
+            # Iterate through all slack sizes, choosing the one with maximum attestation time
+            time_spent_attesting = 0
+            block_length = 0
+            slack_lengths_already_checked = set()
+            for sl in slack_lengths:
+                if sl not in slack_lengths_already_checked:
+                    cur_time_spent_attesting = 0
+                    for sl2 in slack_lengths:
+                        if sl <= sl2:
+                            cur_time_spent_attesting += sl
+                    slack_lengths_already_checked.add(sl)
+                    if cur_time_spent_attesting > time_spent_attesting:
+                        time_spent_attesting = cur_time_spent_attesting
+                        block_length = sl
+
+            print(f"{es_prover.id}")
+            print(f"Slacks: {slacks}")
+            print(f"{(max_non_attested_time, time_spent_attesting, block_length)}")
             res[es_prover.id] = (max_non_attested_time, time_spent_attesting, block_length)
 
         return res

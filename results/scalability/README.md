@@ -6,5 +6,6 @@ The following files are provided:
 - A script to merge these results and select the best one for SA: merge_best_results.py
 - A jupyter notebook showcasing the calculation of Table. III in the paper: scalability_analysis.ipynb
 - A folder containing the ParamILS configuration used for SA: paramILS/
+- A jupyter notebook showcasing the creation of the testcases: GenerateScalabilityTestcases.ipynb
 
 The used testcases can be found in: testcases/scalability/

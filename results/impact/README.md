@@ -6,5 +6,6 @@ The following files are provided:
 - The script to create jobs on DTU's high performance cluster: create_jobs.py
 - A jupyter notebook showcasing the calculation of Table. IV in the paper: impact_analysis.ipynb
 - The tables as csv: impact_results.csv
+- A jupyter notebook showcasing the creation of the testcases: GenerateImpactTestcases.ipynb
 
 The used testcases can be found in: testcases/impact/
