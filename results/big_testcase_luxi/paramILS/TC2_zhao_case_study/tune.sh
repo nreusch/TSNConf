@@ -1,0 +1,1 @@
+ruby ../../paramils2.3.8-source/param_ils_2_3_run.rb -numRun 0 -scenariofile config.txt -validN 10 -maxEvals 36 -pruning 0

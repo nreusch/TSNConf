@@ -1,0 +1,11 @@
+algo = ruby SA_wrapper.rb
+execdir = .
+run_obj = approx
+overall_obj = mean
+cutoff_time = 60
+cutoff_length = max
+tunerTimeout = 600
+paramfile = params.txt
+outdir = paramils-out
+instance_file = instances.txt
+test_instance_file = instances.txt

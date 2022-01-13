@@ -1,0 +1,406 @@
+max wall time = 8640000
+/zhome/d7/7/125153/paramILSConfig/TC2_zhao_case_study/params.txt
+5 parameters in total
+0 parameters are conditional.
+0 parameter combinations are forbidden.
+num_params = 5, num_combos=1125
+seed: 1234
+Run 1
+Level 
+========================================================
+Starting ILS for level 1, i.e. a limit of N=2000, and cutoff time=600.0.
+Current CPU time = 0, this run goes until 92000.0 
+========================================================
+New Incumbent: 0, 100000000 [0, 0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3010:52:20-0.3416862487792969
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3010:52:20-0.3416862487792969
+Result: SAT, -1, -1, 6114, 822569775
+ Same incumbent, new precision:
+New Incumbent: 0.1, 1.0 [1, 600.0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+now 2021-07-30 11:02:02 +0200; start 2021-07-30 10:52:20 +0200; time-start 582.798003922; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9 -k 30 -prmv 0.9 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3011:02:02-0.5190517902374268
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9 -k 30 -prmv 0.9 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3011:02:02-0.5190517902374268
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9 k=30 prmv=0.9 tstart=10000 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 11:11:45 +0200; start 2021-07-30 10:52:20 +0200; time-start 1164.937424047; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 10 -prmv 0.5 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3011:11:45-0.7220077514648438
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 10 -prmv 0.5 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3011:11:45-0.7220077514648438
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9999 k=10 prmv=0.5 tstart=1 w=1000 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 11:21:27 +0200; start 2021-07-30 10:52:20 +0200; time-start 1747.089175724; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.8 -k 30 -prmv 0.5 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3011:21:27-0.27948856353759766
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.8 -k 30 -prmv 0.5 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3011:21:27-0.27948856353759766
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.8 k=30 prmv=0.5 tstart=1 w=1000 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 11:31:09 +0200; start 2021-07-30 10:52:20 +0200; time-start 2329.215058194; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.999999 -k 5 -prmv 0.9 -tstart 10 -w 5 > /tmp/tmp-2021-07-3011:31:09-0.4401082992553711
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.999999 -k 5 -prmv 0.9 -tstart 10 -w 5 > /tmp/tmp-2021-07-3011:31:09-0.4401082992553711
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.999999 k=5 prmv=0.9 tstart=10 w=5 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 11:40:51 +0200; start 2021-07-30 10:52:20 +0200; time-start 2911.344619578; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 15 -prmv 0.1 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3011:40:51-0.7379581928253174
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 15 -prmv 0.1 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3011:40:51-0.7379581928253174
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9999 k=15 prmv=0.1 tstart=10000 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 11:50:33 +0200; start 2021-07-30 10:52:20 +0200; time-start 3493.468670542; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 15 -prmv 0.7 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3011:50:33-0.8283019065856934
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 15 -prmv 0.7 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3011:50:33-0.8283019065856934
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.99 k=15 prmv=0.7 tstart=10000 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 12:00:15 +0200; start 2021-07-30 10:52:20 +0200; time-start 4075.576238294; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9 -k 5 -prmv 0.7 -tstart 1 -w 5 > /tmp/tmp-2021-07-3012:00:15-0.6831986904144287
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9 -k 5 -prmv 0.7 -tstart 1 -w 5 > /tmp/tmp-2021-07-3012:00:15-0.6831986904144287
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9 k=5 prmv=0.7 tstart=1 w=5 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 12:09:57 +0200; start 2021-07-30 10:52:20 +0200; time-start 4657.655291797; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 20 -prmv 0.7 -tstart 1 -w 10 > /tmp/tmp-2021-07-3012:09:57-0.0031952857971191406
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 20 -prmv 0.7 -tstart 1 -w 10 > /tmp/tmp-2021-07-3012:09:57-0.0031952857971191406
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9999 k=20 prmv=0.7 tstart=1 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 12:19:39 +0200; start 2021-07-30 10:52:20 +0200; time-start 5239.859181781; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9 -k 30 -prmv 0.5 -tstart 1 -w 5 > /tmp/tmp-2021-07-3012:19:39-0.6135545969009399
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9 -k 30 -prmv 0.5 -tstart 1 -w 5 > /tmp/tmp-2021-07-3012:19:39-0.6135545969009399
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9 k=30 prmv=0.5 tstart=1 w=5 (1.0 [based on 1 runs with cutoff 600.0])
+
+now 2021-07-30 12:29:22 +0200; start 2021-07-30 10:52:20 +0200; time-start 5821.983906375; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 30 -prmv 0.1 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3012:29:22-0.6192569732666016
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 30 -prmv 0.1 -tstart 10000 -w 10 > /tmp/tmp-2021-07-3012:29:22-0.6192569732666016
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to random alpha=0.9999 k=30 prmv=0.1 tstart=10000 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+
+   BLS in iteration 1, start with alpha=0.9999 k=30 prmv=0.1 tstart=10000 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+now 2021-07-30 12:39:04 +0200; start 2021-07-30 10:52:20 +0200; time-start 6404.179347818; maxWall 8640000.0
+now 2021-07-30 12:39:04 +0200; start 2021-07-30 10:52:20 +0200; time-start 6404.179451672; maxWall 8640000.0
+    Changing ["tstart: 10000->1"], evaluating ...
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3012:39:04-0.825648307800293
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.9999 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3012:39:04-0.825648307800293
+Result: SAT, -1, -1, 6114, 822569775
+          -> Take improving step to neighbour alpha=0.9999 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 1 runs with cutoff 600.0]) with flip 1
+
+          
+============= Performing 1 bonus runs of state: alpha=0.9999 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 1 runs with cutoff 600.0]) ============ 
+
+now 2021-07-30 12:48:46 +0200; start 2021-07-30 10:52:20 +0200; time-start 6986.387134996; maxWall 8640000.0
+State wants more detail (1+1) than incumbent (1), doing incumbent first:
+alpha=0.9999 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 1 runs with cutoff 600.0])
+alpha=0.999999 k=5 prmv=0.1 tstart=10000 w=5 (1.0 [based on 1 runs with cutoff 600.0])
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3012:48:46-0.4710230827331543
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3012:48:46-0.4710230827331543
+Result: SAT, -1, -1, 6114, 2137449171
+ Same incumbent, new precision:
+New Incumbent: 1.3, 1.0 [2, 600.0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.9999 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3012:58:28-0.3827083110809326
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.9999 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3012:58:28-0.3827083110809326
+Result: SAT, -1, -1, 6114, 2137449171
+          -> After 1 bonus runs: alpha=0.9999 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 2 runs with cutoff 600.0])
+
+now 2021-07-30 13:08:10 +0200; start 2021-07-30 10:52:20 +0200; time-start 8150.808158619; maxWall 8640000.0
+now 2021-07-30 13:08:10 +0200; start 2021-07-30 10:52:20 +0200; time-start 8150.80828499; maxWall 8640000.0
+    Changing ["alpha: 0.9999->0.99"], evaluating ...
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3013:08:10-0.010480880737304688
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3013:08:10-0.010480880737304688
+Result: SAT, -1, -1, 6114, 822569775
+now 2021-07-30 13:17:53 +0200; start 2021-07-30 10:52:20 +0200; time-start 8732.929306694; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3013:17:53-0.9666748046875
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3013:17:53-0.9666748046875
+Result: SAT, -1, -1, 6114, 2137449171
+          -> Take improving step to neighbour alpha=0.99 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 2 runs with cutoff 600.0]) with flip 2
+
+          
+============= Performing 1 bonus runs of state: alpha=0.99 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 2 runs with cutoff 600.0]) ============ 
+
+now 2021-07-30 13:27:35 +0200; start 2021-07-30 10:52:20 +0200; time-start 9315.08404466; maxWall 8640000.0
+State wants more detail (2+1) than incumbent (2), doing incumbent first:
+alpha=0.99 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 2 runs with cutoff 600.0])
+alpha=0.999999 k=5 prmv=0.1 tstart=10000 w=5 (1.0 [based on 2 runs with cutoff 600.0])
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3013:27:35-0.08339786529541016
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3013:27:35-0.08339786529541016
+Result: SAT, -1, -1, 6114, 524453158
+ Same incumbent, new precision:
+New Incumbent: 1.7000000000000004, 1.0 [3, 600.0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3013:37:17-0.8998546600341797
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3013:37:17-0.8998546600341797
+Result: SAT, -1, -1, 6114, 524453158
+          -> After 1 bonus runs: alpha=0.99 k=30 prmv=0.1 tstart=1 w=10 (1.0 [based on 3 runs with cutoff 600.0])
+
+now 2021-07-30 13:46:59 +0200; start 2021-07-30 10:52:20 +0200; time-start 10479.352631642; maxWall 8640000.0
+now 2021-07-30 13:46:59 +0200; start 2021-07-30 10:52:20 +0200; time-start 10479.352725754; maxWall 8640000.0
+    Changing ["w: 10->1000"], evaluating ...
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3013:46:59-0.6193840503692627
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3013:46:59-0.6193840503692627
+Result: SAT, -1, -1, 6114, 822569775
+now 2021-07-30 13:56:41 +0200; start 2021-07-30 10:52:20 +0200; time-start 11061.471184693; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3013:56:41-0.8049073219299316
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3013:56:41-0.8049073219299316
+Result: SAT, -1, -1, 6114, 2137449171
+now 2021-07-30 14:06:23 +0200; start 2021-07-30 10:52:20 +0200; time-start 11643.615310293; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:06:23-0.6864504814147949
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:06:23-0.6864504814147949
+Result: SAT, -1, -1, 6114, 524453158
+          -> Take improving step to neighbour alpha=0.99 k=30 prmv=0.1 tstart=1 w=1000 (1.0 [based on 3 runs with cutoff 600.0]) with flip 3
+
+          
+============= Performing 1 bonus runs of state: alpha=0.99 k=30 prmv=0.1 tstart=1 w=1000 (1.0 [based on 3 runs with cutoff 600.0]) ============ 
+
+now 2021-07-30 14:16:05 +0200; start 2021-07-30 10:52:20 +0200; time-start 12225.740997162; maxWall 8640000.0
+State wants more detail (3+1) than incumbent (3), doing incumbent first:
+alpha=0.99 k=30 prmv=0.1 tstart=1 w=1000 (1.0 [based on 3 runs with cutoff 600.0])
+alpha=0.999999 k=5 prmv=0.1 tstart=10000 w=5 (1.0 [based on 3 runs with cutoff 600.0])
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3014:16:05-0.28457391262054443
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3014:16:05-0.28457391262054443
+Result: SAT, -1, -1, 6114, 1365105717
+ Same incumbent, new precision:
+New Incumbent: 2.2000000000000006, 1.0 [4, 600.0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:25:47-0.6098804473876953
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.99 -k 30 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:25:47-0.6098804473876953
+Result: SAT, -1, -1, 6114, 1365105717
+          -> After 1 bonus runs: alpha=0.99 k=30 prmv=0.1 tstart=1 w=1000 (1.0 [based on 4 runs with cutoff 600.0])
+
+now 2021-07-30 14:35:30 +0200; start 2021-07-30 10:52:20 +0200; time-start 13390.010104487; maxWall 8640000.0
+now 2021-07-30 14:35:30 +0200; start 2021-07-30 10:52:20 +0200; time-start 13390.010199001; maxWall 8640000.0
+    Changing ["k: 30->10"], evaluating ...
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:35:30-0.6366405487060547
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:35:30-0.6366405487060547
+Result: SAT, -1, -1, 6114, 822569775
+now 2021-07-30 14:45:12 +0200; start 2021-07-30 10:52:20 +0200; time-start 13972.101115623; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:45:12-0.6027164459228516
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:45:12-0.6027164459228516
+Result: SAT, -1, -1, 6114, 2137449171
+now 2021-07-30 14:54:54 +0200; start 2021-07-30 10:52:20 +0200; time-start 14554.254500563; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:54:54-0.5169029235839844
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3014:54:54-0.5169029235839844
+Result: SAT, -1, -1, 6114, 524453158
+now 2021-07-30 15:04:36 +0200; start 2021-07-30 10:52:20 +0200; time-start 15136.494074103; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3015:04:36-0.36852002143859863
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3015:04:36-0.36852002143859863
+Result: SAT, -1, -1, 6114, 1365105717
+          -> Take improving step to neighbour alpha=0.99 k=10 prmv=0.1 tstart=1 w=1000 (1.0 [based on 4 runs with cutoff 600.0]) with flip 4
+
+          
+============= Performing 1 bonus runs of state: alpha=0.99 k=10 prmv=0.1 tstart=1 w=1000 (1.0 [based on 4 runs with cutoff 600.0]) ============ 
+
+now 2021-07-30 15:14:18 +0200; start 2021-07-30 10:52:20 +0200; time-start 15718.761764723; maxWall 8640000.0
+State wants more detail (4+1) than incumbent (4), doing incumbent first:
+alpha=0.99 k=10 prmv=0.1 tstart=1 w=1000 (1.0 [based on 4 runs with cutoff 600.0])
+alpha=0.999999 k=5 prmv=0.1 tstart=10000 w=5 (1.0 [based on 4 runs with cutoff 600.0])
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1880026316 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3015:14:18-0.9323887825012207
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1880026316 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3015:14:18-0.9323887825012207
+Result: SAT, -1, -1, 6114, 1880026316
+ Same incumbent, new precision:
+New Incumbent: 2.800000000000001, 1.0 [5, 600.0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1880026316 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3015:24:01-0.3729104995727539
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1880026316 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 1000 > /tmp/tmp-2021-07-3015:24:01-0.3729104995727539
+Result: SAT, -1, -1, 6114, 1880026316
+          -> After 1 bonus runs: alpha=0.99 k=10 prmv=0.1 tstart=1 w=1000 (1.0 [based on 5 runs with cutoff 600.0])
+
+now 2021-07-30 15:33:43 +0200; start 2021-07-30 10:52:20 +0200; time-start 16883.530031949; maxWall 8640000.0
+now 2021-07-30 15:33:43 +0200; start 2021-07-30 10:52:20 +0200; time-start 16883.530115073; maxWall 8640000.0
+    Changing ["w: 1000->10"], evaluating ...
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3015:33:43-0.5475304126739502
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 822569775 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3015:33:43-0.5475304126739502
+Result: SAT, -1, -1, 6114, 822569775
+now 2021-07-30 15:43:25 +0200; start 2021-07-30 10:52:20 +0200; time-start 17465.803619059; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3015:43:25-0.17852568626403809
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 2137449171 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3015:43:25-0.17852568626403809
+Result: SAT, -1, -1, 6114, 2137449171
+now 2021-07-30 15:53:08 +0200; start 2021-07-30 10:52:20 +0200; time-start 18047.970531565; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3015:53:08-0.8974456787109375
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 524453158 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3015:53:08-0.8974456787109375
+Result: SAT, -1, -1, 6114, 524453158
+now 2021-07-30 16:02:50 +0200; start 2021-07-30 10:52:20 +0200; time-start 18630.17128017; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:02:50-0.3642463684082031
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1365105717 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:02:50-0.3642463684082031
+Result: SAT, -1, -1, 6114, 1365105717
+now 2021-07-30 16:12:32 +0200; start 2021-07-30 10:52:20 +0200; time-start 19212.351384541; maxWall 8640000.0
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1880026316 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:12:32-0.2870936393737793
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1880026316 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:12:32-0.2870936393737793
+Result: SAT, -1, -1, 6114, 1880026316
+          -> Take improving step to neighbour alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 5 runs with cutoff 600.0]) with flip 5
+
+          
+============= Performing 1 bonus runs of state: alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 5 runs with cutoff 600.0]) ============ 
+
+now 2021-07-30 16:22:14 +0200; start 2021-07-30 10:52:20 +0200; time-start 19794.560310915; maxWall 8640000.0
+State wants more detail (5+1) than incumbent (5), doing incumbent first:
+alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 5 runs with cutoff 600.0])
+alpha=0.999999 k=5 prmv=0.1 tstart=10000 w=5 (1.0 [based on 5 runs with cutoff 600.0])
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 481516916 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3016:22:14-0.32143378257751465
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 481516916 -alpha 0.999999 -k 5 -prmv 0.1 -tstart 10000 -w 5 > /tmp/tmp-2021-07-3016:22:14-0.32143378257751465
+Result: SAT, -1, -1, 6114, 481516916
+ Same incumbent, new precision:
+New Incumbent: 3.5000000000000018, 1.0 [6, 600.0]. With state alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 481516916 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:31:56-0.29548895359039307
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 481516916 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:31:56-0.29548895359039307
+Result: SAT, -1, -1, 6114, 481516916
+          -> After 1 bonus runs: alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 6 runs with cutoff 600.0])
+
+ParamILS has reached the specified maximum number of 36 function evaluations => stopping the search now.
+          
+============= Performing 0 bonus runs of state: alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 6 runs with cutoff 600.0]) ============ 
+
+          -> After 0 bonus runs for LM: alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 6 runs with cutoff 600.0])
+
+   LM for iteration 1: alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 6 runs with cutoff 600.0])
+
+========== DETAILED RESULTS (iteration 1): ==========
+[["SAT", -1.0, -1, 6114.0, 822569775], ["SAT", -1.0, -1, 6114.0, 2137449171], ["SAT", -1.0, -1, 6114.0, 524453158], ["SAT", -1.0, -1, 6114.0, 1365105717], ["SAT", -1.0, -1, 6114.0, 1880026316], ["SAT", -1.0, -1, 6114.0, 481516916]]
+testcases/synthetic4/TC2_zhao_case_study.flex_network_description: 1.0		[based on 6 runs]
+================================================
+
+==================================================================
+Best parameter configuration found so far (end of iteration 1): alpha=0.999999, k=5, prmv=0.1, tstart=10000, w=5
+==================================================================
+Training quality of this incumbent parameter configuration: 1.0, based on 6 runs with cutoff 600.0
+==================================================================
+
+Comparing LM against incumbent:
+alpha=0.99 k=10 prmv=0.1 tstart=1 w=10 (1.0 [based on 6 runs with cutoff 600.0])
+alpha=0.999999 k=5 prmv=0.1 tstart=10000 w=5 (1.0 [based on 6 runs with cutoff 600.0])
+LM better, change incumbent
+New Incumbent: 3.600000000000002, 1.0 [6, 600.0]. With state alpha=0.99, k=10, prmv=0.1, tstart=1, w=10
+ParamILS has reached the specified maximum number of 36 function evaluations => stopping the search now.
+Final solution for depth 1 with limit N=2000, and cutoff time=600.0.
+New Incumbent: 3.600000000000002, 1.0 [6, 600.0]. With state alpha=0.99, k=10, prmv=0.1, tstart=1, w=10
+
+==================================================================
+ParamILS is finished.
+==================================================================
+
+Final best parameter configuration found: alpha=0.99, k=10, prmv=0.1, tstart=1, w=10
+==================================================================
+Active parameters: alpha=0.99, k=10, prmv=0.1, tstart=1, w=10
+
+==================================================================
+Training quality of this final best found parameter configuration: 1.0, based on 6 runs with cutoff 600.0
+==================================================================
+
+
+==================================================================
+Computing validation result on independent data -- 10 runs with cutoff time 600.0...
+==================================================================
+getAlgoResultsForInstsAndParams.
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1722738895 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:41:39-0.7279586791992188
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1722738895 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:41:39-0.7279586791992188
+Result: SAT, -1, -1, 6114, 1722738895
+  Trial 1 for calling: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1531822380 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:51:21-0.7521474361419678
+Executing cmd: ruby SA_wrapper.rb testcases/synthetic4/TC2_zhao_case_study.flex_network_description "" 600.0 2147483647 1531822380 -alpha 0.99 -k 10 -prmv 0.1 -tstart 1 -w 10 > /tmp/tmp-2021-07-3016:51:21-0.7521474361419678
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 10079916: <nikre_tuning_TC2_zhao_case_study> in cluster <dcc> Exited
+
+Job <nikre_tuning_TC2_zhao_case_study> was submitted from host <hpclogin1> by user <nikre> in cluster <dcc> at Fri Jul 30 10:52:18 2021
+Job was executed on host(s) <n-62-31-2>, in queue <hpc>, as user <nikre> in cluster <dcc> at Fri Jul 30 10:52:19 2021
+</zhome/d7/7/125153> was used as the home directory.
+</zhome/d7/7/125153/paramILSConfig/TC2_zhao_case_study> was used as the working directory.
+Started at Fri Jul 30 10:52:19 2021
+Terminated at Fri Jul 30 16:52:23 2021
+Results reported at Fri Jul 30 16:52:23 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/sh
+### General options
+### -- specify queue --
+###BSUB -q compute
+### -- set the job Name --
+#BSUB -J nikre_tuning_TC2_zhao_case_study
+### -- ask for number of cores (default: 1) --
+#BSUB -n 1
+### -- specify that the cores must be on the same host --
+#BSUB -R "span[hosts=1]"
+### -- specify that we need 2GB of memory per core/slot --
+#BSUB -R "rusage[mem=16GB] select[avx2]"
+### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot --
+#BSUB -M 32GB
+### -- set walltime limit: hh:mm --
+#BSUB -W 6:00
+### -- set the email address --
+# please uncomment the following line and put in your e-mail address,
+# if you want to receive e-mail notifications on a non-default address
+##BSUB -u your_email_address
+### -- send notification at start --
+###BSUB -B
+### -- send notification at completion --
+###BSUB -N
+### -- Specify the output and error file. %J is the job-id --
+### -- -o and -e mean append, -oo and -eo mean overwrite --
+#BSUB -oo out_tune%J.out
+#BSUB -eo out_tune%J.err
+
+module load python3/3.9.5
+bash tune.sh placeholder_argument
+
+------------------------------------------------------------
+
+TERM_RUNLIMIT: job killed after reaching LSF run time limit.
+Exited with exit code 140.
+
+Resource usage summary:
+
+    CPU time :                                   21516.00 sec.
+    Max Memory :                                 82 MB
+    Average Memory :                             81.16 MB
+    Total Requested Memory :                     16384.00 MB
+    Delta Memory :                               16302.00 MB
+    Max Swap :                                   -
+    Max Processes :                              9
+    Max Threads :                                13
+    Run time :                                   21656 sec.
+    Turnaround time :                            21605 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <out_tune10079916.err> for stderr output of this job.
+
