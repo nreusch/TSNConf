@@ -55,6 +55,60 @@ class testcase_generation_config:
 
         self.name = "name"
 
+def create_testcase_with_topology_and_dags_and_apps(config, path, G, points_sw, points_es, app_lst, es_utilization_dict, container_id):
+    random.seed(time.time())
+
+
+    tc = Testcase(config.name)
+    tc.W_f_max = config.mtu
+    tc.W_mac = config.mac_length
+    tc.key_length = config.key_length
+    tc.OH = config.frame_overhead
+
+    # ES
+    for p in points_es:
+        es = end_system(p.name, config.mac_exec_time, "EndSystem")
+        tc.add_to_datastructures(es)
+
+    # SW
+    for p in points_sw:
+        sw = switch(p.name)
+        tc.add_to_datastructures(sw)
+
+    # Links
+    for nx_link in G.edges:
+        src_id = nx_link[0]
+        dest_id = nx_link[1]
+        l = link(f"l_{src_id}_{dest_id}", tc.N[src_id], tc.N[dest_id], config.link_speed)
+        tc.add_to_datastructures(l)
+        l = link(f"l_{dest_id}_{src_id}", tc.N[dest_id], tc.N[src_id], config.link_speed)
+        tc.add_to_datastructures(l)
+
+    # Applications
+
+
+    for lst in app_lst:
+        # communicating apps
+        # Use existing DAGs!
+        for el in lst:
+            app = el[0]
+            tasks = el[1]
+            streams = el[2]
+            tc.add_to_datastructures(app)
+            for t in tasks:
+                tc.add_to_datastructures(t)
+            for s in streams:
+                tc.add_to_datastructures(s)
+
+    tc.highest_communication_depth = max([app.get_communication_depth() for app in tc.A_app.values()])
+    serializer.create_flex_network_description(path, tc)
+    print(f"Created testcase at: {path.absolute()}")
+    print(
+        f"Tasks {len(tc.T)}; Streams {len(tc.F)}; Apps {len(tc.A)}; Average ES utilization {sum(es_utilization_dict.values()) / len(es_utilization_dict.values())}")
+    print("-" * 50)
+
+    return path
+
 def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es, container_id):
     random.seed(time.time())
 
