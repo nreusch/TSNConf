@@ -5,6 +5,7 @@ import random
 import time
 from enum import Enum
 from typing import Tuple, List
+from tqdm.auto import tqdm
 
 from ortools.sat.python.cp_model import (CpModel)
 
@@ -39,9 +40,6 @@ class SASchedulingSolver:
     def __init__(self, tc: Testcase, timing_object: TimingData, input_params: InputParameters):
         self.tc = tc
 
-        # Create the model
-        self.model = CpModel()
-
         # Create variables
         t = Timer()
         with t:
@@ -69,7 +67,8 @@ class SASchedulingSolver:
         infeasible_tga = {}
         latencies = {}
         # chain keyApps and then normalApps
-        for tga in itertools.chain(sol.order[0], sol.order[1]):
+        print("-"*20 + "Scheduling apps")
+        for tga in tqdm(itertools.chain(sol.order[0], sol.order[1])):
             tga_is_infeasible = False
             for tgn_id in tga.internal_order:
                 tgn = self.prec_graph.nodes[tgn_id]

@@ -107,8 +107,12 @@ class InputParameters:
         """
         Returns a long string summarizing the input parameters
         """
-        return "{}\nTestcase: {}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
+        return "{}\nTestcase: {}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
             "-" * 80, self.tc_name, self.mode.describe(), self.timeouts,
+            f"k: {self.k}",
+            f"a: {self.a}",
+            f"b: {self.b}",
+            f"w: {self.w}",
             f"No redundancy: {self.no_redundancy}",
             f"No security: {self.no_security}",
             f"Overlap allowed for CP: {self.allow_overlap}",

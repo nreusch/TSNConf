@@ -267,3 +267,86 @@ class Testcase:
     def clear_routes(self):
         self.R = {}
         self.R_info = {}
+
+    def to_luxi_files(self):
+        sched = ""
+        msg = ""
+        portbu = ""
+        rate = ""
+        vls = ""
+
+        # vls
+        # create a virtual link for each stream route
+        s_to_vl_map = {}
+        vl_number = 0
+        vl_strings = ["#generated"]
+        for s in self.F.values():
+            links = self.R[s.id].get_all_links_dfs(self)
+            s_to_vl_map[s.id] = vl_number
+            vl_string = f"vl{vl_number} : "
+            vl_number += 1
+            for l in links:
+                vl_string += f"{l.src.id},{l.dest.id} ; "
+            vl_strings.append(vl_string)
+        vls = "\n".join(vl_strings)
+
+        # msg
+        # create a message for each stream copy
+        msg_strings = ["#!R id, size(byte), deadline, <virtual link id>, type [TT, RC], [period | rate] (us), [offset | ] [packed | fragmented]"]
+        for s in self.F.values():
+            msg_string = f"{s.id}, {s.size}, {s.period}, vl{s_to_vl_map[s.id]}, TT, {s.period}, 0.0"
+            msg_strings.append(msg_string)
+        msg = "\n".join(msg_strings)
+
+        # sched
+        # for each link (including es -> sw links) list blocks
+        if self.schedule == None:
+            raise ValueError("Can't serialize to Luxi format. Schedule missing")
+
+        port_occupations = {}
+        sched_strings = []
+
+        for l in self.L.values():
+            if l.id in self.schedule.o_f_val:
+                port_occupations[l.id] = 0
+                sched_strings.append(f"{l.src.id},{l.dest.id}")
+                offsets = []
+                offset_to_af_and_stream_id = {}
+                for f_id, o_f in self.schedule.o_f_val[l.id].items():
+                    a_f = self.schedule.a_f_val[l.id][f_id]
+                    f = self.F[f_id]
+
+                    if a_f != o_f:
+                        for i_period in range(int(self.hyperperiod / f.period)):
+                            port_occupations[l.id] += a_f-o_f
+                            o = i_period * f.period + o_f
+                            a = i_period * f.period + a_f
+                            offsets.append(o)
+                            offset_to_af_and_stream_id[o] = (a, f_id, i_period)
+
+                for o in sorted(offsets):
+                    sched_string = f"{o}\t{offset_to_af_and_stream_id[o][0]}\t{offset_to_af_and_stream_id[o][1]}\t{offset_to_af_and_stream_id[o][2]}"
+                    sched_strings.append(sched_string)
+                sched_strings.append("")
+        sched = "\n".join(sched_strings)
+
+        # rate
+        # we assume that each link has the same rate
+        link_speeds = {l.speed for l in self.L.values()}
+        if len(link_speeds) > 1:
+            raise ValueError("Can't serialize to Luxi format. Different link speeds found")
+
+        link_speed = link_speeds.pop() * 8
+
+        rate = f"# link rate\n{link_speed},"
+
+        # portbu
+        # multiply link_speed by inverse of port occupation percent
+        portbu_strings = ["#leftover bandwidth usage for each egress port (Mb/s)"]
+        for l in self.L.values():
+            if l.id in port_occupations:
+                portbu_strings.append(f"{l.src.id},{l.dest.id}:{link_speed - (port_occupations[l.id]/self.hyperperiod * link_speed)}")
+        portbu = "\n".join(portbu_strings)
+
+        return sched, msg, portbu, rate, vls
+

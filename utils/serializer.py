@@ -19,6 +19,24 @@ def create_flex_network_description(output_file: Path, tc: Testcase):
     f.write(tc.to_flex_network_description())
     f.close()
 
+def create_luxi_files(output_folder: Path, tc: Testcase):
+    try:
+        f_sched = open(output_folder / "historySCHED1.txt", "w")
+        f_msg = open(output_folder / "msg.txt", "w")
+        f_PortBU = open(output_folder / "PortBU.txt", "w")
+        f_rate = open(output_folder / "rate.txt", "w")
+        f_vls = open(output_folder / "vls.txt", "w")
+
+        sched, msg, portbu, rate, vls = tc.to_luxi_files()
+        f_sched.write(sched)
+        f_msg.write(msg)
+        f_PortBU.write(portbu)
+        f_rate.write(rate)
+        f_vls.write(vls)
+    except Exception as e:
+        raise e
+
+
 def aggregate_solution(csv_path: Path, solution: Solution):
     df = solution_parser.get_solution_results_info_dataframe(solution)
 
@@ -40,6 +58,28 @@ def serialize_solution(base_path: Path, solution: Solution, visualize: bool) -> 
         pickle.dump(solution, f, pickle.HIGHEST_PROTOCOL)
         f.close()
 
+    print(
+        "-" * 20
+        + " Pickled solution"
+    )
+
+    # Create Luxi WCD files
+    luxi_path = path / "luxi"
+    luxi_path_in = path / "luxi" / "in"
+    luxi_path_out = path / "luxi" / "out"
+    luxi_path.mkdir(exist_ok=True)
+    luxi_path_in.mkdir(exist_ok=True)
+    luxi_path_out.mkdir(exist_ok=True)
+    create_luxi_files(
+        luxi_path_in,
+        solution.tc,
+    )
+
+    print(
+        "-" * 20
+        + " Created files for Luxi Zhao WCD analysis"
+    )
+
     # Create flex_network_description
     create_flex_network_description(
         path
@@ -48,6 +88,13 @@ def serialize_solution(base_path: Path, solution: Solution, visualize: bool) -> 
         ),
         solution.tc,
     )
+
+    print(
+        "-" * 20
+        + " Created flex_network_description"
+    )
+
+
 
     if visualize:
         # Create graphviz graphs
@@ -64,12 +111,24 @@ def serialize_solution(base_path: Path, solution: Solution, visualize: bool) -> 
             except Exception as e:
                 raise e
 
+        print(
+            "-" * 20
+            + " Created graph and schedule visualization"
+        )
+
+
+
     # Append to results.csv
     df = solution_parser.get_solution_results_info_dataframe(solution)
     df.insert(0, "Testcase Name", solution.get_folder_name())
 
     with open(base_path / "solutions.csv", "a") as f:
         df.to_csv(f, header=f.tell() == 0, index=False)
+
+    print(
+        "-" * 20
+        + " Appended results to {}".format(base_path / "solutions.csv")
+    )
 
     return path
 

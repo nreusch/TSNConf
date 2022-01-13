@@ -9,6 +9,8 @@ from input.model.route import route
 from input.model.stream import stream
 from input.model.task import task
 
+from tqdm.auto import tqdm
+
 
 class TaskGraphNode:
     def __init__(self, id: str):
@@ -199,7 +201,7 @@ class PrecedenceGraph:
                     tgn_receiver = self.nodes[reciever_t_id]
                     appDAG.add_edge(tgn.id, tgn_receiver.id)
 
-        self.DAG = nx.union(self.DAG, appDAG)
+        self.DAG.update(appDAG.edges, appDAG.nodes)
         if app.id in tc.A_sec:
             self.keyDAGs.append((appDAG, app.id))
         elif app.id in tc.A_app:
@@ -219,11 +221,13 @@ class PrecedenceGraph:
         )
 
         # First add key apps, so they exist and can be connected when creating normal apps
-        for app in tc.A_sec.values():
+        print("-" * 20 + " Creating task graph for key apps")
+        for app in tqdm(tc.A_sec.values()):
             c._add_application_seperate_method(app, tc)
 
+        print("-"*20 + " Creating task graph for normal apps")
         # Add normal apps
-        for app in tc.A_app.values():
+        for app in tqdm(tc.A_app.values()):
             c._add_application_seperate_method(app, tc)
 
 

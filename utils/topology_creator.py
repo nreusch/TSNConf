@@ -85,7 +85,7 @@ def connect_es_to_switches(points_es, connections_per_es):
     return points_es
 
 
-def generate_topology(nr_switches, nr_es, connections_per_sw, connections_per_es) -> Tuple[nx.Graph, List[MyPoint], List[MyPoint]]:
+def generate_topology(nr_switches, nr_es, connections_per_sw, connections_per_es, show_topology=False) -> Tuple[nx.Graph, List[MyPoint], List[MyPoint]]:
     finished = False
     while not finished:
         points_sw, points_es = create_points(nr_switches, nr_es)
@@ -109,10 +109,11 @@ def generate_topology(nr_switches, nr_es, connections_per_sw, connections_per_es
         print("Found possible graph. Is connected: " + str(nx.is_connected(G)))
         finished = nx.is_connected(G)
 
-    pos = nx.spring_layout(G, seed=3068)
-    nx.draw(G, pos=pos, with_labels=True, node_color=color_map)
-    plt.ion()
-    plt.show()
-    plt.pause(0.001)
+    if show_topology:
+        pos = nx.spring_layout(G, seed=3068)
+        nx.draw(G, pos=pos, with_labels=True, node_color=color_map)
+        plt.ion()
+        plt.show()
+        plt.pause(0.001)
 
     return G, points_sw, points_es

@@ -45,7 +45,7 @@ class Solution:
             self.calculate_cost()
             self.calculate_bandwidth()
             self.calculate_cpu()
-            self.calculate_ra_and_extensibility_metrics()
+            #self.calculate_ra_and_extensibility_metrics()
 
 
     def get_folder_name(self) -> str:

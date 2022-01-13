@@ -17,6 +17,8 @@ from utils.utilities import Timer, list_gcd, print_model_stats, shortest_simple_
 import networkx as nx
 from itertools import islice
 
+from tqdm.auto import tqdm
+
 class SARoutingSolution:
     def __init__(self, paths: Dict[str, Dict[str, List[str]]]):
         #Dict[stream.id, Dict(receiver_es_id -> path)]
@@ -34,9 +36,6 @@ class SARoutingSolver:
 
         self.possible_paths : Dict[str, Dict[str, List[List[str]]]] = {} # stream_id -> Dict(receiver_es_id -> List[path])
 
-        # Create the model
-        self.model = CpModel()
-
         # Create variables
         t = Timer()
         with t:
@@ -48,14 +47,18 @@ class SARoutingSolver:
 
     def _create_variables(self, k, w):
         # Create networkx digraph with all edges & links
+        print("-"*20 + "Creating NetworkX routing graph")
         g = nx.DiGraph()
         g.add_nodes_from(self.tc.N.keys())
         for l in self.tc.L.values():
             g.add_edge(l.src.id, l.dest.id, weight=1)
 
+
+
+        print("-"*20 + "Calculating k-shortest-paths for streams")
         # For each stream, for each sender ES, receiver ES pair, add k-shortest-paths as possibilities
         s_prefixes = {}
-        for s in self.tc.F_routed.values():
+        for s in tqdm(self.tc.F_routed.values()):
 
             if s.get_id_prefix() not in s_prefixes:
                 # First stream
@@ -144,7 +147,7 @@ class SARoutingSolver:
 
         s_i = self._initial_solution()
         s_best = s_i
-        best_cost = self._cost(s_best)
+        best_cost,_,_ = self._cost(s_best)
         print(f"INITIAL COST: {best_cost}")
         #print_simple_solution(s_i, index_to_core_map)
         print()
@@ -155,8 +158,8 @@ class SARoutingSolver:
         start = time.time()
         while time.time() - start < timeout:
             s = self._random_neighbour(s_i)
-            old_cost = self._cost(s_i)
-            new_cost = self._cost(s)
+            old_cost,_,_ = self._cost(s_i)
+            new_cost,_,_ = self._cost(s)
             delta = new_cost - old_cost   # new_cost - old_cost, because we want to minimize cost
 
             if delta < 0 or _probability_check(delta, temp):

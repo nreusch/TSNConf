@@ -313,7 +313,7 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
 
 def _mode_11(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
-    Mode 21: SA Routing, ASAP Scheduling, Security, Redundancy, Optimization
+    Mode 11: SA Routing, ASAP Scheduling, Security, Redundancy, Optimization
     """
     status_obj = StatusObject()
     security = not input_params.no_security

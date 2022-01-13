@@ -317,10 +317,10 @@ class schedule:
     def from_xml_node(
         cls, n: ET.Element, tc
     ):
-        c = cls(tc)
+        c = cls()
 
         for n_child in n:
-            if n_child.tag == "link":
+            if n_child.tag == "link" or n_child.tag == "node":
                 src_n_id = n_child.attrib["src"]
                 dest_n_id = n_child.attrib["dest"]
 
@@ -346,9 +346,11 @@ class schedule:
                         c.a_t_val[creator_id] = end
                     elif creator_id in tc.F:
                         # stream
-                        c.o_f_val[l_or_n.id][creator_id] = start
-                        c.c_f_val[l_or_n.id][creator_id] = duration
-                        c.a_f_val[l_or_n.id][creator_id] = end
+                        if creator_id not in c.o_f_val[l_or_n.id]:
+                            # Only parse the first block for each stream. This ignores repeats of the stream within the hyperperiod, which are implicit in this schedule format
+                            c.o_f_val[l_or_n.id][creator_id] = start
+                            c.c_f_val[l_or_n.id][creator_id] = duration
+                            c.a_f_val[l_or_n.id][creator_id] = end
             elif n_child.tag == "key_release_intervals":
                 for n_phi in n_child:
                     stream_id = n_phi.attrib["stream_id"]
@@ -361,3 +363,5 @@ class schedule:
                     value = int(n_cost.attrib["value"])
 
                     c.app_costs[app_id] = value
+
+        return c

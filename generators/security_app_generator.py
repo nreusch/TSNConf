@@ -76,6 +76,7 @@ def run(tc: Testcase, timing_object: TimingData) -> Testcase:
                                 dest_es_id,
                                 tc.ES[dest_es_id].mac_exec_time,
                                 tc.Pint,
+                                0,
                                 ETaskType.KEY_VERIFICATION,
                                 src_es_id,
                             )

@@ -250,7 +250,7 @@ def run(input_params: InputParameters) -> Solution:
     except Exception as e:
         print("Error in Step 2: Serializing the solution")
         print(e)
-        #raise e
+        raise e
 
     # 4. Print results
     try:

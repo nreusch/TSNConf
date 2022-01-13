@@ -15,6 +15,45 @@ import subprocess
 import matplotlib.pyplot as plt
 import time
 
+def create_simple_apps(app_name_prefix: str, config, es_utilization_dict):
+    # Creates a simple application with 2 zero wcet tasks and one stream between them
+    period = random.choice(config.periods)
+
+    # Create the application datastructure
+    app = application(app_name_prefix, period, EApplicationType.NORMAL)
+    tasks = {}
+    streams = []
+
+    # Create tasks from DAG nodes
+    send_t_wcet = 1
+    send_t_es_id = find_random_es(es_utilization_dict, send_t_wcet / period, config)
+    t_send = task(f"t-{app.id}-send", app.id, send_t_es_id, send_t_wcet, period, 0,
+             ETaskType.NORMAL)  # Don't use underscores in task name
+
+    recv_t_wcet = 1
+    recv_t_es_id = find_random_es(es_utilization_dict, recv_t_wcet / period, config, send_t_es_id)
+    t_recv = task(f"t-{app.id}-recv", app.id, recv_t_es_id, recv_t_wcet, period, 0,
+             ETaskType.NORMAL)  # Don't use underscores in task name
+
+    tasks[t_send.id] = t_send
+    tasks[t_recv.id] = t_recv
+
+    # Create streams from DAG edges
+    stream_id = f"s-{t_send.id}"  # Don't use underscores in stream name
+    message_size = random.randint(config.stream_min_size, config.stream_max_size - config.frame_overhead)
+    mac_size = 0
+    overhead = config.frame_overhead
+    rl = 1
+    secure = False
+
+    s = stream(stream_id, app.id, t_send.src_es_id, [t_recv.src_es_id], t_send.id, [t_recv.id],
+               message_size + mac_size + overhead, app.period, rl, secure, message_size, mac_size, overhead,
+               EStreamType.NORMAL)
+    streams.append(s)
+
+    return (app, tasks.values(), streams)
+
+
 def get_dag_from_ggen(task_count: int, tree_depth: int, connection_probability: float, container_id):
     # using https://github.com/perarnau/ggen
     # run vagrant container
@@ -51,14 +90,11 @@ def create_dags(task_count: int, tree_depth: int, connection_probability: float,
 
     return G
 
-def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: float, config) -> str:
+def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: float, config, exclude_es_id="") -> str:
     random_es = random.choice(list(es_utilization_dict.keys()))
+    while random_es == exclude_es_id or es_utilization_dict[random_es]+task_utilization >= config.max_es_utilization:
+        random_es = random.choice(list(es_utilization_dict.keys()))
     es_utilization_dict[random_es] += task_utilization
-
-    if es_utilization_dict[random_es] >= config.max_es_utilization:
-        if es_utilization_dict[random_es] > 1:
-            raise ValueError("ES utilization > 1")
-        es_utilization_dict.pop(random_es)
 
     return random_es
 
@@ -70,7 +106,7 @@ def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, flo
         G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability, container_id)
     else:
         r = random.randint(0, 9)
-        G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(f"utils/apps/dag{r}.dot"))
+        G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(f"../../utils/apps/dag{r}.dot"))
 
     # Split seperate parts of the DAG into seperate applications
     sgs = [G.subgraph(c) for c in weakly_connected_components(G)]

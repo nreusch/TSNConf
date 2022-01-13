@@ -55,6 +55,8 @@ class route:
             while n_id != self.stream.sender_es_id:
                 self.paths[es_recv_id].insert(0, (p_id, n_id))
                 n_id = p_id
+                if n_id == self.stream.sender_es_id:
+                    break
                 p_id = x_res_vector[n_id]
 
     def get_all_links(self, tc) -> List[link]:
