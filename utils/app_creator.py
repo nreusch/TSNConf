@@ -98,14 +98,17 @@ def find_random_es(es_utilization_dict: Dict[str, float], task_utilization: floa
 
     return random_es
 
-def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int, use_existing_dag, container_id) -> List[Tuple[application, List[task], List[stream]]]:
+def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, float], task_count: int, use_existing_dag, container_id, existing_dag_random=True) -> List[Tuple[application, List[task], List[stream]]]:
     print(f"Creating apps with {task_count} tasks")
 
     # Create a random DAG using the ggen tool
     if not use_existing_dag:
         G = get_dag_from_ggen(task_count, random.randint(config.min_app_depth, config.max_app_depth), config.app_task_connection_probability, container_id)
     else:
-        r = random.randint(0, 9)
+        if existing_dag_random:
+            r = random.randint(0, 9)
+        else:
+            r = 1
         G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(f"../../utils/apps/dag{r}.dot"))
 
     # Split seperate parts of the DAG into seperate applications

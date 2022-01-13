@@ -109,7 +109,7 @@ def create_testcase_with_topology_and_dags_and_apps(config, path, G, points_sw, 
 
     return path
 
-def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es, container_id):
+def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es, container_id, existing_dag_random=True):
     random.seed(time.time())
 
     es_utilization_dict = {}
@@ -147,7 +147,7 @@ def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es
     for i in range(config.nr_dags):
         # communicating apps
         # Use existing DAGs!
-        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, True, container_id)
+        lst = app_creator.create_apps(f"app{i}", config, es_utilization_dict, tasks_per_app, True, container_id, existing_dag_random)
 
         for el in lst:
             app = el[0]

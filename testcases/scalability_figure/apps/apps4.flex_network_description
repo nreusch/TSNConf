@@ -9,6 +9,8 @@
 	<device name="SW5" type="Switch"/>
 	<device name="SW6" type="Switch"/>
 	<device name="SW7" type="Switch"/>
+	<device name="SW8" type="Switch"/>
+	<device name="SW9" type="Switch"/>
 	<device name="ES0" type="EndSystem" mac_exec_time="10"/>
 	<device name="ES1" type="EndSystem" mac_exec_time="10"/>
 	<device name="ES2" type="EndSystem" mac_exec_time="10"/>
@@ -25,175 +27,221 @@
 	<device name="ES13" type="EndSystem" mac_exec_time="10"/>
 	<device name="ES14" type="EndSystem" mac_exec_time="10"/>
 	<device name="ES15" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES16" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES17" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES18" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES19" type="EndSystem" mac_exec_time="10"/>
 
 	<!-- Links are directional. speed = byte/us -->
-	<link src="ES0" dest="SW0" speed="125.00"/>
 	<link src="ES0" dest="SW1" speed="125.00"/>
-	<link src="ES0" dest="SW2" speed="125.00"/>
-	<link src="ES0" dest="SW4" speed="125.00"/>
+	<link src="ES0" dest="SW6" speed="125.00"/>
+	<link src="ES0" dest="SW7" speed="125.00"/>
+	<link src="ES0" dest="SW9" speed="125.00"/>
+	<link src="ES1" dest="SW0" speed="125.00"/>
+	<link src="ES1" dest="SW2" speed="125.00"/>
 	<link src="ES1" dest="SW3" speed="125.00"/>
 	<link src="ES1" dest="SW4" speed="125.00"/>
-	<link src="ES1" dest="SW5" speed="125.00"/>
-	<link src="ES1" dest="SW7" speed="125.00"/>
 	<link src="ES2" dest="SW0" speed="125.00"/>
-	<link src="ES2" dest="SW1" speed="125.00"/>
 	<link src="ES2" dest="SW2" speed="125.00"/>
 	<link src="ES2" dest="SW3" speed="125.00"/>
-	<link src="ES3" dest="SW4" speed="125.00"/>
+	<link src="ES2" dest="SW4" speed="125.00"/>
+	<link src="ES3" dest="SW2" speed="125.00"/>
 	<link src="ES3" dest="SW5" speed="125.00"/>
 	<link src="ES3" dest="SW6" speed="125.00"/>
-	<link src="ES3" dest="SW7" speed="125.00"/>
+	<link src="ES3" dest="SW9" speed="125.00"/>
+	<link src="ES4" dest="SW0" speed="125.00"/>
+	<link src="ES4" dest="SW2" speed="125.00"/>
+	<link src="ES4" dest="SW3" speed="125.00"/>
 	<link src="ES4" dest="SW4" speed="125.00"/>
-	<link src="ES4" dest="SW5" speed="125.00"/>
-	<link src="ES4" dest="SW6" speed="125.00"/>
-	<link src="ES4" dest="SW7" speed="125.00"/>
-	<link src="ES5" dest="SW0" speed="125.00"/>
-	<link src="ES5" dest="SW2" speed="125.00"/>
-	<link src="ES5" dest="SW3" speed="125.00"/>
-	<link src="ES5" dest="SW7" speed="125.00"/>
-	<link src="ES6" dest="SW4" speed="125.00"/>
+	<link src="ES5" dest="SW1" speed="125.00"/>
+	<link src="ES5" dest="SW5" speed="125.00"/>
+	<link src="ES5" dest="SW6" speed="125.00"/>
+	<link src="ES5" dest="SW8" speed="125.00"/>
+	<link src="ES6" dest="SW0" speed="125.00"/>
+	<link src="ES6" dest="SW2" speed="125.00"/>
+	<link src="ES6" dest="SW3" speed="125.00"/>
 	<link src="ES6" dest="SW5" speed="125.00"/>
-	<link src="ES6" dest="SW6" speed="125.00"/>
-	<link src="ES6" dest="SW7" speed="125.00"/>
-	<link src="ES7" dest="SW4" speed="125.00"/>
+	<link src="ES7" dest="SW1" speed="125.00"/>
 	<link src="ES7" dest="SW5" speed="125.00"/>
 	<link src="ES7" dest="SW6" speed="125.00"/>
-	<link src="ES7" dest="SW7" speed="125.00"/>
-	<link src="ES8" dest="SW3" speed="125.00"/>
-	<link src="ES8" dest="SW4" speed="125.00"/>
+	<link src="ES7" dest="SW8" speed="125.00"/>
 	<link src="ES8" dest="SW5" speed="125.00"/>
+	<link src="ES8" dest="SW6" speed="125.00"/>
 	<link src="ES8" dest="SW7" speed="125.00"/>
-	<link src="ES9" dest="SW2" speed="125.00"/>
-	<link src="ES9" dest="SW3" speed="125.00"/>
+	<link src="ES8" dest="SW9" speed="125.00"/>
+	<link src="ES9" dest="SW1" speed="125.00"/>
 	<link src="ES9" dest="SW5" speed="125.00"/>
-	<link src="ES9" dest="SW7" speed="125.00"/>
-	<link src="ES10" dest="SW0" speed="125.00"/>
-	<link src="ES10" dest="SW1" speed="125.00"/>
-	<link src="ES10" dest="SW4" speed="125.00"/>
-	<link src="ES10" dest="SW6" speed="125.00"/>
+	<link src="ES9" dest="SW6" speed="125.00"/>
+	<link src="ES9" dest="SW8" speed="125.00"/>
+	<link src="ES10" dest="SW2" speed="125.00"/>
+	<link src="ES10" dest="SW3" speed="125.00"/>
+	<link src="ES10" dest="SW5" speed="125.00"/>
+	<link src="ES10" dest="SW8" speed="125.00"/>
+	<link src="ES11" dest="SW0" speed="125.00"/>
+	<link src="ES11" dest="SW2" speed="125.00"/>
+	<link src="ES11" dest="SW3" speed="125.00"/>
 	<link src="ES11" dest="SW4" speed="125.00"/>
-	<link src="ES11" dest="SW5" speed="125.00"/>
-	<link src="ES11" dest="SW6" speed="125.00"/>
-	<link src="ES11" dest="SW7" speed="125.00"/>
-	<link src="ES12" dest="SW0" speed="125.00"/>
 	<link src="ES12" dest="SW1" speed="125.00"/>
-	<link src="ES12" dest="SW2" speed="125.00"/>
-	<link src="ES12" dest="SW3" speed="125.00"/>
+	<link src="ES12" dest="SW5" speed="125.00"/>
+	<link src="ES12" dest="SW6" speed="125.00"/>
+	<link src="ES12" dest="SW8" speed="125.00"/>
 	<link src="ES13" dest="SW0" speed="125.00"/>
-	<link src="ES13" dest="SW1" speed="125.00"/>
 	<link src="ES13" dest="SW2" speed="125.00"/>
 	<link src="ES13" dest="SW3" speed="125.00"/>
-	<link src="ES14" dest="SW4" speed="125.00"/>
+	<link src="ES13" dest="SW4" speed="125.00"/>
+	<link src="ES14" dest="SW1" speed="125.00"/>
+	<link src="ES14" dest="SW3" speed="125.00"/>
 	<link src="ES14" dest="SW5" speed="125.00"/>
-	<link src="ES14" dest="SW6" speed="125.00"/>
-	<link src="ES14" dest="SW7" speed="125.00"/>
+	<link src="ES14" dest="SW8" speed="125.00"/>
 	<link src="ES15" dest="SW0" speed="125.00"/>
-	<link src="ES15" dest="SW1" speed="125.00"/>
 	<link src="ES15" dest="SW2" speed="125.00"/>
 	<link src="ES15" dest="SW3" speed="125.00"/>
-	<link src="SW0" dest="SW1" speed="125.00"/>
+	<link src="ES15" dest="SW4" speed="125.00"/>
+	<link src="ES16" dest="SW0" speed="125.00"/>
+	<link src="ES16" dest="SW2" speed="125.00"/>
+	<link src="ES16" dest="SW3" speed="125.00"/>
+	<link src="ES16" dest="SW4" speed="125.00"/>
+	<link src="ES17" dest="SW1" speed="125.00"/>
+	<link src="ES17" dest="SW3" speed="125.00"/>
+	<link src="ES17" dest="SW5" speed="125.00"/>
+	<link src="ES17" dest="SW8" speed="125.00"/>
+	<link src="ES18" dest="SW1" speed="125.00"/>
+	<link src="ES18" dest="SW5" speed="125.00"/>
+	<link src="ES18" dest="SW6" speed="125.00"/>
+	<link src="ES18" dest="SW8" speed="125.00"/>
+	<link src="ES19" dest="SW1" speed="125.00"/>
+	<link src="ES19" dest="SW5" speed="125.00"/>
+	<link src="ES19" dest="SW6" speed="125.00"/>
+	<link src="ES19" dest="SW9" speed="125.00"/>
+	<link src="SW0" dest="SW4" speed="125.00"/>
 	<link src="SW0" dest="SW2" speed="125.00"/>
 	<link src="SW0" dest="SW3" speed="125.00"/>
-	<link src="SW0" dest="SW7" speed="125.00"/>
-	<link src="SW0" dest="SW4" speed="125.00"/>
-	<link src="SW0" dest="SW6" speed="125.00"/>
 	<link src="SW0" dest="SW5" speed="125.00"/>
-	<link src="SW0" dest="ES0" speed="125.00"/>
+	<link src="SW0" dest="SW8" speed="125.00"/>
+	<link src="SW0" dest="SW9" speed="125.00"/>
+	<link src="SW0" dest="SW1" speed="125.00"/>
+	<link src="SW0" dest="SW6" speed="125.00"/>
+	<link src="SW0" dest="SW7" speed="125.00"/>
+	<link src="SW0" dest="ES1" speed="125.00"/>
 	<link src="SW0" dest="ES2" speed="125.00"/>
-	<link src="SW0" dest="ES5" speed="125.00"/>
-	<link src="SW0" dest="ES10" speed="125.00"/>
-	<link src="SW0" dest="ES12" speed="125.00"/>
+	<link src="SW0" dest="ES4" speed="125.00"/>
+	<link src="SW0" dest="ES6" speed="125.00"/>
+	<link src="SW0" dest="ES11" speed="125.00"/>
 	<link src="SW0" dest="ES13" speed="125.00"/>
 	<link src="SW0" dest="ES15" speed="125.00"/>
+	<link src="SW0" dest="ES16" speed="125.00"/>
 	<link src="SW1" dest="SW0" speed="125.00"/>
-	<link src="SW1" dest="SW2" speed="125.00"/>
-	<link src="SW1" dest="SW3" speed="125.00"/>
-	<link src="SW1" dest="SW4" speed="125.00"/>
-	<link src="SW1" dest="SW7" speed="125.00"/>
 	<link src="SW1" dest="SW6" speed="125.00"/>
+	<link src="SW1" dest="SW8" speed="125.00"/>
 	<link src="SW1" dest="SW5" speed="125.00"/>
+	<link src="SW1" dest="SW9" speed="125.00"/>
+	<link src="SW1" dest="SW3" speed="125.00"/>
+	<link src="SW1" dest="SW2" speed="125.00"/>
+	<link src="SW1" dest="SW7" speed="125.00"/>
+	<link src="SW1" dest="SW4" speed="125.00"/>
 	<link src="SW1" dest="ES0" speed="125.00"/>
-	<link src="SW1" dest="ES2" speed="125.00"/>
-	<link src="SW1" dest="ES10" speed="125.00"/>
+	<link src="SW1" dest="ES5" speed="125.00"/>
+	<link src="SW1" dest="ES7" speed="125.00"/>
+	<link src="SW1" dest="ES9" speed="125.00"/>
 	<link src="SW1" dest="ES12" speed="125.00"/>
-	<link src="SW1" dest="ES13" speed="125.00"/>
-	<link src="SW1" dest="ES15" speed="125.00"/>
+	<link src="SW1" dest="ES14" speed="125.00"/>
+	<link src="SW1" dest="ES17" speed="125.00"/>
+	<link src="SW1" dest="ES18" speed="125.00"/>
+	<link src="SW1" dest="ES19" speed="125.00"/>
 	<link src="SW2" dest="SW0" speed="125.00"/>
 	<link src="SW2" dest="SW1" speed="125.00"/>
 	<link src="SW2" dest="SW3" speed="125.00"/>
-	<link src="SW2" dest="SW7" speed="125.00"/>
-	<link src="SW2" dest="SW4" speed="125.00"/>
-	<link src="SW2" dest="SW6" speed="125.00"/>
 	<link src="SW2" dest="SW5" speed="125.00"/>
-	<link src="SW2" dest="ES0" speed="125.00"/>
+	<link src="SW2" dest="SW4" speed="125.00"/>
+	<link src="SW2" dest="SW9" speed="125.00"/>
+	<link src="SW2" dest="SW6" speed="125.00"/>
+	<link src="SW2" dest="SW8" speed="125.00"/>
+	<link src="SW2" dest="SW7" speed="125.00"/>
+	<link src="SW2" dest="ES1" speed="125.00"/>
 	<link src="SW2" dest="ES2" speed="125.00"/>
-	<link src="SW2" dest="ES5" speed="125.00"/>
-	<link src="SW2" dest="ES9" speed="125.00"/>
-	<link src="SW2" dest="ES12" speed="125.00"/>
+	<link src="SW2" dest="ES3" speed="125.00"/>
+	<link src="SW2" dest="ES4" speed="125.00"/>
+	<link src="SW2" dest="ES6" speed="125.00"/>
+	<link src="SW2" dest="ES10" speed="125.00"/>
+	<link src="SW2" dest="ES11" speed="125.00"/>
 	<link src="SW2" dest="ES13" speed="125.00"/>
 	<link src="SW2" dest="ES15" speed="125.00"/>
+	<link src="SW2" dest="ES16" speed="125.00"/>
 	<link src="SW3" dest="SW0" speed="125.00"/>
 	<link src="SW3" dest="SW1" speed="125.00"/>
 	<link src="SW3" dest="SW2" speed="125.00"/>
-	<link src="SW3" dest="SW7" speed="125.00"/>
 	<link src="SW3" dest="SW4" speed="125.00"/>
-	<link src="SW3" dest="SW6" speed="125.00"/>
 	<link src="SW3" dest="SW5" speed="125.00"/>
+	<link src="SW3" dest="SW8" speed="125.00"/>
+	<link src="SW3" dest="SW6" speed="125.00"/>
+	<link src="SW3" dest="SW9" speed="125.00"/>
+	<link src="SW3" dest="SW7" speed="125.00"/>
 	<link src="SW3" dest="ES1" speed="125.00"/>
 	<link src="SW3" dest="ES2" speed="125.00"/>
-	<link src="SW3" dest="ES5" speed="125.00"/>
-	<link src="SW3" dest="ES8" speed="125.00"/>
-	<link src="SW3" dest="ES9" speed="125.00"/>
-	<link src="SW3" dest="ES12" speed="125.00"/>
+	<link src="SW3" dest="ES4" speed="125.00"/>
+	<link src="SW3" dest="ES6" speed="125.00"/>
+	<link src="SW3" dest="ES10" speed="125.00"/>
+	<link src="SW3" dest="ES11" speed="125.00"/>
 	<link src="SW3" dest="ES13" speed="125.00"/>
+	<link src="SW3" dest="ES14" speed="125.00"/>
 	<link src="SW3" dest="ES15" speed="125.00"/>
+	<link src="SW3" dest="ES16" speed="125.00"/>
+	<link src="SW3" dest="ES17" speed="125.00"/>
 	<link src="SW4" dest="SW0" speed="125.00"/>
 	<link src="SW4" dest="SW1" speed="125.00"/>
 	<link src="SW4" dest="SW2" speed="125.00"/>
 	<link src="SW4" dest="SW3" speed="125.00"/>
+	<link src="SW4" dest="SW5" speed="125.00"/>
+	<link src="SW4" dest="SW8" speed="125.00"/>
+	<link src="SW4" dest="SW9" speed="125.00"/>
 	<link src="SW4" dest="SW6" speed="125.00"/>
 	<link src="SW4" dest="SW7" speed="125.00"/>
-	<link src="SW4" dest="SW5" speed="125.00"/>
-	<link src="SW4" dest="ES0" speed="125.00"/>
 	<link src="SW4" dest="ES1" speed="125.00"/>
-	<link src="SW4" dest="ES3" speed="125.00"/>
+	<link src="SW4" dest="ES2" speed="125.00"/>
 	<link src="SW4" dest="ES4" speed="125.00"/>
-	<link src="SW4" dest="ES6" speed="125.00"/>
-	<link src="SW4" dest="ES7" speed="125.00"/>
-	<link src="SW4" dest="ES8" speed="125.00"/>
-	<link src="SW4" dest="ES10" speed="125.00"/>
 	<link src="SW4" dest="ES11" speed="125.00"/>
-	<link src="SW4" dest="ES14" speed="125.00"/>
+	<link src="SW4" dest="ES13" speed="125.00"/>
+	<link src="SW4" dest="ES15" speed="125.00"/>
+	<link src="SW4" dest="ES16" speed="125.00"/>
 	<link src="SW5" dest="SW0" speed="125.00"/>
 	<link src="SW5" dest="SW1" speed="125.00"/>
 	<link src="SW5" dest="SW2" speed="125.00"/>
 	<link src="SW5" dest="SW3" speed="125.00"/>
 	<link src="SW5" dest="SW4" speed="125.00"/>
 	<link src="SW5" dest="SW6" speed="125.00"/>
+	<link src="SW5" dest="SW8" speed="125.00"/>
+	<link src="SW5" dest="SW9" speed="125.00"/>
 	<link src="SW5" dest="SW7" speed="125.00"/>
-	<link src="SW5" dest="ES1" speed="125.00"/>
 	<link src="SW5" dest="ES3" speed="125.00"/>
-	<link src="SW5" dest="ES4" speed="125.00"/>
+	<link src="SW5" dest="ES5" speed="125.00"/>
 	<link src="SW5" dest="ES6" speed="125.00"/>
 	<link src="SW5" dest="ES7" speed="125.00"/>
 	<link src="SW5" dest="ES8" speed="125.00"/>
 	<link src="SW5" dest="ES9" speed="125.00"/>
-	<link src="SW5" dest="ES11" speed="125.00"/>
+	<link src="SW5" dest="ES10" speed="125.00"/>
+	<link src="SW5" dest="ES12" speed="125.00"/>
 	<link src="SW5" dest="ES14" speed="125.00"/>
+	<link src="SW5" dest="ES17" speed="125.00"/>
+	<link src="SW5" dest="ES18" speed="125.00"/>
+	<link src="SW5" dest="ES19" speed="125.00"/>
 	<link src="SW6" dest="SW0" speed="125.00"/>
 	<link src="SW6" dest="SW1" speed="125.00"/>
 	<link src="SW6" dest="SW2" speed="125.00"/>
 	<link src="SW6" dest="SW3" speed="125.00"/>
 	<link src="SW6" dest="SW4" speed="125.00"/>
 	<link src="SW6" dest="SW5" speed="125.00"/>
+	<link src="SW6" dest="SW9" speed="125.00"/>
+	<link src="SW6" dest="SW8" speed="125.00"/>
 	<link src="SW6" dest="SW7" speed="125.00"/>
+	<link src="SW6" dest="ES0" speed="125.00"/>
 	<link src="SW6" dest="ES3" speed="125.00"/>
-	<link src="SW6" dest="ES4" speed="125.00"/>
-	<link src="SW6" dest="ES6" speed="125.00"/>
+	<link src="SW6" dest="ES5" speed="125.00"/>
 	<link src="SW6" dest="ES7" speed="125.00"/>
-	<link src="SW6" dest="ES10" speed="125.00"/>
-	<link src="SW6" dest="ES11" speed="125.00"/>
-	<link src="SW6" dest="ES14" speed="125.00"/>
+	<link src="SW6" dest="ES8" speed="125.00"/>
+	<link src="SW6" dest="ES9" speed="125.00"/>
+	<link src="SW6" dest="ES12" speed="125.00"/>
+	<link src="SW6" dest="ES18" speed="125.00"/>
+	<link src="SW6" dest="ES19" speed="125.00"/>
 	<link src="SW7" dest="SW0" speed="125.00"/>
 	<link src="SW7" dest="SW1" speed="125.00"/>
 	<link src="SW7" dest="SW2" speed="125.00"/>
@@ -201,21 +249,45 @@
 	<link src="SW7" dest="SW4" speed="125.00"/>
 	<link src="SW7" dest="SW5" speed="125.00"/>
 	<link src="SW7" dest="SW6" speed="125.00"/>
-	<link src="SW7" dest="ES1" speed="125.00"/>
-	<link src="SW7" dest="ES3" speed="125.00"/>
-	<link src="SW7" dest="ES4" speed="125.00"/>
-	<link src="SW7" dest="ES5" speed="125.00"/>
-	<link src="SW7" dest="ES6" speed="125.00"/>
-	<link src="SW7" dest="ES7" speed="125.00"/>
+	<link src="SW7" dest="SW9" speed="125.00"/>
+	<link src="SW7" dest="SW8" speed="125.00"/>
+	<link src="SW7" dest="ES0" speed="125.00"/>
 	<link src="SW7" dest="ES8" speed="125.00"/>
-	<link src="SW7" dest="ES9" speed="125.00"/>
-	<link src="SW7" dest="ES11" speed="125.00"/>
-	<link src="SW7" dest="ES14" speed="125.00"/>
+	<link src="SW8" dest="SW0" speed="125.00"/>
+	<link src="SW8" dest="SW1" speed="125.00"/>
+	<link src="SW8" dest="SW2" speed="125.00"/>
+	<link src="SW8" dest="SW3" speed="125.00"/>
+	<link src="SW8" dest="SW4" speed="125.00"/>
+	<link src="SW8" dest="SW5" speed="125.00"/>
+	<link src="SW8" dest="SW6" speed="125.00"/>
+	<link src="SW8" dest="SW7" speed="125.00"/>
+	<link src="SW8" dest="SW9" speed="125.00"/>
+	<link src="SW8" dest="ES5" speed="125.00"/>
+	<link src="SW8" dest="ES7" speed="125.00"/>
+	<link src="SW8" dest="ES9" speed="125.00"/>
+	<link src="SW8" dest="ES10" speed="125.00"/>
+	<link src="SW8" dest="ES12" speed="125.00"/>
+	<link src="SW8" dest="ES14" speed="125.00"/>
+	<link src="SW8" dest="ES17" speed="125.00"/>
+	<link src="SW8" dest="ES18" speed="125.00"/>
+	<link src="SW9" dest="SW0" speed="125.00"/>
+	<link src="SW9" dest="SW1" speed="125.00"/>
+	<link src="SW9" dest="SW2" speed="125.00"/>
+	<link src="SW9" dest="SW3" speed="125.00"/>
+	<link src="SW9" dest="SW4" speed="125.00"/>
+	<link src="SW9" dest="SW5" speed="125.00"/>
+	<link src="SW9" dest="SW6" speed="125.00"/>
+	<link src="SW9" dest="SW7" speed="125.00"/>
+	<link src="SW9" dest="SW8" speed="125.00"/>
+	<link src="SW9" dest="ES0" speed="125.00"/>
+	<link src="SW9" dest="ES3" speed="125.00"/>
+	<link src="SW9" dest="ES8" speed="125.00"/>
+	<link src="SW9" dest="ES19" speed="125.00"/>
 
 	<!-- period&wcet is in us, size in Byte-->
-	<application name="app00" period="75000" type="NORMAL">
+	<application name="app00" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app00-3" node="ES3" wcet="2320" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app00-3" node="ES13" wcet="1808" period="50000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
@@ -223,36 +295,41 @@
 	
 	<application name="app01" period="100000" type="NORMAL">
 		<tasks>
-			<task name="t-app01-2" node="ES13" wcet="2841" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app01-0" node="ES0" wcet="5246" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app01-1" node="ES4" wcet="4987" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app01-4" node="ES15" wcet="9394" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app01-5" node="ES3" wcet="8329" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app01-2" node="ES4" wcet="3521" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app01-0" node="ES12" wcet="842" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app01-1" node="ES13" wcet="2213" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app01-4" node="ES2" wcet="8372" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app01-5" node="ES13" wcet="7596" period="100000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app01-2" src="ES13" dest="ES0,ES4,ES15,ES3" sender_task="t-app01-2" receiver_tasks="t-app01-0,t-app01-1,t-app01-4,t-app01-5" size="819" period="100000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app01-2" src="ES4" dest="ES12,ES13,ES2,ES13" sender_task="t-app01-2" receiver_tasks="t-app01-0,t-app01-1,t-app01-4,t-app01-5" size="522" period="100000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
-	<application name="app10" period="100000" type="NORMAL">
+	<application name="app10" period="75000" type="NORMAL">
 		<tasks>
-			<task name="t-app10-1" node="ES5" wcet="8181" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app10-0" node="ES0" wcet="2280" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app10-2" node="ES2" wcet="7345" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app10-3" node="ES3" wcet="7051" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app10-4" node="ES14" wcet="629" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app10-5" node="ES0" wcet="6350" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app10-3" node="ES12" wcet="1136" period="75000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app10-1" src="ES5" dest="ES0" sender_task="t-app10-1" receiver_tasks="t-app10-0" size="327" period="100000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app10-2" src="ES2" dest="ES0,ES3,ES14" sender_task="t-app10-2" receiver_tasks="t-app10-0,t-app10-3,t-app10-4" size="797" period="100000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app10-5" src="ES0" dest="ES14" sender_task="t-app10-5" receiver_tasks="t-app10-4" size="480" period="100000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
-	<application name="app20" period="50000" type="NORMAL">
+	<application name="app11" period="75000" type="NORMAL">
 		<tasks>
-			<task name="t-app20-3" node="ES0" wcet="2606" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app11-2" node="ES6" wcet="3378" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app11-0" node="ES13" wcet="6194" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app11-1" node="ES16" wcet="2496" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app11-4" node="ES2" wcet="6789" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app11-5" node="ES13" wcet="6939" period="75000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s-t-app11-2" src="ES6" dest="ES13,ES16,ES2,ES13" sender_task="t-app11-2" receiver_tasks="t-app11-0,t-app11-1,t-app11-4,t-app11-5" size="522" period="75000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app20" period="100000" type="NORMAL">
+		<tasks>
+			<task name="t-app20-3" node="ES11" wcet="2165" period="100000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
@@ -260,66 +337,77 @@
 	
 	<application name="app21" period="50000" type="NORMAL">
 		<tasks>
-			<task name="t-app21-2" node="ES5" wcet="668" period="50000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app21-0" node="ES7" wcet="2167" period="50000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app21-1" node="ES2" wcet="4845" period="50000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app21-4" node="ES12" wcet="2334" period="50000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app21-5" node="ES9" wcet="3393" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app21-2" node="ES15" wcet="868" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app21-0" node="ES0" wcet="1251" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app21-1" node="ES15" wcet="2178" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app21-4" node="ES14" wcet="163" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app21-5" node="ES18" wcet="689" period="50000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app21-2" src="ES5" dest="ES7,ES2,ES12,ES9" sender_task="t-app21-2" receiver_tasks="t-app21-0,t-app21-1,t-app21-4,t-app21-5" size="788" period="50000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app21-2" src="ES15" dest="ES0,ES14,ES18" sender_task="t-app21-2" receiver_tasks="t-app21-0,t-app21-4,t-app21-5" size="522" period="50000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
-	<application name="app30" period="100000" type="NORMAL">
+	<application name="app30" period="75000" type="NORMAL">
 		<tasks>
-			<task name="t-app30-3" node="ES11" wcet="2257" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app30-3" node="ES2" wcet="4722" period="75000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
 		</streams>
 	</application>
 	
-	<application name="app31" period="100000" type="NORMAL">
+	<application name="app31" period="75000" type="NORMAL">
 		<tasks>
-			<task name="t-app31-2" node="ES9" wcet="1164" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app31-0" node="ES2" wcet="3062" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app31-1" node="ES5" wcet="2238" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app31-4" node="ES14" wcet="3504" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app31-5" node="ES3" wcet="7152" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app31-2" node="ES1" wcet="7478" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app31-0" node="ES12" wcet="7439" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app31-1" node="ES4" wcet="6837" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app31-4" node="ES17" wcet="3492" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app31-5" node="ES13" wcet="5935" period="75000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app31-2" src="ES9" dest="ES2,ES5,ES14,ES3" sender_task="t-app31-2" receiver_tasks="t-app31-0,t-app31-1,t-app31-4,t-app31-5" size="105" period="100000" rl="1" secure="False" type="NORMAL" />
+			<stream name="s-t-app31-2" src="ES1" dest="ES12,ES4,ES17,ES13" sender_task="t-app31-2" receiver_tasks="t-app31-0,t-app31-1,t-app31-4,t-app31-5" size="522" period="75000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
 	<application name="app40" period="100000" type="NORMAL">
 		<tasks>
-			<task name="t-app40-0" node="ES3" wcet="8342" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app40-2" node="ES0" wcet="97" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app40-4" node="ES8" wcet="2014" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app40-1" node="ES11" wcet="7845" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app40-5" node="ES0" wcet="9902" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app40-3" node="ES3" wcet="9901" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app40-3" node="ES7" wcet="9126" period="100000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app40-0" src="ES3" dest="ES0,ES8" sender_task="t-app40-0" receiver_tasks="t-app40-2,t-app40-4" size="1324" period="100000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app40-1" src="ES11" dest="ES0,ES8,ES0" sender_task="t-app40-1" receiver_tasks="t-app40-2,t-app40-4,t-app40-5" size="495" period="100000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app41" period="75000" type="NORMAL">
+		<tasks>
+			<task name="t-app41-2" node="ES4" wcet="3508" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app41-0" node="ES14" wcet="2366" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app41-1" node="ES14" wcet="7472" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app41-4" node="ES10" wcet="1209" period="75000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app41-5" node="ES15" wcet="5671" period="75000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s-t-app41-2" src="ES4" dest="ES14,ES14,ES10,ES15" sender_task="t-app41-2" receiver_tasks="t-app41-0,t-app41-1,t-app41-4,t-app41-5" size="522" period="75000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
 	<application name="app50" period="100000" type="NORMAL">
 		<tasks>
-			<task name="t-app50-1" node="ES9" wcet="8450" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app50-0" node="ES2" wcet="189" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app50-2" node="ES5" wcet="2734" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app50-3" node="ES11" wcet="8421" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app50-4" node="ES9" wcet="3844" period="100000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app50-5" node="ES13" wcet="3977" period="100000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app50-3" node="ES1" wcet="3602" period="100000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="s-t-app50-1" src="ES9" dest="ES2" sender_task="t-app50-1" receiver_tasks="t-app50-0" size="115" period="100000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app50-2" src="ES5" dest="ES2,ES11,ES9" sender_task="t-app50-2" receiver_tasks="t-app50-0,t-app50-3,t-app50-4" size="1074" period="100000" rl="1" secure="False" type="NORMAL" />
-			<stream name="s-t-app50-5" src="ES13" dest="ES9" sender_task="t-app50-5" receiver_tasks="t-app50-4" size="1011" period="100000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app51" period="50000" type="NORMAL">
+		<tasks>
+			<task name="t-app51-2" node="ES19" wcet="3176" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app51-0" node="ES10" wcet="2026" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app51-1" node="ES1" wcet="257" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app51-4" node="ES17" wcet="32" period="50000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app51-5" node="ES13" wcet="3345" period="50000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="s-t-app51-2" src="ES19" dest="ES10,ES1,ES17,ES13" sender_task="t-app51-2" receiver_tasks="t-app51-0,t-app51-1,t-app51-4,t-app51-5" size="522" period="50000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 	
