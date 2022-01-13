@@ -68,7 +68,7 @@ def create_testcase_with_topology_and_dags(config, path, G, points_sw, points_es
 
     # ES
     for p in points_es:
-        es = end_system(p.name, config.mac_exec_time, "")
+        es = end_system(p.name, config.mac_exec_time, "EndSystem")
         tc.add_to_datastructures(es)
 
         es_utilization_dict[es.id] = 0
@@ -129,7 +129,7 @@ def create_testcase(config, path, container_id):
 
     # ES
     for p in points_es:
-        es = end_system(p.name, config.mac_exec_time, "")
+        es = end_system(p.name, config.mac_exec_time, "EndSystem")
         tc.add_to_datastructures(es)
 
         es_utilization_dict[es.id] = 0
