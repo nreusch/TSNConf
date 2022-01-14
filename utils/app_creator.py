@@ -108,7 +108,7 @@ def create_apps(app_name_prefix: str, config, es_utilization_dict: Dict[str, flo
         if existing_dag_random:
             r = random.randint(0, 9)
         else:
-            r = 1
+            r = 10
         G = nx.DiGraph(nx.drawing.nx_pydot.read_dot(f"../../utils/apps/dag{r}.dot"))
 
     # Split seperate parts of the DAG into seperate applications
