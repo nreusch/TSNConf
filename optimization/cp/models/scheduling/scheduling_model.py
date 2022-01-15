@@ -114,6 +114,7 @@ class CPSchedulingSolver:
     ) -> Tuple[Testcase, EOptimizationStatus]:
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_scheduling
+        solver.parameters.random_seed = 10
         print_model_stats(self.model.ModelStats())
 
         t = Timer()

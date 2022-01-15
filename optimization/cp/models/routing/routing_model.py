@@ -103,6 +103,7 @@ class CPRoutingSolver:
         # Solve model_Pint.
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_routing
+        solver.parameters.random_seed = 10
         print_model_stats(self.model.ModelStats())
         t = Timer()
         with t:
