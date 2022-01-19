@@ -1,0 +1,10 @@
+Testcase,Optimization Time (ms),# Tasks,# Switches
+topo_size_plus_apps0,0.45755555555555555,8,6
+topo_size_plus_apps1,1.1823333333333332,16,8
+topo_size_plus_apps2,12.45588888888889,24,10
+topo_size_plus_apps3,3548.663,32,12
+topo_size_plus_apps4,2195.5015,40,14
+topo_size_plus_apps5,6260.073285714286,48,16
+topo_size_plus_apps6,9594.26325,56,18
+topo_size_plus_apps7,9941.162199999999,64,20
+topo_size_plus_apps9,11208.505,80,24

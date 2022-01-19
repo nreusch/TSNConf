@@ -60,7 +60,7 @@ class Solution:
         """
         Returns a string containing all important results
         """
-        return "{}: {} ES, {} SW, {} Tasks, {} Streams, {} Apps, {} Cost, {:.2f}% Bandwidth , {:.2f}% CPU , {:.2f}ms Optimization Time, Infeasible Apps {}/{}, Routing {}, Scheduling {}".format(
+        return "{}: {} ES, {} SW, {} Tasks, {} Streams, {} Apps, {} Cost, {}% Bandwidth , {:.2f}% CPU , {:.2f}ms Optimization Time, Infeasible Apps {}/{}, Routing {}, Scheduling {}".format(
             self.input_params.tc_name,
             len(self.tc.ES),
             len(self.tc.SW),

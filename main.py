@@ -90,6 +90,13 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
         help="Allow the CP solver to produce infeasible solutions, including stream overlap or missed deadlines",
     )
 
+    parser.add_argument(
+        "--original_tesla",
+        action="store_true",
+        default=False,
+        help="Use TESLA without modification (key only sent in secure stream). Will incure higher bandwidth and cost",
+    )
+
 
     parser.add_argument(
         "--timeout_routing",
@@ -189,6 +196,7 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     no_security = results.no_security
     allow_overlap = results.allow_overlap
     allow_infeasible_solutions = results.allow_infeasible
+    original_tesla = results.original_tesla
 
     if allow_infeasible_solutions:
         allow_overlap = True
@@ -200,7 +208,7 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     alpha = results.alpha
     Prmv = results.Prmv
     w = results.w
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, extra_apps_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, k, a, b, Tstart, alpha, Prmv, w))
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, extra_apps_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, original_tesla, k, a, b, Tstart, alpha, Prmv, w))
 
     return input_param_list, Path(results.testcase_path)
 

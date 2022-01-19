@@ -67,8 +67,7 @@ class SASchedulingSolver:
         infeasible_tga = {}
         latencies = {}
         # chain keyApps and then normalApps
-        print("-"*20 + "Scheduling apps")
-        for tga in tqdm(itertools.chain(sol.order[0], sol.order[1])):
+        for tga in itertools.chain(sol.order[0], sol.order[1]):
             tga_is_infeasible = False
             for tgn_id in tga.internal_order:
                 tgn = self.prec_graph.nodes[tgn_id]

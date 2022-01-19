@@ -58,7 +58,7 @@ class EMode(Enum):
 
 @dataclass
 class InputParameters:
-    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, extra_apps_path: str, visualize: bool, aggregate_path: str, port: int, no_redundancy: bool, no_security: bool, allow_overlap: bool, allow_infeasible_solutions: bool, k: int, a: int, b: int, Tstart: int, alpha: float, Prmv: float, w: int):
+    def __init__(self, mode: EMode, timeouts: Timeouts, tc_path: str, extra_apps_path: str, visualize: bool, aggregate_path: str, port: int, no_redundancy: bool, no_security: bool, allow_overlap: bool, allow_infeasible_solutions: bool,original_tesla: bool, k: int, a: int, b: int, Tstart: int, alpha: float, Prmv: float, w: int):
         self.mode = mode
 
         self.timeouts = timeouts
@@ -78,6 +78,7 @@ class InputParameters:
         self.no_security = no_security
         self.allow_overlap = allow_overlap
         self.allow_infeasible_solutions = allow_infeasible_solutions
+        self.original_tesla = original_tesla
 
         self.k = k
         self.a = a
@@ -117,5 +118,6 @@ class InputParameters:
             f"No security: {self.no_security}",
             f"Overlap allowed for CP: {self.allow_overlap}",
             f"Infeasible solutions allowed for CP: {self.allow_infeasible_solutions}",
+            f"Original TESLA: {self.original_tesla}",
             "-" * 80
         )

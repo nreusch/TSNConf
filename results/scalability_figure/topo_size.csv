@@ -1,0 +1,11 @@
+Testcase,Optimization Time (ms),# Switches
+topo_size0,0.959,6
+topo_size1,1.0322,8
+topo_size2,1.2,10
+topo_size3,2.2312,12
+topo_size4,6.9592,14
+topo_size5,6.6828,16
+topo_size6,6.9962,18
+topo_size7,15.037799999999999,20
+topo_size8,17.9466,22
+topo_size9,38.3376,24
