@@ -1,0 +1,17 @@
+__pycache__/
+testcases/output/
+.venv/
+venv/
+.idea/
+.vscode/
+.venv_ubuntu/
+.venvubuntu/
+.ipynb_checkpoints/
+*.svg
+*.csv
+*.pdf
+*.txt
+*.bat
+run_single_windows_testcases.py
+run_single_windows_testcases_extended.py
+results.zip

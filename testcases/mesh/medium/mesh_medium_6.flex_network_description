@@ -1,0 +1,286 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="0" key_length="0" mac_length="0" link_speed="12.5">
+	<!-- Expected order: devices, links, streams, routes, schedule-->
+	<device name="SW0" type="Switch"/>
+	<device name="SW1" type="Switch"/>
+	<device name="SW2" type="Switch"/>
+	<device name="SW3" type="Switch"/>
+	<device name="ES0" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES4" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES5" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES6" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES7" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES8" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES9" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES10" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES11" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES12" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES13" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES14" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES15" type="EndSystem" mac_exec_time="0"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="ES0" dest="SW0" speed="12.50"/>
+	<link src="ES1" dest="SW0" speed="12.50"/>
+	<link src="ES2" dest="SW0" speed="12.50"/>
+	<link src="ES3" dest="SW0" speed="12.50"/>
+	<link src="ES4" dest="SW1" speed="12.50"/>
+	<link src="ES5" dest="SW1" speed="12.50"/>
+	<link src="ES6" dest="SW1" speed="12.50"/>
+	<link src="ES7" dest="SW1" speed="12.50"/>
+	<link src="ES8" dest="SW2" speed="12.50"/>
+	<link src="ES9" dest="SW2" speed="12.50"/>
+	<link src="ES10" dest="SW2" speed="12.50"/>
+	<link src="ES11" dest="SW2" speed="12.50"/>
+	<link src="ES12" dest="SW3" speed="12.50"/>
+	<link src="ES13" dest="SW3" speed="12.50"/>
+	<link src="ES14" dest="SW3" speed="12.50"/>
+	<link src="ES15" dest="SW3" speed="12.50"/>
+	<link src="SW0" dest="ES0" speed="12.50"/>
+	<link src="SW0" dest="ES1" speed="12.50"/>
+	<link src="SW0" dest="ES2" speed="12.50"/>
+	<link src="SW0" dest="ES3" speed="12.50"/>
+	<link src="SW0" dest="SW1" speed="12.50"/>
+	<link src="SW0" dest="SW2" speed="12.50"/>
+	<link src="SW0" dest="SW3" speed="12.50"/>
+	<link src="SW1" dest="ES4" speed="12.50"/>
+	<link src="SW1" dest="ES5" speed="12.50"/>
+	<link src="SW1" dest="ES6" speed="12.50"/>
+	<link src="SW1" dest="ES7" speed="12.50"/>
+	<link src="SW1" dest="SW0" speed="12.50"/>
+	<link src="SW1" dest="SW2" speed="12.50"/>
+	<link src="SW1" dest="SW3" speed="12.50"/>
+	<link src="SW2" dest="ES8" speed="12.50"/>
+	<link src="SW2" dest="ES9" speed="12.50"/>
+	<link src="SW2" dest="ES10" speed="12.50"/>
+	<link src="SW2" dest="ES11" speed="12.50"/>
+	<link src="SW2" dest="SW0" speed="12.50"/>
+	<link src="SW2" dest="SW1" speed="12.50"/>
+	<link src="SW2" dest="SW3" speed="12.50"/>
+	<link src="SW3" dest="ES12" speed="12.50"/>
+	<link src="SW3" dest="ES13" speed="12.50"/>
+	<link src="SW3" dest="ES14" speed="12.50"/>
+	<link src="SW3" dest="ES15" speed="12.50"/>
+	<link src="SW3" dest="SW0" speed="12.50"/>
+	<link src="SW3" dest="SW1" speed="12.50"/>
+	<link src="SW3" dest="SW2" speed="12.50"/>
+
+	<!-- period is in us, size in Byte-->
+	<stream name="s0" src="ES7" dest="ES14" size="1408" period="10000" type="NORMAL" priority="4" deadline="100000"/>
+	<stream name="s1" src="ES15" dest="ES1" size="1012" period="1000" type="NORMAL" priority="0" deadline="10000"/>
+	<stream name="s2" src="ES15" dest="ES4" size="560" period="1000" type="NORMAL" priority="3" deadline="10000"/>
+	<stream name="s3" src="ES14" dest="ES8" size="433" period="10000" type="NORMAL" priority="1" deadline="100000"/>
+	<stream name="s4" src="ES12" dest="ES9" size="457" period="1000" type="NORMAL" priority="0" deadline="10000"/>
+	<stream name="s5" src="ES11" dest="ES2" size="1351" period="1000" type="NORMAL" priority="2" deadline="10000"/>
+	<stream name="s6" src="ES8" dest="ES5" size="407" period="2000" type="NORMAL" priority="4" deadline="20000"/>
+	<stream name="s7" src="ES2" dest="ES15" size="1077" period="2000" type="NORMAL" priority="4" deadline="20000"/>
+	<stream name="s8" src="ES12" dest="ES8" size="692" period="1000" type="NORMAL" priority="4" deadline="10000"/>
+	<stream name="s9" src="ES5" dest="ES14" size="706" period="5000" type="NORMAL" priority="2" deadline="50000"/>
+	<stream name="s10" src="ES1" dest="ES15" size="1423" period="10000" type="NORMAL" priority="0" deadline="100000"/>
+	<stream name="s11" src="ES5" dest="ES8" size="311" period="10000" type="NORMAL" priority="3" deadline="100000"/>
+	<stream name="s12" src="ES1" dest="ES4" size="1331" period="1000" type="NORMAL" priority="0" deadline="10000"/>
+	<stream name="s13" src="ES8" dest="ES4" size="1190" period="5000" type="NORMAL" priority="2" deadline="50000"/>
+	<stream name="s14" src="ES9" dest="ES12" size="1234" period="10000" type="NORMAL" priority="2" deadline="100000"/>
+	<stream name="s15" src="ES8" dest="ES0" size="246" period="2000" type="NORMAL" priority="2" deadline="20000"/>
+	<stream name="s16" src="ES13" dest="ES12" size="630" period="5000" type="NORMAL" priority="4" deadline="50000"/>
+	<stream name="s17" src="ES3" dest="ES8" size="984" period="1000" type="NORMAL" priority="3" deadline="10000"/>
+	<stream name="s18" src="ES15" dest="ES14" size="263" period="2000" type="NORMAL" priority="4" deadline="20000"/>
+	<stream name="s19" src="ES5" dest="ES0" size="1333" period="5000" type="NORMAL" priority="1" deadline="50000"/>
+	<stream name="s20" src="ES15" dest="ES2" size="858" period="10000" type="NORMAL" priority="1" deadline="100000"/>
+	<stream name="s21" src="ES5" dest="ES8" size="715" period="2000" type="NORMAL" priority="0" deadline="20000"/>
+	<stream name="s22" src="ES5" dest="ES3" size="611" period="10000" type="NORMAL" priority="3" deadline="100000"/>
+	<stream name="s23" src="ES11" dest="ES2" size="161" period="2000" type="NORMAL" priority="3" deadline="20000"/>
+	<stream name="s24" src="ES14" dest="ES12" size="1028" period="5000" type="NORMAL" priority="4" deadline="50000"/>
+	<stream name="s25" src="ES4" dest="ES12" size="942" period="2000" type="NORMAL" priority="2" deadline="20000"/>
+	<stream name="s26" src="ES9" dest="ES7" size="565" period="2000" type="NORMAL" priority="1" deadline="20000"/>
+	<stream name="s27" src="ES9" dest="ES8" size="378" period="2000" type="NORMAL" priority="4" deadline="20000"/>
+	<stream name="s28" src="ES0" dest="ES15" size="303" period="1000" type="NORMAL" priority="0" deadline="10000"/>
+	<stream name="s29" src="ES15" dest="ES0" size="1333" period="1000" type="NORMAL" priority="1" deadline="10000"/>
+	<stream name="s30" src="ES11" dest="ES7" size="1137" period="2000" type="NORMAL" priority="0" deadline="20000"/>
+	<stream name="s31" src="ES12" dest="ES11" size="155" period="1000" type="NORMAL" priority="3" deadline="10000"/>
+	<stream name="s32" src="ES13" dest="ES1" size="293" period="2000" type="NORMAL" priority="1" deadline="20000"/>
+	<stream name="s33" src="ES4" dest="ES15" size="827" period="1000" type="NORMAL" priority="2" deadline="10000"/>
+	<stream name="s34" src="ES7" dest="ES3" size="770" period="2000" type="NORMAL" priority="1" deadline="20000"/>
+	<stream name="s35" src="ES13" dest="ES10" size="1024" period="2000" type="NORMAL" priority="0" deadline="20000"/>
+
+	<route stream="s0">
+		<link src="ES7" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES14" />
+	</route>
+	<route stream="s1">
+		<link src="ES15" dest="SW3" />
+		<link src="SW3" dest="SW0" />
+		<link src="SW0" dest="ES1" />
+	</route>
+	<route stream="s2">
+		<link src="ES15" dest="SW3" />
+		<link src="SW3" dest="SW1" />
+		<link src="SW1" dest="ES4" />
+	</route>
+	<route stream="s3">
+		<link src="ES14" dest="SW3" />
+		<link src="SW3" dest="SW2" />
+		<link src="SW2" dest="ES8" />
+	</route>
+	<route stream="s4">
+		<link src="ES12" dest="SW3" />
+		<link src="SW3" dest="SW2" />
+		<link src="SW2" dest="ES9" />
+	</route>
+	<route stream="s5">
+		<link src="ES11" dest="SW2" />
+		<link src="SW2" dest="SW0" />
+		<link src="SW0" dest="ES2" />
+	</route>
+	<route stream="s6">
+		<link src="ES8" dest="SW2" />
+		<link src="SW2" dest="SW1" />
+		<link src="SW1" dest="ES5" />
+	</route>
+	<route stream="s7">
+		<link src="ES2" dest="SW0" />
+		<link src="SW0" dest="SW3" />
+		<link src="SW3" dest="ES15" />
+	</route>
+	<route stream="s8">
+		<link src="ES12" dest="SW3" />
+		<link src="SW3" dest="SW2" />
+		<link src="SW2" dest="ES8" />
+	</route>
+	<route stream="s9">
+		<link src="ES5" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES14" />
+	</route>
+	<route stream="s10">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="SW3" />
+		<link src="SW3" dest="ES15" />
+	</route>
+	<route stream="s11">
+		<link src="ES5" dest="SW1" />
+		<link src="SW1" dest="SW2" />
+		<link src="SW2" dest="ES8" />
+	</route>
+	<route stream="s12">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="SW1" />
+		<link src="SW1" dest="ES4" />
+	</route>
+	<route stream="s13">
+		<link src="ES8" dest="SW2" />
+		<link src="SW2" dest="SW1" />
+		<link src="SW1" dest="ES4" />
+	</route>
+	<route stream="s14">
+		<link src="ES9" dest="SW2" />
+		<link src="SW2" dest="SW3" />
+		<link src="SW3" dest="ES12" />
+	</route>
+	<route stream="s15">
+		<link src="ES8" dest="SW2" />
+		<link src="SW2" dest="SW0" />
+		<link src="SW0" dest="ES0" />
+	</route>
+	<route stream="s16">
+		<link src="ES13" dest="SW3" />
+		<link src="SW3" dest="ES12" />
+	</route>
+	<route stream="s17">
+		<link src="ES3" dest="SW0" />
+		<link src="SW0" dest="SW2" />
+		<link src="SW2" dest="ES8" />
+	</route>
+	<route stream="s18">
+		<link src="ES15" dest="SW3" />
+		<link src="SW3" dest="ES14" />
+	</route>
+	<route stream="s19">
+		<link src="ES5" dest="SW1" />
+		<link src="SW1" dest="SW0" />
+		<link src="SW0" dest="ES0" />
+	</route>
+	<route stream="s20">
+		<link src="ES15" dest="SW3" />
+		<link src="SW3" dest="SW0" />
+		<link src="SW0" dest="ES2" />
+	</route>
+	<route stream="s21">
+		<link src="ES5" dest="SW1" />
+		<link src="SW1" dest="SW2" />
+		<link src="SW2" dest="ES8" />
+	</route>
+	<route stream="s22">
+		<link src="ES5" dest="SW1" />
+		<link src="SW1" dest="SW0" />
+		<link src="SW0" dest="ES3" />
+	</route>
+	<route stream="s23">
+		<link src="ES11" dest="SW2" />
+		<link src="SW2" dest="SW0" />
+		<link src="SW0" dest="ES2" />
+	</route>
+	<route stream="s24">
+		<link src="ES14" dest="SW3" />
+		<link src="SW3" dest="ES12" />
+	</route>
+	<route stream="s25">
+		<link src="ES4" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES12" />
+	</route>
+	<route stream="s26">
+		<link src="ES9" dest="SW2" />
+		<link src="SW2" dest="SW1" />
+		<link src="SW1" dest="ES7" />
+	</route>
+	<route stream="s27">
+		<link src="ES9" dest="SW2" />
+		<link src="SW2" dest="ES8" />
+	</route>
+	<route stream="s28">
+		<link src="ES0" dest="SW0" />
+		<link src="SW0" dest="SW3" />
+		<link src="SW3" dest="ES15" />
+	</route>
+	<route stream="s29">
+		<link src="ES15" dest="SW3" />
+		<link src="SW3" dest="SW0" />
+		<link src="SW0" dest="ES0" />
+	</route>
+	<route stream="s30">
+		<link src="ES11" dest="SW2" />
+		<link src="SW2" dest="SW1" />
+		<link src="SW1" dest="ES7" />
+	</route>
+	<route stream="s31">
+		<link src="ES12" dest="SW3" />
+		<link src="SW3" dest="SW2" />
+		<link src="SW2" dest="ES11" />
+	</route>
+	<route stream="s32">
+		<link src="ES13" dest="SW3" />
+		<link src="SW3" dest="SW0" />
+		<link src="SW0" dest="ES1" />
+	</route>
+	<route stream="s33">
+		<link src="ES4" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES15" />
+	</route>
+	<route stream="s34">
+		<link src="ES7" dest="SW1" />
+		<link src="SW1" dest="SW0" />
+		<link src="SW0" dest="ES3" />
+	</route>
+	<route stream="s35">
+		<link src="ES13" dest="SW3" />
+		<link src="SW3" dest="SW2" />
+		<link src="SW2" dest="ES10" />
+	</route>
+
+</NetworkDescription>

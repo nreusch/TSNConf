@@ -1,0 +1,98 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="0" key_length="0" mac_length="0" link_speed="12.5">
+	<!-- Expected order: devices, links, streams, routes, schedule-->
+	<device name="SW0" type="Switch"/>
+	<device name="SW1" type="Switch"/>
+	<device name="ES0" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES4" type="EndSystem" mac_exec_time="0"/>
+	<device name="ES5" type="EndSystem" mac_exec_time="0"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="ES0" dest="SW0" speed="12.50"/>
+	<link src="ES1" dest="SW0" speed="12.50"/>
+	<link src="ES2" dest="SW0" speed="12.50"/>
+	<link src="ES3" dest="SW1" speed="12.50"/>
+	<link src="ES4" dest="SW1" speed="12.50"/>
+	<link src="ES5" dest="SW1" speed="12.50"/>
+	<link src="SW0" dest="ES0" speed="12.50"/>
+	<link src="SW0" dest="ES1" speed="12.50"/>
+	<link src="SW0" dest="ES2" speed="12.50"/>
+	<link src="SW0" dest="SW1" speed="12.50"/>
+	<link src="SW1" dest="ES3" speed="12.50"/>
+	<link src="SW1" dest="ES4" speed="12.50"/>
+	<link src="SW1" dest="ES5" speed="12.50"/>
+	<link src="SW1" dest="SW0" speed="12.50"/>
+
+	<!-- period is in us, size in Byte-->
+	<stream name="s0" src="ES1" dest="ES4" size="1366" period="2000" type="NORMAL" priority="1" deadline="2000"/>
+	<stream name="s1" src="ES0" dest="ES2" size="327" period="5000" type="NORMAL" priority="1" deadline="5000"/>
+	<stream name="s2" src="ES1" dest="ES2" size="1408" period="5000" type="NORMAL" priority="2" deadline="5000"/>
+	<stream name="s3" src="ES0" dest="ES1" size="819" period="10000" type="NORMAL" priority="1" deadline="10000"/>
+	<stream name="s4" src="ES2" dest="ES3" size="425" period="2000" type="NORMAL" priority="0" deadline="2000"/>
+	<stream name="s5" src="ES1" dest="ES0" size="259" period="1000" type="NORMAL" priority="4" deadline="1000"/>
+	<stream name="s6" src="ES4" dest="ES1" size="710" period="2000" type="NORMAL" priority="1" deadline="2000"/>
+	<stream name="s7" src="ES1" dest="ES5" size="249" period="5000" type="NORMAL" priority="1" deadline="5000"/>
+	<stream name="s8" src="ES1" dest="ES5" size="148" period="5000" type="NORMAL" priority="0" deadline="5000"/>
+	<stream name="s9" src="ES2" dest="ES4" size="1363" period="10000" type="NORMAL" priority="1" deadline="10000"/>
+	<stream name="s10" src="ES2" dest="ES0" size="1420" period="1000" type="NORMAL" priority="2" deadline="1000"/>
+	<stream name="s11" src="ES5" dest="ES3" size="845" period="1000" type="NORMAL" priority="3" deadline="1000"/>
+
+	<route stream="s0">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="SW1" />
+		<link src="SW1" dest="ES4" />
+	</route>
+	<route stream="s1">
+		<link src="ES0" dest="SW0" />
+		<link src="SW0" dest="ES2" />
+	</route>
+	<route stream="s2">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="ES2" />
+	</route>
+	<route stream="s3">
+		<link src="ES0" dest="SW0" />
+		<link src="SW0" dest="ES1" />
+	</route>
+	<route stream="s4">
+		<link src="ES2" dest="SW0" />
+		<link src="SW0" dest="SW1" />
+		<link src="SW1" dest="ES3" />
+	</route>
+	<route stream="s5">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="ES0" />
+	</route>
+	<route stream="s6">
+		<link src="ES4" dest="SW1" />
+		<link src="SW1" dest="SW0" />
+		<link src="SW0" dest="ES1" />
+	</route>
+	<route stream="s7">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="SW1" />
+		<link src="SW1" dest="ES5" />
+	</route>
+	<route stream="s8">
+		<link src="ES1" dest="SW0" />
+		<link src="SW0" dest="SW1" />
+		<link src="SW1" dest="ES5" />
+	</route>
+	<route stream="s9">
+		<link src="ES2" dest="SW0" />
+		<link src="SW0" dest="SW1" />
+		<link src="SW1" dest="ES4" />
+	</route>
+	<route stream="s10">
+		<link src="ES2" dest="SW0" />
+		<link src="SW0" dest="ES0" />
+	</route>
+	<route stream="s11">
+		<link src="ES5" dest="SW1" />
+		<link src="SW1" dest="ES3" />
+	</route>
+
+</NetworkDescription>

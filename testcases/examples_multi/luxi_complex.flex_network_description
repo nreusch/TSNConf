@@ -1,0 +1,44 @@
+<!-- mtu, overhead in Byte. link_speed in Byte/us. -->
+<NetworkDescription mtu="1500" frame_overhead="0" link_speed="12.5">
+	<!-- Expected order: devices, links, streams, routes, schedule-->
+	<device name="SW1" type="Switch"/>
+	<device name="SW2" type="Switch"/>
+	<device name="SW3" type="Switch"/>
+	<device name="ES1" type="EndSystem"/>
+	<device name="ES2" type="EndSystem"/>
+	<device name="ES3" type="EndSystem"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="SW1" dest="SW3"/>
+	<link src="SW2" dest="SW3"/>
+	<link src="SW3" dest="ES3"/>
+	<link src="ES1" dest="SW1"/>
+	<link src="ES2" dest="SW2"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<stream name="s1" src="ES1" dest="ES3" size="125" period="100" priority="0" type="NORMAL" />
+	<stream name="s2" src="ES1" dest="ES3" size="1250" period="1000" priority="0" type="NORMAL" />
+	<stream name="s3" src="ES1" dest="ES3" size="625" period="1000" priority="1" type="NORMAL" />
+	<stream name="s4" src="ES2" dest="ES3" size="1250" period="1000" priority="4" type="NORMAL" />
+
+	<route stream="s1">
+		<link src="ES1" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES3" />
+	</route>
+	<route stream="s2">
+		<link src="ES1" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES3" />
+	</route>
+	<route stream="s3">
+		<link src="ES1" dest="SW1" />
+		<link src="SW1" dest="SW3" />
+		<link src="SW3" dest="ES3" />
+	</route>
+	<route stream="s4">
+		<link src="ES2" dest="SW2" />
+		<link src="SW2" dest="SW3" />
+		<link src="SW3" dest="ES3" />
+	</route>
+</NetworkDescription>

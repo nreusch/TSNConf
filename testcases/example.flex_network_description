@@ -1,0 +1,27 @@
+<!-- mtu, overhead in Byte. link_speed in Byte/us. -->
+<NetworkDescription mtu="1500" frame_overhead="0" link_speed="125">
+	<!-- Expected order: devices, links, streams, routes, schedule-->
+	<device name="SW1" type="Switch"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="SW1" dest="ES1"/>
+	<link src="SW1" dest="ES2"/>
+	<link src="ES1" dest="SW1"/>
+	<link src="ES2" dest="SW1"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<stream name="s1" src="ES1" dest="ES2" size="500" period="1000" priority="0" type="NORMAL" />
+	<stream name="s2" src="ES1" dest="ES2" size="500" period="1000" priority="0" type="NORMAL" />
+
+	<route stream="s1">
+		<link src="ES1" dest="SW1" />
+		<link src="SW1" dest="ES2" />
+	</route>
+	<route stream="s2">
+		<link src="ES1" dest="SW1" />
+		<link src="SW1" dest="ES2" />
+	</route>
+
+</NetworkDescription>
