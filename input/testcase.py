@@ -87,6 +87,7 @@ class Testcase:
         ] = {}  # Mapping ES to its tasks. node.id => [task]
         self.T_standalone: Dict[str, task] = {} # All tasks outside applications
 
+
         self.F_sec: Dict[str, stream] = {} # All streams from security applications. security_application.id => [stream]
         self.T_sec: Dict[str, task] = {}  # All key tasks. task.id -> task
         self.T_sec_g: Dict[str, List[task]] = {}  # All key tasks. node.id => [task]
@@ -113,13 +114,15 @@ class Testcase:
                 for task_id in x.receiver_task_ids:
                     self.F_t_in[task_id].append(x)
 
-                # if x is a routed/scheduled stream
-                if len(x.receiver_es_ids) > 1 or list(x.receiver_es_ids)[0] != x.sender_es_id:
+                # if x is a routed/scheduled stream, i.e. sender and receiver might be different
+                if len(x.receiver_es_ids) > 1 or list(x.receiver_es_ids)[0] != x.sender_es_id or (x.sender_es_id == "" or list(x.receiver_es_ids)[0] == ""):
                     self.F_routed[x.id] = x
 
-                    self.F_g_out[x.sender_es_id].append(x)
+                    if x.sender_es_id != "":
+                        self.F_g_out[x.sender_es_id].append(x)
                     for es_id in x.receiver_es_ids:
-                        self.F_g_in[es_id].append(x)
+                        if es_id != "":
+                            self.F_g_in[es_id].append(x)
 
 
                     if x.get_id_prefix() in self.F_red:
@@ -184,7 +187,14 @@ class Testcase:
                 if x.id in self.T:
                     raise ValueError(f"Cannot add task {x.id} a second time")
                 self.T[x.id] = x
-                self.T_g[x.src_es_id].append(x)
+                if x.src_es_id != "":
+                    self.T_g[x.src_es_id].append(x)
+                    x.allowed_assignments = [x.src_es_id]
+                else:
+                    # if there are no allowed assignments given, all ES are allowed for mapping
+                    if len(x.allowed_assignments) == 0 or x.allowed_assignments == None:
+                        x.allowed_assignments = list(self.ES.keys())
+
                 self.F_t_out[x.id] = []
                 self.F_t_in[x.id] = []
 
@@ -197,12 +207,14 @@ class Testcase:
 
                 if x.type == ETaskType.KEY_RELEASE:
                     self.T_sec[x.id] = x
-                    self.T_sec_g[x.src_es_id].append(x)
-                    self.T_release[x.src_es_id] = x
+                    if x.src_es_id != "":
+                        self.T_sec_g[x.src_es_id].append(x)
+                        self.T_release[x.src_es_id] = x
 
                 if x.type == ETaskType.KEY_VERIFICATION:
                     self.T_sec[x.id] = x
-                    self.T_sec_g[x.src_es_id].append(x)
+                    if x.src_es_id != "":
+                        self.T_sec_g[x.src_es_id].append(x)
 
                     if x.corr_release_task_es_id not in self.T_verify:
                         self.T_verify[x.corr_release_task_es_id] = {}
@@ -294,7 +306,7 @@ class Testcase:
         # create a message for each stream copy
         msg_strings = ["#!R id, size(byte), deadline, <virtual link id>, type [TT, RC], [period | rate] (us), [offset | ] [packed | fragmented]"]
         for s in self.F.values():
-            msg_string = f"{s.id}, {s.size}, {s.period}, vl{s_to_vl_map[s.id]}, TT, {s.period}, 0.0"
+            msg_string = f"{s.id}, {s.size}, {s.period}, vl{s_to_vl_map[s.id]}, TT,0, {s.period}"
             msg_strings.append(msg_string)
         msg = "\n".join(msg_strings)
 
@@ -338,7 +350,7 @@ class Testcase:
 
         link_speed = link_speeds.pop() * 8
 
-        rate = f"# link rate\n{link_speed},"
+        rate = f"# link rate\n{link_speed}"
 
         # portbu
         # multiply link_speed by inverse of port occupation percent

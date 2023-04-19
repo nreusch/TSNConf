@@ -50,6 +50,18 @@ class CPRoutingSolver:
             timing_object.time_creating_constraints_routing = t.elapsed_time
 
     def _create_optimization_variables(self):
+        # task mapping
+        self.m_t: Dict[str, IntVar] = {}
+        self.t_mapped_ES_is_v: Dict[List[IntVar]] = {}
+        self.f_sender_is_v: List[List[IntVar]] = []
+        self.f_rcvr_is_v: List[List[IntVar]] = []
+
+
+        # ---  ES_capacity[v_int] = X, means X capacity is used on ES v
+        # ---  ES_capc_use_of_t[v_int][t_int] = X, means X capacity is used by f on link from u to v
+        self.ES_capacity: List[IntVar] = []
+        self.ES_capc_use_of_t: List[List[IntVar]] = []
+
         # NOTE: The optimization finds the path backwards, from receivers to sender
         # Thus the meaning of successor/predecessor is reversed compared to the normal understanding
 
@@ -146,11 +158,41 @@ class CPRoutingSolver:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            x_res, costs, route_lens, overlap_amounts, overlap_links = routing_model_results.generate_result_structures(self, solver)
+            x_res, costs, route_lens, overlap_amounts, overlap_links, y_res, m_res = routing_model_results.generate_result_structures(self, solver)
 
+            # Add task mapping to data structures
+            for t_id, es_id in m_res.items():
+                t = self.tc.T[t_id]
+
+                if t.src_es_id != "":
+                    if t.src_es_id != es_id:
+                        raise ValueError("task should not be mapped to a new ES, if it was already mapped")
+                else:
+                    t.src_es_id = es_id
+                    self.tc.T_g[t.src_es_id].append(t)
+
+
+            # Add stream routing to data structures
             for f_int in range(self.max_stream_int):
                 f_id = self._IntToStreamIDMap[f_int]
                 f = self.tc.F[f_id]
+
+                # Assign sender/receiver ES ids, if they weren't already given before optimization
+                if f.sender_es_id == "":
+                    f.sender_es_id = self.tc.T[f.sender_task_id].src_es_id
+                    self.tc.F_g_out[f.sender_es_id].append(f)
+
+                if len(f.receiver_es_ids.keys()) == 1 and "" in f.receiver_es_ids.keys():
+                    f.receiver_es_ids = {} # clear out the empty entry
+                    for t_id in f.receiver_task_ids.keys():
+                        f.receiver_es_ids[self.tc.T[t_id].src_es_id] = None
+                    for es_id in f.receiver_es_ids.keys():
+                        self.tc.F_g_in[es_id].append(f)
+
+                assert len(f.receiver_es_ids.keys()) > 0
+                assert "" not in f.receiver_es_ids.keys()
+                assert f.sender_es_id != ""
+
                 mt = route(f)
                 mt.init_from_x_res_vector(x_res[f.id])
                 self.tc.add_to_datastructures(mt)

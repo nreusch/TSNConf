@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from enum import Enum
+from typing import Dict, List
+
 
 class ETaskType(Enum):
     NORMAL = 1
@@ -18,6 +20,7 @@ class task:
     period: int
     arrival_time: int
     type: ETaskType
+    allowed_assignments: List[str] # mapping tasks to a list of ES they can be mapped to task.id => [ES.id]
 
     def xml_string(self):
         return '<task name="{}" node="{}" wcet="{}" period="{}" arrival_time="{}" type="{}"/>\n'.format(
@@ -32,8 +35,17 @@ class task:
     @classmethod
     def from_xml_node(cls, n: ET.Element, app_id: str = "", app_period: int = -1):
         id = n.attrib["name"]
-        src_es_id = n.attrib["node"]
         wcet = int(n.attrib["wcet"])
+
+        if "node" in n.attrib:
+            src_es_id = n.attrib["node"]
+        else:
+            src_es_id = ""
+
+        if "allowed_assignments" in n.attrib:
+            allowed_assignments = n.attrib["allowed_assignments"].replace(" ", "").split(",")
+        else:
+            allowed_assignments = []
 
         if app_id != "" and app_period != -1:
             period = app_period
@@ -51,7 +63,7 @@ class task:
             arrival_time = 0
 
         return cls(
-            id, app_id, src_es_id, wcet, period, arrival_time, type
+            id, app_id, src_es_id, wcet, period, arrival_time, type, allowed_assignments
         )
 
 

@@ -18,6 +18,8 @@ class node:
 @dataclass(frozen=True)
 class end_system(node):
     mac_exec_time: int
+    max_utilization: float
+    wcet_factor: float
     type: str
 
     def __repr__(self):
@@ -33,8 +35,8 @@ class end_system(node):
         return "Prover" in self.type
 
     def to_xml_string(self):
-        return '<device name="{}" type="{}" mac_exec_time="{}"/>\n'.format(
-            self.id, self.type, self.mac_exec_time
+        return '<device name="{}" type="{}" mac_exec_time="{}" max_utilization="{}" wcet_factor="{}"/>\n'.format(
+            self.id, self.type, self.mac_exec_time, self.max_utilization, self.wcet_factor
         )
 
     @classmethod
@@ -44,9 +46,19 @@ class end_system(node):
         else:
             met = 10
 
+        if "max_utilization" in n.attrib:
+            max_util = float(n.attrib["max_utilization"])
+        else:
+            max_util = 1
+
+        if "wcet_factor" in n.attrib:
+            wcet_factor = float(n.attrib["wcet_factor"])
+        else:
+            wcet_factor = 1
+
         type = n.attrib["type"]
 
-        return cls(n.attrib["name"], met, type)
+        return cls(n.attrib["name"], met, max_util, wcet_factor, type)
 
 
 @dataclass(frozen=True)

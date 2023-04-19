@@ -1,0 +1,34 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW1" type="Switch"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="2"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="ES1" dest="SW1" speed="12.5"/>
+	<link src="SW1" dest="ES1" speed="12.5"/>
+
+	<link src="ES2" dest="SW1" speed="12.5"/>
+	<link src="SW1" dest="ES2" speed="12.5"/>
+
+
+
+
+
+
+	<!-- period&wcet is in us, size in Byte-->
+	<!--
+	<stream name="AppNoMap_s1" sender_task="AppNoMap_t1" receiver_tasks="AppNoMap_t2" size="50" period="1000" rl="1" secure="False" type="NORMAL" />
+			<stream name="AppNoMap_s2" sender_task="AppNoMap_t2" receiver_tasks="AppNoMap_t3" size="50" period="1000" rl="1" secure="False" type="NORMAL" />
+	-->
+
+	<application name="AppNoMap" period="1000" type="NORMAL">
+		<tasks>
+			<task name="AppNoMap_t1" wcet="250" period="1000" type="NORMAL" allowed_assignments="ES1"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+
+</NetworkDescription>

@@ -7,6 +7,7 @@ from input.model.stream import EStreamType
 from input.model.task import ETaskType, key_verification_task
 from utils.utilities import lcm
 
+import math
 
 def add_constraints(model, security, do_allow_infeasible_solutions):
     # Streams
@@ -224,8 +225,9 @@ def constrain_task_do_not_overlap(model, t):
 
 
 def constrain_task_end_time_equals_start_plus_exec_time(model, t):
-    # Constraint 1: a_t = o_t + t.wcet
-    model.model.Add(model.a_t[t.id] == model.o_t[t.id] + t.exec_time)
+    # Constraint 1: a_t = o_t + t.wcet*es.wcet_factor
+    wcet = math.ceil(model.tc.ES[t.src_es_id].wcet_factor*t.exec_time)
+    model.model.Add(model.a_t[t.id] == model.o_t[t.id] + wcet)
 
 
 def helper_link_or_node_from_id(model, l_or_n_id):

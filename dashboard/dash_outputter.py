@@ -150,6 +150,9 @@ def run(solution: Solution, PORT=None):
     df = solution_parser.get_solution_application_dataframe(solution)
     solution_results_applications_table = table("table_solution_applications", df)
 
+    df = solution_parser.get_solution_es_dataframe(solution)
+    solution_results_es_table = table("table_solution_es", df)
+
     # ------- Routing
     if solution.is_feasible_routing():
         solution_routing = solution_parser.get_solution_routing_cytoscape(
@@ -427,6 +430,10 @@ def run(solution: Solution, PORT=None):
                                                                 "Applications",
                                                                 solution_results_applications_table,
                                                             ),
+                                                            inner_container(
+                                                                "End-Systems",
+                                                                solution_results_es_table
+                                                            )
                                                         ]
                                                     ),
                                                 ]

@@ -83,10 +83,11 @@ def get_testcase_task_dataframe(solution: Solution) -> pd.DataFrame:
             row.append(task.period)
             row.append(task.exec_time)
             row.append(task.src_es_id)
+            row.append(", ".join(task.allowed_assignments))
 
             columns.append(row)
 
-    return pd.DataFrame(columns, columns=["ID", "Period (us)", "WCET (us)", "ES"])
+    return pd.DataFrame(columns, columns=["ID", "Period (us)", "WCET (us)", "Mapped ES", "Mapping Possibilities"])
 
 
 def get_testcase_stream_dataframe(solution: Solution) -> pd.DataFrame:
@@ -413,6 +414,32 @@ def get_solution_results_optimization_status_dataframe(
     columns.append(row)
     return pd.DataFrame(columns, columns=["Routing", "Pint", "Scheduling"])
 
+def get_solution_es_dataframe(solution: Solution) -> pd.DataFrame:
+    """
+    Returns a dataframe about applications: columns=["ID", "Deadline/Period", "Latency/Cost", "Laxity"]
+    """
+    columns = []
+    row = []
+
+    for es in solution.tc.ES.values():
+        row = []
+        row.append(es.id)
+
+        if es.id in solution.tc.schedule.cpu_use:
+            row.append(solution.tc.schedule.cpu_use[es.id])
+        else:
+            row.append(0)
+        row.append(es.max_utilization)
+        row.append(es.wcet_factor)
+        row.append(es.mac_exec_time)
+
+        row.append(", ".join([t.id for t in solution.tc.T_g[es.id]]))
+        columns.append(row)
+
+    return pd.DataFrame(
+        columns,
+        columns=["ID", "Utilization", "Max. Utilization", "WCET Factor", "MAC Exec Time (us)", "Mapped Tasks"],
+    )
 
 def get_solution_application_dataframe(solution: Solution) -> pd.DataFrame:
     """
@@ -768,11 +795,11 @@ def get_solution_schedule_plotly(solution: Solution) -> Optional[go.Figure]:
                     offset = (
                         i_period * task.period + solution.tc.schedule.o_t_val[task.id]
                     )
-                    length = task.exec_time
+                    length = solution.tc.schedule.a_t_val[task.id] - solution.tc.schedule.o_t_val[task.id]
 
                     block_durations[index].append(length)
                     block_hovers[index].append(
-                        "{}\nStart: {}\nEnd: {}".format(task.id, offset, offset + length)
+                        "{}\nStart: {}\nEnd: {}\nWCET Factor: {}".format(task.id, offset, offset + length, solution.tc.ES[task.src_es_id].wcet_factor)
                     )
                     block_linkids[index].append(str(solution.tc.N[task.src_es_id]))
                     block_offsets[index].append(offset)

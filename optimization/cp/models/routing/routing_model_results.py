@@ -1,6 +1,10 @@
 def generate_result_structures(model, solver):
     x_res = {}
     y_res = {}
+    m_res = {}
+    ES_capacity_res = {}
+    ES_capc_use_of_t_res = {}
+    t_mapped_ES_is_v_res = {}
     link_weight_res = {}
     stream_weight_res = {}
     has_successor_res = {}
@@ -98,11 +102,19 @@ def generate_result_structures(model, solver):
                 )
 
     for n_id in model.tc.N.keys():
+        n_int = model._NodeIDToIntMap[n_id]
         link_capacity_res[n_id] = {}
         capac_use_res[n_id] = {}
+        ES_capacity_res[n_id] = solver.Value(model.ES_capacity[n_int])
+
+        i = 0
+        ES_capc_use_of_t_res[n_id] = {}
+        for t_id in model.tc.T.keys():
+            ES_capc_use_of_t_res[n_id][t_id] = solver.Value(model.ES_capc_use_of_t[n_int][i])
+            i += 1
+
         for conn_n_id in model.tc.N_conn[n_id]:
             capac_use_res[n_id][conn_n_id] = {}
-            n_int = model._NodeIDToIntMap[n_id]
             conn_n_int = model._NodeIDToIntMap[conn_n_id]
 
             for f_int in range(model.max_stream_int):
@@ -115,6 +127,13 @@ def generate_result_structures(model, solver):
                 model.link_capacity[conn_n_int][n_int]
             )
 
+    for t_id in model.tc.T.keys():
+        m_res[t_id] = model._IntToNodeIDMap[solver.Value(model.m_t[t_id])]
+
+        t_mapped_ES_is_v_res[t_id] = {}
+        for n_id in model.tc.N.keys():
+            n_int = model._NodeIDToIntMap[n_id]
+            t_mapped_ES_is_v_res[t_id][n_id] = solver.Value(model.t_mapped_ES_is_v[t_id][n_int])
 
 
-    return x_res, costs, route_lens, overlap_amounts, overlap_links
+    return x_res, costs, route_lens, overlap_amounts, overlap_links, y_res, m_res

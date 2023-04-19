@@ -1,0 +1,95 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="SW1" type="Switch"/>
+	<device name="SW2" type="Switch"/>
+	<device name="SW3" type="Switch"/>
+	<device name="SW4" type="Switch"/>
+	<device name="SW5" type="Switch"/>
+	<device name="Verifier1" type="EndSystem_Verifier" mac_exec_time="10" max_utilization="0.75" wcet_factor="0.5"/>
+	<device name="Verifier2" type="EndSystem_Verifier" mac_exec_time="10" max_utilization="0.75" wcet_factor="0.5"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="ES2" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="ES4" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="Prover1" type="EndSystem_Prover" mac_exec_time="10" max_utilization="0.75" wcet_factor="2"/>
+	<device name="Prover2" type="EndSystem_Prover" mac_exec_time="10" max_utilization="0.75" wcet_factor="2"/>
+	<device name="Prover3" type="EndSystem_Prover" mac_exec_time="10" max_utilization="0.75" wcet_factor="2"/>
+	<device name="Prover4" type="EndSystem_Prover" mac_exec_time="10" max_utilization="0.75" wcet_factor="2"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="ES1" dest="SW1" speed="12.5"/>
+	<link src="SW1" dest="ES1" speed="12.5"/>
+
+	<link src="Verifier1" dest="SW1" speed="12.5"/>
+	<link src="SW1" dest="Verifier1" speed="12.5"/>
+
+	<link src="Verifier2" dest="SW1" speed="12.5"/>
+	<link src="SW1" dest="Verifier2" speed="12.5"/>
+
+	<link src="SW1" dest="SW2" speed="12.5"/>
+	<link src="SW2" dest="SW1" speed="12.5"/>
+
+	<link src="SW1" dest="SW3" speed="12.5"/>
+	<link src="SW3" dest="SW1" speed="12.5"/>
+
+	<link src="SW2" dest="ES2" speed="12.5"/>
+	<link src="ES2" dest="SW2" speed="12.5"/>
+
+	<link src="SW2" dest="ES3" speed="12.5"/>
+	<link src="ES3" dest="SW2" speed="12.5"/>
+
+	<link src="SW2" dest="SW4" speed="12.5"/>
+	<link src="SW4" dest="SW2" speed="12.5"/>
+
+	<link src="SW4" dest="Prover1" speed="12.5"/>
+	<link src="Prover1" dest="SW4" speed="12.5"/>
+
+	<link src="SW4" dest="Prover2" speed="12.5"/>
+	<link src="Prover2" dest="SW4" speed="12.5"/>
+
+	<link src="SW3" dest="ES4" speed="12.5"/>
+	<link src="ES4" dest="SW3" speed="12.5"/>
+
+	<link src="SW3" dest="SW5" speed="12.5"/>
+	<link src="SW5" dest="SW3" speed="12.5"/>
+
+	<link src="SW5" dest="Prover3" speed="12.5"/>
+	<link src="Prover3" dest="SW5" speed="12.5"/>
+
+	<link src="SW5" dest="Prover4" speed="12.5"/>
+	<link src="Prover4" dest="SW5" speed="12.5"/>
+
+
+
+
+
+
+	<!-- period&wcet is in us, size in Byte-->
+
+	<!-- ES1 to ES4 -->
+	<application name="AppES1_ES4" period="2000" type="NORMAL">
+		<tasks>
+			<task name="AppES1_ES4_t1" node="ES1" wcet="500" period="2000" type="NORMAL"/>
+			<task name="AppES1_ES4_t2" node="ES4" wcet="500" period="2000" type="NORMAL"/>
+			<task name="AppES1_ES4_t3" node="ES1" wcet="500" period="2000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="AppES1_ES4_s1" src="ES1" dest="ES4" sender_task="AppES1_ES4_t1" receiver_tasks="AppES1_ES4_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+			<stream name="AppES1_ES4_s2" src="ES4" dest="ES1" sender_task="AppES1_ES4_t2" receiver_tasks="AppES1_ES4_t3" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+	<application name="AppNoMap" period="2000" type="NORMAL">
+		<tasks>
+			<task name="AppNoMap_t1" wcet="500" period="2000" type="NORMAL"/>
+			<task name="AppNoMap_t2" wcet="500" period="2000" type="NORMAL"/>
+			<task name="AppNoMap_t3" wcet="500" period="2000" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="AppNoMap_s1" sender_task="AppNoMap_t1" receiver_tasks="AppNoMap_t2" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+			<stream name="AppNoMap_s2" sender_task="AppNoMap_t2" receiver_tasks="AppNoMap_t3" size="50" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+
+</NetworkDescription>

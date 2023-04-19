@@ -2,13 +2,35 @@
 from ortools.sat.python.cp_model import Domain
 
 def init_optimization_variables(model, existing_routes = None):
+    # task mapping
+    for t_id, t in model.tc.T.items():
+        if t.src_es_id != "":
+            model.m_t[t_id] = model.model.NewConstant(model._NodeIDToIntMap[t.src_es_id])
+        else:
+            model.m_t[t_id] = model.model.NewIntVar(0, model.max_node_int-1, "m_{}".format(t_id))
+
+
+        model.t_mapped_ES_is_v[t_id] = []
+        for v_int in range(model.max_node_int):
+            model.t_mapped_ES_is_v[t_id].append(model.model.NewBoolVar(f"{t_id}_is_mapped_on_{v_int}"))
+
     # link capacity
     for v_int in range(model.max_node_int):
+        v_id = model._IntToNodeIDMap[v_int]
+
+        model.ES_capacity.append(model.model.NewIntVar(0,1000, f"capac_{v_id}"))
+
+        model.ES_capc_use_of_t.append([])
+        for t_id, t in model.tc.T.items():
+            if t.src_es_id == model._IntToNodeIDMap[v_int]:
+                model.ES_capc_use_of_t[v_int].append(model.model.NewConstant(int((t.exec_time / t.period) * 1000)))
+            else:
+                model.ES_capc_use_of_t[v_int].append(model.model.NewIntVar(0, 1000, f"ES_capac_use_of_{t_id}_on_{v_int}"))
+
         model.v_to_u_capc_use_of_f.append([])
         model.link_capacity.append([])
         for u_int in range(model.max_node_int):
             model.v_to_u_capc_use_of_f[v_int].append([])
-            v_id = model._IntToNodeIDMap[v_int]
             u_id = model._IntToNodeIDMap[u_int]
 
             if (
@@ -43,6 +65,8 @@ def init_optimization_variables(model, existing_routes = None):
     # x,y, ...
     for f_int in range(model.max_stream_int):
         f = model.tc.F_routed[model._IntToStreamIDMap[f_int]]
+        model.f_sender_is_v.append([])
+        model.f_rcvr_is_v.append([])
         model.x.append([])
         model.y.append([])
         model.x_v_has_successor.append([])
@@ -56,6 +80,16 @@ def init_optimization_variables(model, existing_routes = None):
             model.x_v_is_u[f_int].append([])
             model.x_v_is_not_u[f_int].append([])
             model.x_v_is_u_and_uses_bandwidth[f_int].append([])
+
+            # f_sender_is_v
+            model.f_sender_is_v[f_int].append(
+                model.model.NewBoolVar("{}_sender_is_{}".format(f_int, v_int))
+            )
+
+            # f_rcvr_is_v
+            model.f_rcvr_is_v[f_int].append(
+                model.model.NewBoolVar("{}_rcvr_is_{}".format(f_int, v_int))
+            )
 
             x_u_has_no_pred = model.model.NewBoolVar(
                 "x_{}_{}_has_no_pred".format(f_int, v_int)
@@ -84,7 +118,7 @@ def init_optimization_variables(model, existing_routes = None):
 
             for u_id in model.tc.N_conn_inv[v.id]:
                 if u_id == v.id:
-                    if v.id == f.sender_es_id:
+                    if v.id == f.sender_es_id or f.sender_es_id == "":
                         # Only append node itself for sender
                         possible_domain.append(model._NodeIDToIntMap[u_id])
                         possible_domain_strings.append(u_id)
