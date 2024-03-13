@@ -2,8 +2,9 @@
 <NetworkDescription mtu="1500" frame_overhead="22" key_length="16" mac_length="16">
 	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
 	<device name="SW1" type="Switch"/>
-	<device name="ES1" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="2"/>
+	<device name="ES1" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
 	<device name="ES2" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="ES3" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
 
 	<!-- Links are directional. speed = byte/us -->
 	<link src="ES1" dest="SW1" speed="12.5"/>
@@ -25,7 +26,11 @@
 
 	<application name="AppNoMap" period="1000" type="NORMAL">
 		<tasks>
-			<task name="AppNoMap_t1" wcet="250" period="1000" type="NORMAL" allowed_assignments="ES1"/>
+			<task name="AppNoMap_t1" wcet="500" period="1000" type="NORMAL" allowed_assignments="ES1,ES2,ES3,ES4"/>
+			<task name="AppNoMap_t2" wcet="250" period="1000" type="NORMAL" allowed_assignments="ES1,ES2,ES3,ES4"/>
+			<task name="AppNoMap_t3" wcet="250" period="1000" type="NORMAL" allowed_assignments="ES1,ES2,ES3,ES4"/>
+			<task name="AppNoMap_t4" wcet="250" period="1000" type="NORMAL" allowed_assignments="ES1,ES2,ES3,ES4"/>
+			<task name="AppNoMap_t5" wcet="250" period="1000" type="NORMAL" allowed_assignments="ES1,ES2,ES3,ES4"/>
 		</tasks>
 		<streams>
 		</streams>

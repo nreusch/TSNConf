@@ -3,6 +3,45 @@ from typing import Dict
 from utils.utilities import flatten
 
 
+def add_optimization_goal_plus_load_balancing(model, existing_routes):
+    # cost = alpha * (route length + 10*overlaps) for each stream + beta*max load of ES
+    # let the route length dominate over the load balancing with alpha=1000
+    # max route length + 10 * max amount of overlaps
+    upper_bound_stream_cost = model.max_node_int + 10 * (model.max_stream_int * model.max_node_int)
+    upper_bound_es_cost = model.ES_capacity[-1]._IntVar__var.domain._values[-1] # get upper bound of ES_capacity variable = 1000
+
+    alpha = upper_bound_es_cost
+    beta = 1
+    upper_bound_total_cost = alpha * model.max_stream_int * upper_bound_stream_cost + beta*upper_bound_es_cost
+
+
+    _create_cost_variable_route_length(model)
+    _create_cost_variable_overlap(model, existing_routes)
+
+
+    # Set cost for each stream
+    for f_int in range(model.max_stream_int):
+        stream_id = model._IntToStreamIDMap[f_int]
+
+        model.stream_cost[stream_id] = model.model.NewIntVar(
+            0, upper_bound_stream_cost, "stream_cost_{}".format(f_int)
+        )
+        model.model.Add(
+            model.stream_cost[stream_id] == 10 * sum(model.stream_overlaps[stream_id]) + model.stream_route_lens[stream_id]
+        )
+
+    model.es_cost = model.model.NewIntVar(
+        0, upper_bound_es_cost, "es_cost"
+    )
+    model.model.AddMaxEquality(model.es_cost, model.ES_capacity)
+
+    # Cost
+    model.total_cost = model.model.NewIntVar(
+        0, upper_bound_total_cost, "total_cost"
+    )
+    model.model.Add(model.total_cost == alpha * sum(model.stream_cost.values()) + beta*model.es_cost)
+    model.model.Minimize(model.total_cost)
+
 def add_optimization_goal(model, existing_routes):
     # max route length + 10 * max amount of overlaps
     upper_bound_stream_cost = model.max_node_int + 10 * (model.max_stream_int * model.max_node_int)

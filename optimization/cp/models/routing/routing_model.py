@@ -24,7 +24,7 @@ def weight(v_int, x_v_val):
 
 
 class CPRoutingSolver:
-    def __init__(self, tc: Testcase, timing_object: TimingData, redundancy: bool, allow_overlap: bool, existing_routes: Dict[str, route] = None):
+    def __init__(self, tc: Testcase, timing_object: TimingData, redundancy: bool, allow_overlap: bool, existing_routes: Dict[str, route] = None, do_task_mapping: bool=False):
         self.tc = tc
         # Create the model
         self.model = CpModel()
@@ -45,7 +45,11 @@ class CPRoutingSolver:
             routing_model_constraints.add_constraints(self, redundancy, allow_overlap)
 
             # Add optimization goal
-            routing_model_goals.add_optimization_goal(self, existing_routes)
+            if do_task_mapping:
+                # If we do task mapping, add task load balancing to the cost functions
+                routing_model_goals.add_optimization_goal_plus_load_balancing(self, existing_routes)
+            else:
+                routing_model_goals.add_optimization_goal(self, existing_routes)
 
             timing_object.time_creating_constraints_routing = t.elapsed_time
 
@@ -58,7 +62,7 @@ class CPRoutingSolver:
 
 
         # ---  ES_capacity[v_int] = X, means X capacity is used on ES v
-        # ---  ES_capc_use_of_t[v_int][t_int] = X, means X capacity is used by f on link from u to v
+        # ---  ES_capc_use_of_t[v_int][t_int] = X, means X capacity is used by t on ES v
         self.ES_capacity: List[IntVar] = []
         self.ES_capc_use_of_t: List[List[IntVar]] = []
 
@@ -99,6 +103,7 @@ class CPRoutingSolver:
 
         self.stream_overlaps: Dict[str, List[IntVar]] = {}  # stream.id -> [IntVar]
         self.stream_cost: Dict[str, IntVar] = {}  # stream.id -> IntVar
+        self.es_cost: IntVar = None
         self.total_cost: IntVar = None  # IntVar
 
     def _create_helper_variables(self):

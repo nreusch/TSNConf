@@ -275,12 +275,12 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
             + "Skipping generating security applications, because no security wanted"
         )
 
-    # 5. Find routing
-    routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap)
+    # 5. Find routing & task mapping
+    routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap, do_task_mapping=True)
     tc, status = routing_model.optimize(input_params, timing_object)
     print(
         "-" * 20
-        + " Found Routing, in {:.2f} ms".format(timing_object.time_optimizing_routing)
+        + " Found Routing & Mapping, in {:.2f} ms".format(timing_object.time_optimizing_routing)
     )
     status_obj.Routing_status = status
 

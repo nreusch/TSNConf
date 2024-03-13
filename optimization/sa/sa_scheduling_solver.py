@@ -98,7 +98,6 @@ class SASchedulingSolver:
         return scheduling_cost, infeasible_tga, my_schedule
 
     def _cost_combined(self, sol: Tuple[SARoutingSolution, SASchedulingSolution], a):
-        # TODO: Fix cost calculation
         # 1. Calculate routing cost of routing solution
         route_cost, overlap_amount, overlapping_streams = cost_SA_routing_solution(sol[0], self.tc, a)
 
@@ -124,17 +123,25 @@ class SASchedulingSolver:
     def p(self, delta, t):
         return math.e ** (-1 * (delta / t))
 
-    def _solve_seperated_sa(self, timeout: int):
+    def _solve_seperated_sa(self, timeout: int, timing_object: TimingData):
         Tstart = 1
         alpha = 0.999
         temp_reset = False
+
+        start = time.time()
+        status = EOptimizationStatus.INFEASIBLE
+        first_feasible_time = -1
 
         s_i = self._initial_solution_schedule()
         s_best = s_i
         best_cost, infeasible_tgn, _ = self._cost_scheduling(s_best)
         print(f"INITIAL COST: {best_cost}; INFEASIBLE TGN: {infeasible_tgn}; ORDER: {s_best.order[1]}")
+        if len(infeasible_tgn) == 0 and first_feasible_time == -1:
+            first_feasible_time = time.time() - start
+            print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
+            status = EOptimizationStatus.FEASIBLE
+            timing_object.time_first_feasible_solution = first_feasible_time
         # print_simple_solution(s_i, index_to_core_map)
-        debug_print("")
 
         temp = Tstart
         step = 0
@@ -144,6 +151,13 @@ class SASchedulingSolver:
             s = self._random_neighbour(s_i)
             old_cost, infeasible_tgn, _ = self._cost_scheduling(s_i)
             new_cost, infeasible_tgn, _ = self._cost_scheduling(s)
+
+            if len(infeasible_tgn) == 0 and first_feasible_time == -1:
+                first_feasible_time = time.time() - start
+                print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
+                status = EOptimizationStatus.FEASIBLE
+                timing_object.time_first_feasible_solution = first_feasible_time
+
             delta = new_cost - old_cost  # new_cost - old_cost, because we want to minimize cost
 
             if delta < 0 or self._probability_check(delta, temp):
@@ -165,7 +179,7 @@ class SASchedulingSolver:
                     temp_reset = True
             step += 1
 
-        return s_best
+        return s_best, status
 
     def _solve_combined_sa(self, routingSolver: SARoutingSolver, timing_object: TimingData, input_params: InputParameters):
         Tstart = input_params.Tstart
@@ -174,6 +188,7 @@ class SASchedulingSolver:
         temp_reset = False
         start = time.time()
         first_feasible_time = -1
+        status = EOptimizationStatus.INFEASIBLE
 
         s_i = (routingSolver._initial_solution(), self._initial_solution_schedule())
         s_best = s_i
@@ -185,6 +200,7 @@ class SASchedulingSolver:
         if len(infeasible_tgn) == 0 and overlap_amount == 0 and first_feasible_time == -1:
             first_feasible_time = time.time() - start
             print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
+            status = EOptimizationStatus.FEASIBLE
             timing_object.time_first_feasible_solution = first_feasible_time
 
         print(f"ROUTING SOLUTION: {s_best[0]}\nSCHEDULING SOLUTION: {s_best[1].order[1]}")
@@ -203,6 +219,7 @@ class SASchedulingSolver:
             if len(infeasible_tgn) == 0 and overlap_amount == 0 and first_feasible_time == -1:
                 first_feasible_time = time.time() - start
                 print(f"FIRST FEASIBLE SOLUTION after {first_feasible_time}")
+                status = EOptimizationStatus.FEASIBLE
                 timing_object.time_first_feasible_solution = first_feasible_time
 
 
@@ -228,7 +245,7 @@ class SASchedulingSolver:
                     temp_reset = True
             step += 1
 
-        return s_best[0], s_best[1]
+        return s_best[0], s_best[1], status
 
     def optimize(
         self, input_params: InputParameters, timing_object: TimingData, mode: SAOptimizationMode
@@ -241,10 +258,10 @@ class SASchedulingSolver:
             if mode == SAOptimizationMode.SEPERATED_NO_SA:
                 schedule_solution = self._solve_seperated_no_sa()
             elif mode == SAOptimizationMode.SEPERATED_SA:
-                schedule_solution = self._solve_seperated_sa(input_params.timeouts.timeout_scheduling)
+                schedule_solution, status = self._solve_seperated_sa(input_params.timeouts.timeout_scheduling, timing_object)
             elif mode == SAOptimizationMode.COMBINED_SA:
                 routingSolver = SARoutingSolver(self.tc, timing_object, input_params.k, input_params.a, input_params.w)
-                routing_solution, schedule_solution = self._solve_combined_sa(routingSolver, timing_object, input_params)
+                routing_solution, schedule_solution, status = self._solve_combined_sa(routingSolver, timing_object, input_params)
             else:
                 raise ValueError
         timing_object.time_optimizing_scheduling = t.elapsed_time

@@ -7,3 +7,9 @@ testcases/output/
 .venvubuntu/
 .ipynb_checkpoints/
 paramils-out/
+/testcases/impact2/
+/testcases/synthetic/
+/testcases/synthetic2/
+/testcases/synthetic3/
+/results/old/
+/.run/

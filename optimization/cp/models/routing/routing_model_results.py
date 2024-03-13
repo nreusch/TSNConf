@@ -16,6 +16,7 @@ def generate_result_structures(model, solver):
     x_u_has_no_pred = {}
     stream_cost_res = {}
     stream_overlaps_res = {}
+    es_capacity_res = {}
 
     costs = {}
     route_lens = {}
@@ -135,5 +136,8 @@ def generate_result_structures(model, solver):
             n_int = model._NodeIDToIntMap[n_id]
             t_mapped_ES_is_v_res[t_id][n_id] = solver.Value(model.t_mapped_ES_is_v[t_id][n_int])
 
+    for es_id in model.tc.ES.keys():
+        v_int = model._NodeIDToIntMap[es_id]
+        es_capacity_res[es_id] = solver.Value(model.ES_capacity[v_int])
 
     return x_res, costs, route_lens, overlap_amounts, overlap_links, y_res, m_res
