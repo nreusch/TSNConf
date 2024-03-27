@@ -38,7 +38,7 @@ jupyter-console==6.4.0
 jupyter-core==4.7.1
 jupyterlab-pygments==0.1.2
 jupyterlab-widgets==1.0.0
-kaleido==0.1.0.post1
+kaleido==0.1.0a3
 kiwisolver==1.3.1
 MarkupSafe==1.1.1
 matplotlib==3.3.4
@@ -72,8 +72,8 @@ pytest==6.2.1
 pytest-pycharm==0.7.0
 python-dateutil==2.8.1
 pytz==2020.4
-pywin32==300
-pywinpty==0.5.7
+#pywin32==300
+#pywinpty==0.5.7
 pyzmq==22.0.3
 qtconsole==5.0.3
 QtPy==1.9.0
