@@ -23,7 +23,7 @@ class tesla_parameters:
 
 def _parse_device(n: ET.Element, tc: Testcase):
     nd = None
-    if n.attrib["type"] == "topo:EndSystem" or n.attrib["type"] == "EndSystem" or n.attrib["type"] == "EndSystem_Verifier" or n.attrib["type"] == "EndSystem_Prover":
+    if n.attrib["type"] == "topo:EndSystem" or n.attrib["type"].startswith("EndSystem"):
         nd = end_system.from_xml_node(n)
     elif n.attrib["type"] == "topo:Switch" or n.attrib["type"] == "Switch" :
         nd = switch.from_xml_node(n)

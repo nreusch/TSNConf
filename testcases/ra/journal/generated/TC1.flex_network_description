@@ -1,0 +1,99 @@
+<!-- mtu, overhead, mac_length in Byte. All times in us-->
+<NetworkDescription mtu="1500" frame_overhead="-1" key_length="-1" mac_length="0">
+	<!-- Expected order: devices, links, applications(tasks, signals, (functionpaths)), streams, routes, schedule-->
+	<device name="sw-0-0" type="Switch"/>
+	<device name="sw-0-1" type="Switch"/>
+	<device name="node0-0-0-0" type="EndSystem_Prover" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="node0-0-0-1" type="EndSystem_Edge_Verifier" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="node0-0-1-0" type="EndSystem" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+	<device name="node0-0-1-1" type="EndSystem_Edge_Verifier" mac_exec_time="10" max_utilization="0.75" wcet_factor="1"/>
+
+	<!-- Links are directional. speed = byte/us -->
+	<link src="sw-0-0" dest="sw-0-1" speed="125.00"/>
+	<link src="sw-0-0" dest="node0-0-0-0" speed="125.00"/>
+	<link src="sw-0-0" dest="node0-0-0-1" speed="125.00"/>
+	<link src="sw-0-1" dest="sw-0-0" speed="125.00"/>
+	<link src="sw-0-1" dest="node0-0-1-0" speed="125.00"/>
+	<link src="sw-0-1" dest="node0-0-1-1" speed="125.00"/>
+	<link src="node0-0-0-0" dest="sw-0-0" speed="125.00"/>
+	<link src="node0-0-0-1" dest="sw-0-0" speed="125.00"/>
+	<link src="node0-0-1-0" dest="sw-0-1" speed="125.00"/>
+	<link src="node0-0-1-1" dest="sw-0-1" speed="125.00"/>
+
+	<!-- period&wcet is in us, size in Byte-->
+	<application name="app_VLAN-0-Flow-0" period="2000" type="NORMAL">
+		<tasks>
+			<task name="t-app_VLAN-0-Flow-0-sender" node="node0-0-0-0" wcet="17" period="2000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app_VLAN-0-Flow-0-receiver" node="node0-0-0-0" wcet="20" period="2000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="VLAN-0-Flow-0" src="node0-0-0-0" dest="node0-0-0-0" sender_task="t-app_VLAN-0-Flow-0-sender" receiver_tasks="t-app_VLAN-0-Flow-0-receiver" size="55" period="2000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app_VLAN-0-Flow-1" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-app_VLAN-0-Flow-1-sender" node="node0-0-0-0" wcet="22" period="4000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app_VLAN-0-Flow-1-receiver" node="node0-0-0-1" wcet="19" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="VLAN-0-Flow-1" src="node0-0-0-0" dest="node0-0-0-1" sender_task="t-app_VLAN-0-Flow-1-sender" receiver_tasks="t-app_VLAN-0-Flow-1-receiver" size="67" period="4000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app_VLAN-0-Flow-2" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-app_VLAN-0-Flow-2-sender" node="node0-0-0-0" wcet="4" period="4000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app_VLAN-0-Flow-2-receiver" node="node0-0-1-1" wcet="39" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="VLAN-0-Flow-2" src="node0-0-0-0" dest="node0-0-1-1" sender_task="t-app_VLAN-0-Flow-2-sender" receiver_tasks="t-app_VLAN-0-Flow-2-receiver" size="52" period="4000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app_VLAN-0-Flow-3" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-app_VLAN-0-Flow-3-sender" node="node0-0-0-0" wcet="9" period="4000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app_VLAN-0-Flow-3-receiver" node="node0-0-0-0" wcet="6" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+			<stream name="VLAN-0-Flow-3" src="node0-0-0-0" dest="node0-0-0-0" sender_task="t-app_VLAN-0-Flow-3-sender" receiver_tasks="t-app_VLAN-0-Flow-3-receiver" size="73" period="4000" rl="1" secure="False" type="NORMAL" />
+		</streams>
+	</application>
+	
+	<application name="app_mapped_task0" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-mapped-0" node="node0-0-1-0" wcet="9" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="app_mapped_task1" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-mapped-1" node="node0-0-1-1" wcet="6" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="app_mapped_task2" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-mapped-2" node="node0-0-0-1" wcet="35" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+	<application name="app_mapped_task3" period="4000" type="NORMAL">
+		<tasks>
+			<task name="t-mapped-3" node="node0-0-1-0" wcet="17" period="4000" arrival_time="0" type="NORMAL"/>
+		</tasks>
+		<streams>
+		</streams>
+	</application>
+	
+
+
+
+</NetworkDescription>

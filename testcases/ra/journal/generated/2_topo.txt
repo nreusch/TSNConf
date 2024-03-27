@@ -1,0 +1,11 @@
+vertex,SWITCH,sw_0_0,mac,00:00:00:00:00:0c,PortNumber,8
+vertex,SWITCH,sw_0_1,mac,00:00:00:00:00:0d,PortNumber,8
+vertex,PLC,node0_0_0_0,mac,00:00:00:00:00:0e,PortNumber,1
+vertex,PLC,node0_0_0_1,mac,00:00:00:00:00:0f,PortNumber,1
+vertex,PLC,node0_0_1_0,mac,00:00:00:00:00:10,PortNumber,1
+vertex,PLC,node0_0_1_1,mac,00:00:00:00:00:11,PortNumber,1
+edge,WIRE,sw_0_0.P0,sw_0_1.P0,undirect,e11
+edge,WIRE,sw_0_0.P1,node0_0_0_0,undirect,e12
+edge,WIRE,sw_0_0.P2,node0_0_0_1,undirect,e13
+edge,WIRE,sw_0_1.P1,node0_0_1_0,undirect,e14
+edge,WIRE,sw_0_1.P2,node0_0_1_1,undirect,e15

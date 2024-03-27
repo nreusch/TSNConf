@@ -18,14 +18,13 @@ def generate_result_structures(model, solver):
     stream_overlaps_res = {}
     es_capacity_res = {}
 
-    costs = {}
+    stream_costs = {}
     route_lens = {}
     overlap_amounts = {}
     overlap_links = {}
 
     # Read results
-
-    solver.Value(model.total_cost)
+    total_cost = solver.Value(model.total_cost)
 
     for f_int in range(model.max_stream_int):
         f_id = model._IntToStreamIDMap[f_int]
@@ -42,7 +41,7 @@ def generate_result_structures(model, solver):
         stream_overlaps_res[f_id] = {}
 
         stream_cost_res[f_id] = solver.Value(model.stream_cost[f_id])
-        costs[f_id] = solver.Value(model.stream_cost[f_id])
+        stream_costs[f_id] = solver.Value(model.stream_cost[f_id])
 
         overlap_amounts[f_id] = 0
         overlap_links[f_id] = set()
@@ -140,4 +139,4 @@ def generate_result_structures(model, solver):
         v_int = model._NodeIDToIntMap[es_id]
         es_capacity_res[es_id] = solver.Value(model.ES_capacity[v_int])
 
-    return x_res, costs, route_lens, overlap_amounts, overlap_links, y_res, m_res
+    return x_res, stream_costs, route_lens, overlap_amounts, overlap_links, y_res, m_res, es_capacity_res, total_cost

@@ -63,6 +63,7 @@ class schedule:
             if app.id not in infeasible_tga:
                 c.app_costs[app.id] = max([c.a_t_val[t_id] for t_id in app.verticies.keys()]) - min([c.o_t_val[t_id] for t_id in app.verticies.keys()])
 
+
         return c
 
     @classmethod
@@ -107,6 +108,10 @@ class schedule:
             c.o_t_val[t.id] = solver.Value(scheduling_model.o_t[t.id])
             c.a_t_val[t.id] = solver.Value(scheduling_model.a_t[t.id])
 
+            if scheduling_model.tc.ES[t.src_es_id].is_prover() or scheduling_model.tc.ES[t.src_es_id].is_edge_device() or scheduling_model.tc.ES[t.src_es_id].is_verifier():
+                c.actual_distance_t_val[t.id] = solver.Value(scheduling_model.actual_distances[t.id])
+                c.inverse_distance_t_val[t.id] = solver.Value(scheduling_model.actual_distances[t.id])
+
             l_or_es = tc.ES[t.src_es_id]
             length = c.a_t_val[t.id] - c.o_t_val[t.id]
             period = t.period
@@ -117,6 +122,8 @@ class schedule:
 
         for app in scheduling_model.tc.A.values():
             c.app_costs[app.id] = max([c.a_t_val[t_id] for t_id in app.verticies.keys()]) - min([c.o_t_val[t_id] for t_id in app.verticies.keys()])
+
+        c.scheduling_cost = solver.Value(scheduling_model.cost)
 
         return c
 
@@ -131,6 +138,8 @@ class schedule:
         # t_id -> val
         self.o_t_val: Dict[str, int] = {}
         self.a_t_val: Dict[str, int] = {}
+        self.inverse_distance_t_val: Dict[str, int] = {}
+        self.actual_distance_t_val: Dict[str, int] = {}
 
         self.app_costs: Dict[
             str, int
@@ -144,6 +153,10 @@ class schedule:
             str, float
         ] = {}  # Dict(es.id -> val)
 
+        # only used in CP_EXT
+        self.scheduling_cost: int = 0
+        self.routing_cost: int = 0
+
     def is_stream_using_link_or_node(self, f_id, l_or_n_id):
         if l_or_n_id in self.c_f_val and f_id in self.c_f_val[l_or_n_id]:
             return self.c_f_val[l_or_n_id][f_id] != 0
@@ -154,23 +167,24 @@ class schedule:
         res = {}
 
         for es in tc.ES.values():
-            if not es.is_prover():
+            if es.is_edge_device():
                 ivs = []
                 for t in tc.T_g[es.id]:
-                    ivs.append((self.o_t_val[t.id], self.a_t_val[t.id]))
+                    for alpha in range(int(tc.hyperperiod / t.period)):
+                        ivs.append((alpha * t.period + self.o_t_val[t.id], alpha * t.period + self.a_t_val[t.id]))
                 iv_tree = IntervalTree.from_tuples(ivs)
                 iv_tree.merge_overlaps(strict=False)
                 iv_lengths = [iv.end - iv.begin for iv in iv_tree]
                 worst_case_response_time = max(iv_lengths) if len(iv_lengths) > 0 else 0
-
                 average_response_time = 0
                 for iv_length in iv_lengths:
                     average_response_time += (iv_length*(iv_length+1)) / 2
-                average_response_time = average_response_time / len(iv_lengths)
+                average_response_time = average_response_time / tc.hyperperiod
+                average_response_time_perc = average_response_time / tc.hyperperiod
                 debug_print(f"{es.id}")
                 debug_print(f"Intervals: {iv_tree}")
-                debug_print(f"{(worst_case_response_time, average_response_time)}")
-                res[es.id] = (worst_case_response_time, average_response_time)
+                debug_print(f"{(worst_case_response_time, average_response_time, average_response_time_perc)}")
+                res[es.id] = (worst_case_response_time, average_response_time, average_response_time_perc)
 
         return res
 
@@ -182,16 +196,23 @@ class schedule:
         for es_prover in tc.ES_prover.values():
             ivs = []
             for t in tc.T_g[es_prover.id]:
-                ivs.append((self.o_t_val[t.id], self.a_t_val[t.id]))
+                for alpha in range(int(tc.hyperperiod/t.period)):
+                    ivs.append((alpha*t.period + self.o_t_val[t.id], alpha*t.period + self.a_t_val[t.id]))
             iv_tree = IntervalTree.from_tuples(ivs)
             iv_tree.merge_overlaps(strict=False)
             iv_lengths = [iv.end - iv.begin for iv in iv_tree]
             max_non_attested_time = max(iv_lengths) if len(iv_lengths) > 0 else 0
+            max_non_attested_time_perc = max_non_attested_time / tc.hyperperiod
             slacks = sorted_complement(iv_tree, start=0, end=tc.hyperperiod)
             slack_lengths = [iv.end - iv.begin for iv in slacks]
+            time_spent_attesting = sum(slack_lengths)
+            time_spent_attesting_perc = time_spent_attesting / tc.hyperperiod
+            block_length = max(slack_lengths)
 
             # Calculate the best block size for the maximum attestation time
             # Iterate through all slack sizes, choosing the one with maximum attestation time
+            # ??
+            '''
             time_spent_attesting = 0
             block_length = 0
             slack_lengths_already_checked = set()
@@ -205,11 +226,11 @@ class schedule:
                     if cur_time_spent_attesting > time_spent_attesting:
                         time_spent_attesting = cur_time_spent_attesting
                         block_length = sl
-
+            '''
             print(f"{es_prover.id}")
             print(f"Slacks: {slacks}")
-            print(f"{(max_non_attested_time, time_spent_attesting, block_length)}")
-            res[es_prover.id] = (max_non_attested_time, time_spent_attesting, block_length)
+            print(f"{(max_non_attested_time, time_spent_attesting, block_length, max_non_attested_time_perc, time_spent_attesting_perc)}")
+            res[es_prover.id] = (max_non_attested_time, time_spent_attesting, block_length, max_non_attested_time_perc, time_spent_attesting_perc)
 
         return res
 

@@ -116,7 +116,7 @@ class CPRoutingSolver:
 
     def optimize(
         self, input_params: InputParameters, timing_object: TimingData
-    ) -> Tuple[Testcase, EOptimizationStatus]:
+    ) -> Tuple[Testcase, EOptimizationStatus, Dict, int]:
         # Solve model_Pint.
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_routing
@@ -163,7 +163,7 @@ class CPRoutingSolver:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            x_res, costs, route_lens, overlap_amounts, overlap_links, y_res, m_res = routing_model_results.generate_result_structures(self, solver)
+            x_res, costs, route_lens, overlap_amounts, overlap_links, y_res, m_res, es_capacity_res, total_cost = routing_model_results.generate_result_structures(self, solver)
 
             # Add task mapping to data structures
             for t_id, es_id in m_res.items():
@@ -210,4 +210,4 @@ class CPRoutingSolver:
                 + str(status)
             )
 
-        return self.tc, status
+        return self.tc, status, es_capacity_res, total_cost

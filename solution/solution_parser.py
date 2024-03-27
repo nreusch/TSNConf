@@ -341,9 +341,12 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
     row.append("{:d}".format(solution.total_number_of_stream_that_have_overlap))
 
     row.append("{:.2f}".format(solution.ra_avg_max_unattested_time))
+    row.append("{:.2f}".format(solution.ra_avg_max_unattested_time_perc))
     row.append("{:.2f}".format(solution.ra_avg_time_spent_attesting))
+    row.append("{:.2f}".format(solution.ra_avg_time_spent_attesting_perc))
     row.append("{:.2f}".format(solution.ext_avg_worst_case_resp_time))
     row.append("{:.2f}".format(solution.ext_avg_avg_case_resp_time))
+    row.append("{:.2f}".format(solution.ext_avg_avg_case_resp_time_perc))
     row.append("{:.2f}".format(solution.avg_edge_application_latency))
 
     row.append("{:d}".format(solution.input_params.Tstart))
@@ -383,9 +386,12 @@ def get_solution_results_info_dataframe(solution: Solution) -> pd.DataFrame:
             "Overlapping number",
             "Stream with overlap",
             "Avg. maximum unattested time",
+            "Avg. maximum unattested time %",
             "Avg. time spent attesting",
+            "Avg. time spent attesting %",
             "Avg. worst case response time",
             "Avg. avg response time",
+            "Avg. avg response time %",
             "Avg. edge app latency",
             "Tstart",
             "alpha",
@@ -424,6 +430,7 @@ def get_solution_es_dataframe(solution: Solution) -> pd.DataFrame:
     for es in solution.tc.ES.values():
         row = []
         row.append(es.id)
+        row.append(es.type)
 
         if es.id in solution.tc.schedule.cpu_use:
             row.append(solution.tc.schedule.cpu_use[es.id])
@@ -438,7 +445,7 @@ def get_solution_es_dataframe(solution: Solution) -> pd.DataFrame:
 
     return pd.DataFrame(
         columns,
-        columns=["ID", "Utilization", "Max. Utilization", "WCET Factor", "MAC Exec Time (us)", "Mapped Tasks"],
+        columns=["ID", "Type", "Utilization", "Max. Utilization", "WCET Factor", "MAC Exec Time (us)", "Mapped Tasks"],
     )
 
 def get_solution_application_dataframe(solution: Solution) -> pd.DataFrame:

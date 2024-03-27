@@ -67,7 +67,7 @@ def _run_edge_apps(timing_object: TimingData, input_params: InputParameters, tc,
     )
 
     routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap, tc.R)
-    tc, status = routing_model.optimize(input_params, timing_object)
+    tc, status, es_capacity_res, total_cost = routing_model.optimize(input_params, timing_object)
     print(
         "-" * 20
         + " Found Routing, in {:.2f} ms".format(timing_object.time_optimizing_routing)
@@ -80,7 +80,8 @@ def _run_edge_apps(timing_object: TimingData, input_params: InputParameters, tc,
                                           existing_schedule=tc.schedule,
                                           do_security=security,
                                           do_allow_infeasible_solutions=allow_infeasible_solutions)
-    tc, status = scheduling_model.optimize(input_params, timing_object)
+    tc, status, schdl, cost = scheduling_model.optimize(input_params, timing_object)
+    tc.add_to_datastructures(schdl)
     print(
         "-" * 20
         + " Found Schedule in {:.2f} ms".format(
@@ -191,7 +192,7 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
 
     # 5. Find routing
     routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap)
-    tc, status = routing_model.optimize(input_params, timing_object)
+    tc, status, es_capacity_res, total_cost  = routing_model.optimize(input_params, timing_object)
     print(
         "-" * 20
         + " Found Routing, in {:.2f} ms".format(timing_object.time_optimizing_routing)
@@ -200,7 +201,8 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
 
     # 6. Find scheduling
     scheduling_model = CPSchedulingSolver(tc, timing_object, EOptimizationGoal.MAXIMIZE_LAXITY, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions)
-    tc, status = scheduling_model.optimize(input_params, timing_object)
+    tc, status, schdl, cost = scheduling_model.optimize(input_params, timing_object)
+    tc.add_to_datastructures(schdl)
     print(
         "-" * 20
         + " Found Schedule in {:.2f} ms".format(
@@ -222,7 +224,7 @@ def _mode_1(timing_object: TimingData, input_params: InputParameters) -> Solutio
 
 def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solution:
     """
-    Mode 2: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize laxity + extensibility), Extra applications after scheduling
+    Mode 2: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize extensibility), Extra applications after scheduling
     """
     status_obj = StatusObject()
     security = not input_params.no_security
@@ -277,7 +279,7 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
 
     # 5. Find routing & task mapping
     routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap, do_task_mapping=True)
-    tc, status = routing_model.optimize(input_params, timing_object)
+    tc, status, es_capacity_res, total_cost_routing = routing_model.optimize(input_params, timing_object)
     print(
         "-" * 20
         + " Found Routing & Mapping, in {:.2f} ms".format(timing_object.time_optimizing_routing)
@@ -285,8 +287,9 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Routing_status = status
 
     # 6. Find scheduling
-    scheduling_model = CPSchedulingSolver(tc, timing_object, EOptimizationGoal.MAXIMIZE_LAXITY_AND_EXTENSIBLITY, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions)
-    tc, status = scheduling_model.optimize(input_params, timing_object)
+    scheduling_model = CPSchedulingSolver(tc, timing_object, EOptimizationGoal.MAXIMIZE_EXTENSIBILITY, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions)
+    tc, status, schdl, total_cost_scheduling = scheduling_model.optimize(input_params, timing_object)
+    tc.add_to_datastructures(schdl)
     print(
         "-" * 20
         + " Found Schedule in {:.2f} ms".format(
@@ -296,7 +299,7 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Scheduling_status = status
 
     # 7. Create solution object
-    solution = Solution(tc, input_params, status_obj, timing_object, security, redundancy)
+    solution = Solution(tc, input_params, status_obj, timing_object, security, redundancy, total_cost_routing, total_cost_scheduling)
     solution_final = None
     # -------------------
 

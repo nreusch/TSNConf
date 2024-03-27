@@ -55,7 +55,20 @@ python -m dashboard.dash_outputter testcases\output\TC0_example_mode1_600_1800_1
 
 Then open [http://127.0.0.1:8050](http://127.0.0.1:8050) in your browser.
 
-#Available commands:
+## Running extensibility & task mapping optimization
+To run a testcase where you want to optimize the extensibility, i.e. have regular free intervals between tasks, and where you have tasks without mapping, use:
+```
+-- mode CP_ROUTING_CP_SCHEDULING_EXT
+```
+
+A task without mapping does not have a node assigned in the .flex_network_description. It may have a list of allowed_assignments, which constrains on which this task may be mapped. Make sure that tasks that send & receive streams are only allowed to be mapped to connected ES.
+
+Example task without mapping:
+```
+<task name="AppNoMap_t1" wcet="500" period="1000" type="NORMAL" allowed_assignments="ES1,ES2,ES3,ES4"/>
+```
+
+## Available commands:
 ```
 usage: main.py [-h] [--mode MODE] [--aggregate AGGREGATE] [--extra_apps_path EXTRA_APPS_PATH] [--visualize] [--port PORT] [--no_redundancy] [--no_security] [--allow_overlap] [--allow_infeasible] [--original_tesla] [--timeout_routing TIMEOUT_ROUTING]
                [--timeout_scheduling TIMEOUT_SCHEDULING] [--timeout_pint TIMEOUT_PINT] [--k K] [--a A] [--b B] [--Tstart TSTART] [--alpha ALPHA] [--Prmv PRMV] [--w W]

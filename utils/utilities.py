@@ -17,7 +17,7 @@ from input.model.route import route
 
 PRINT_CONSTRAINT_DESCRIPTION = False
 PRINT_CONSTRAINT_VALUES = False
-DEBUG = False
+DEBUG = True
 
 
 OUTPUT_PATH = Path("testcases/output/")

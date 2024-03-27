@@ -3,9 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-@dataclass(
-    frozen=True
-)  # pretends class is immutable. Adds all arguments constructor and equals methods
+@dataclass() # Adds all arguments constructor and equals methods
 class node:
     id: str
 
@@ -15,7 +13,7 @@ class node:
     def __str__(self):
         return self.__repr__()
 
-@dataclass(frozen=True)
+@dataclass()
 class end_system(node):
     mac_exec_time: int
     max_utilization: float
@@ -33,6 +31,9 @@ class end_system(node):
 
     def is_prover(self):
         return "Prover" in self.type
+
+    def is_edge_device(self):
+        return "Edge" in self.type
 
     def to_xml_string(self):
         return '<device name="{}" type="{}" mac_exec_time="{}" max_utilization="{}" wcet_factor="{}"/>\n'.format(
@@ -61,7 +62,7 @@ class end_system(node):
         return cls(n.attrib["name"], met, max_util, wcet_factor, type)
 
 
-@dataclass(frozen=True)
+@dataclass()
 class switch(node):
     def __repr__(self):
         return "[{}]".format(self.id)

@@ -31,7 +31,7 @@ def cost_routing(tc, a):
 
     return total_cost, total_overlaps, total_number_of_stream_that_have_overlap
 
-def cost_schedule(tc, b):
+def latency_cost_schedule(tc, b):
     total_cost = 0
     infeasible_apps = 0
     for app_id in tc.A.keys():
@@ -43,6 +43,7 @@ def cost_schedule(tc, b):
             # if app is not in app_costs it was infeasible (including over deadline)
             total_cost += b
             infeasible_apps += 1
+
 
     return total_cost, infeasible_apps
 

@@ -3,7 +3,7 @@ from input.testcase import Testcase
 from input.input_parameters import InputParameters, EMode
 from solution.solution_optimization_status import StatusObject
 from solution.solution_timing_data import TimingData
-from utils.cost import cost_routing, cost_schedule
+from utils.cost import cost_routing, latency_cost_schedule
 from utils.utilities import VERSION
 
 
@@ -16,6 +16,8 @@ class Solution:
         timing_object: TimingData,
         security: bool,
         redundancy: bool,
+        cost_routing: int = -1,
+        cost_scheduling: int = -1
     ):
         self.tc = tc
         self.input_params = input_params
@@ -35,17 +37,22 @@ class Solution:
         self.total_number_of_stream_that_have_overlap: int = -1
 
         self.ra_avg_max_unattested_time: float = -1
+        self.ra_avg_max_unattested_time_perc: float = -1
         self.ra_avg_time_spent_attesting: float = -1
+        self.ra_avg_time_spent_attesting_perc: float = -1
         self.ext_avg_worst_case_resp_time: float = -1
         self.ext_avg_avg_case_resp_time: float = -1
+        self.ext_avg_avg_case_resp_time_perc: float = -1
 
         self.avg_edge_application_latency: float = -1
 
         if not input_params.mode == EMode.VIEW:
-            self.calculate_cost()
+            self.calculate_cost(cost_routing, cost_scheduling)
             self.calculate_bandwidth()
             self.calculate_cpu()
-            #self.calculate_ra_and_extensibility_metrics()
+
+        if input_params.mode == EMode.CP_ROUTING_CP_SCHEDULING_EXT:
+            self.calculate_ra_and_extensibility_metrics()
 
 
     def get_folder_name(self) -> str:
@@ -112,12 +119,14 @@ class Solution:
             and self.is_feasible_scheduling()
         )
 
-    def calculate_cost(self):
+    def calculate_cost(self, cr, cs):
         self.cost_routing, self.total_overlaps_routing, self.total_number_of_stream_that_have_overlap = cost_routing(self.tc, self.input_params.a)
-        self.cost_scheduling, self.infeasible_apps = cost_schedule(self.tc, self.input_params.b)
+        if cr != -1:
+            self.cost_routing = cr # override cost calculation if cost is given
+        self.cost_scheduling, self.infeasible_apps = latency_cost_schedule(self.tc, self.input_params.b)
+        if cs != -1:
+            self.cost_scheduling = cs
         self.cost_total = self.cost_routing + self.cost_scheduling
-
-
     def calculate_bandwidth(self):
         perc_sum = sum([v for v in self.tc.schedule.bw_use.values()])
 
@@ -130,13 +139,18 @@ class Solution:
         self.cpu_used_percentage_total = perc_sum / len(self.tc.ES.values())
 
     def calculate_ra_and_extensibility_metrics(self):
-        ra_metrics = self.tc.schedule.get_RA_metrics(self.tc)
-        extensibility_metrics = self.tc.schedule.get_Extensibility_metrics(self.tc)
+        ra_metrics = self.tc.schedule.get_RA_metrics(self.tc) # (max_non_attested_time, time_spent_attesting, block_length, max_non_attested_time_perc, time_spent_attesting_perc)
+        extensibility_metrics = self.tc.schedule.get_Extensibility_metrics(self.tc) # (worst_case_response_time, average_response_time, average_response_time_perc)
 
-        self.ra_avg_max_unattested_time = sum([ram[0] for ram in ra_metrics.values()]) / len(ra_metrics)
-        self.ra_avg_time_spent_attesting = sum([ram[1] for ram in ra_metrics.values()]) / len(ra_metrics)
-        self.ext_avg_worst_case_resp_time = sum([em[0] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
-        self.ext_avg_avg_case_resp_time = sum([em[1] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
+        if len(ra_metrics)>0:
+            self.ra_avg_max_unattested_time = sum([ram[0] for ram in ra_metrics.values()]) / len(ra_metrics)
+            self.ra_avg_max_unattested_time_perc = sum([ram[3] for ram in ra_metrics.values()]) / len(ra_metrics)
+            self.ra_avg_time_spent_attesting = sum([ram[1] for ram in ra_metrics.values()]) / len(ra_metrics)
+            self.ra_avg_time_spent_attesting_perc = sum([ram[4] for ram in ra_metrics.values()]) / len(ra_metrics)
+        if len(extensibility_metrics)>0:
+            self.ext_avg_worst_case_resp_time = sum([em[0] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
+            self.ext_avg_avg_case_resp_time = sum([em[1] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
+            self.ext_avg_avg_case_resp_time_perc = sum([em[2] for em in extensibility_metrics.values()]) / len(extensibility_metrics)
 
         if self.input_params.extra_apps_path != "":
             nr_edge_apps = 0

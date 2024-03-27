@@ -293,20 +293,24 @@ class Testcase:
         vl_number = 0
         vl_strings = ["#generated"]
         for s in self.F.values():
-            links = self.R[s.id].get_all_links_dfs(self)
-            s_to_vl_map[s.id] = vl_number
-            vl_string = f"vl{vl_number} : "
-            vl_number += 1
-            for l in links:
-                vl_string += f"{l.src.id},{l.dest.id} ; "
-            vl_strings.append(vl_string)
+            if s.id in self.R:
+                links = self.R[s.id].get_all_links_dfs(self)
+                s_to_vl_map[s.id] = vl_number
+                vl_string = f"vl{vl_number} : "
+                vl_number += 1
+                for l in links:
+                    vl_string += f"{l.src.id},{l.dest.id} ; "
+                vl_strings.append(vl_string)
         vls = "\n".join(vl_strings)
 
         # msg
         # create a message for each stream copy
         msg_strings = ["#!R id, size(byte), deadline, <virtual link id>, type [TT, RC], [period | rate] (us), [offset | ] [packed | fragmented]"]
         for s in self.F.values():
-            msg_string = f"{s.id}, {s.size}, {s.period}, vl{s_to_vl_map[s.id]}, TT,0, {s.period}"
+            if s.id in s_to_vl_map:
+                msg_string = f"{s.id}, {s.size}, {s.period}, vl{s_to_vl_map[s.id]}, TT,0, {s.period}"
+            else:
+                msg_string = f"{s.id}, {s.size}, {s.period}, NOTROUTED, TT,0, {s.period}"
             msg_strings.append(msg_string)
         msg = "\n".join(msg_strings)
 

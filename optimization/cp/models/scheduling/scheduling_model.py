@@ -23,6 +23,7 @@ from utils.utilities import Timer, print_model_stats, report_exception, list_gcd
 class EOptimizationGoal(Enum):
     MAXIMIZE_LAXITY = 1
     MAXIMIZE_LAXITY_AND_EXTENSIBLITY = 2
+    MAXIMIZE_EXTENSIBILITY = 3
 
 
 class CPSchedulingSolver:
@@ -64,6 +65,8 @@ class CPSchedulingSolver:
             # Add optimization goal
             if optimization_goal == EOptimizationGoal.MAXIMIZE_LAXITY_AND_EXTENSIBLITY:
                 scheduling_model_goals.maximize_laxity_and_extensibility(self)
+            elif optimization_goal == EOptimizationGoal.MAXIMIZE_EXTENSIBILITY:
+                scheduling_model_goals.maximize_extensibility(self)
             elif optimization_goal == EOptimizationGoal.MAXIMIZE_LAXITY:
                 scheduling_model_goals.maximize_laxity(self)
             else:
@@ -111,7 +114,7 @@ class CPSchedulingSolver:
 
     def optimize(
         self, input_params, timing_object: TimingData
-    ) -> Tuple[Testcase, EOptimizationStatus]:
+    ) -> Tuple[Testcase, EOptimizationStatus, schedule, int]:
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_scheduling
         solver.parameters.random_seed = 10
@@ -120,6 +123,7 @@ class CPSchedulingSolver:
         t = Timer()
         try:
             with t:
+
                 for l_or_n_id in itertools.chain(self.tc.L.keys(), self.tc.N.keys()):
                     self.model.AddDecisionStrategy(
                         list(self.o_f[l_or_n_id].values()),
@@ -127,17 +131,22 @@ class CPSchedulingSolver:
                         cp_model.SELECT_MIN_VALUE,
                     )
 
+                ''' Probably better to avoid manual search strategy here for extensibility
                 self.model.AddDecisionStrategy(
                     list(self.o_t.values()),
                     cp_model.CHOOSE_LOWEST_MIN,
                     cp_model.SELECT_MIN_VALUE,
                 )
+                '''
+
                 self.model.AddDecisionStrategy(
                     list(self.phi_f.values()),
                     cp_model.CHOOSE_LOWEST_MIN,
                     cp_model.SELECT_MIN_VALUE,
                 )
-                solver_status = solver.Solve(self.model)
+
+                solution_printer = cp_model.ObjectiveSolutionPrinter()
+                solver_status = solver.SolveWithSolutionCallback(self.model, solution_printer)
                 # print("Solved!\n{}".format(solver.ResponseStats()))
         except Exception as e:
             report_exception(e)
@@ -167,17 +176,19 @@ class CPSchedulingSolver:
                 debug_print(f"Cost {app.id} = {solver.Value(self.app_cost[app.id])}")
                 debug_print(f"MinStartTime {app.id} = {solver.Value(self.min_start_time[app.id])}")
                 debug_print(f"MaxEndTime {app.id} = {solver.Value(self.max_end_time[app.id])}")
+                debug_print("\n")
             for t in self.tc.T.values():
                 if len(self.actual_distances) > 0:
-                    debug_print(f"Distance {t.id} = {solver.Value(self.actual_distances[t.id])}")
-                    debug_print(f"Inverse Distance {t.id} = {solver.Value(self.inverse_distances[t.id])}")
+                    if t.id in self.actual_distances and t.id in self.inverse_distances:
+                        debug_print(f"Distance {t.id} = {solver.Value(self.actual_distances[t.id])}")
+                        debug_print(f"Inverse Distance {t.id} = {solver.Value(self.inverse_distances[t.id])}")
                 debug_print(f"o_t {t.id} = {solver.Value(self.o_t[t.id])}")
                 debug_print(f"a_t {t.id} = {solver.Value(self.a_t[t.id])}")
+                debug_print("\n")
             schdl = schedule.from_cp_solver(solver, self, self.tc)
-            self.tc.add_to_datastructures(schdl)
-            return self.tc, status
+            return self.tc, status,schdl,solver.Value(self.cost)
         else:
             report_exception(
                 "CPSolver returned invalid status for scheduling model: " + str(status)
             )
-            return self.tc, status
+            return self.tc, status,None,-1
