@@ -231,6 +231,7 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     redundancy = not input_params.no_redundancy
     allow_overlap = input_params.allow_overlap
     allow_infeasible_solutions = input_params.allow_infeasible_solutions
+    dont_optimize = input_params.no_extensibility_optimization
 
     # 1. Parse the given testcase
     t = Timer()
@@ -287,7 +288,7 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     status_obj.Routing_status = status
 
     # 6. Find scheduling
-    scheduling_model = CPSchedulingSolver(tc, timing_object, EOptimizationGoal.MAXIMIZE_EXTENSIBILITY, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions)
+    scheduling_model = CPSchedulingSolver(tc, timing_object, EOptimizationGoal.MAXIMIZE_EXTENSIBILITY, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions, dont_optimize=dont_optimize)
     tc, status, schdl, total_cost_scheduling = scheduling_model.optimize(input_params, timing_object)
     tc.add_to_datastructures(schdl)
     print(

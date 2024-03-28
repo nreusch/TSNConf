@@ -2,7 +2,7 @@ from input.model.nodes import end_system
 from utils.utilities import lcm
 
 
-def maximize_extensibility(model):
+def maximize_extensibility(model, dont_optimize=False):
     model.actual_distances = {}
     model.inverse_distances = {}
 
@@ -58,7 +58,9 @@ def maximize_extensibility(model):
 
     model.cost = model.model.NewIntVar(0, len(model.tc.A) * model.tc.hyperperiod + len(model.tc.T) * 2*model.tc.hyperperiod , f"cost")
     model.model.Add(model.cost == sum(model.inverse_distances.values()))
-    model.model.Minimize(model.cost)
+
+    if not dont_optimize:
+        model.model.Minimize(model.cost)
 
 def maximize_laxity_and_extensibility(model):
     model.actual_distances = {}

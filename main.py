@@ -77,6 +77,13 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     )
 
     parser.add_argument(
+        "--no_extensibility_optimization",
+        action="store_true",
+        default=False,
+        help="Disable optimization for extensibility in CP_EXT  (Default: False)",
+    )
+
+    parser.add_argument(
         "--allow_overlap",
         action="store_true",
         default=False,
@@ -197,6 +204,7 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     allow_overlap = results.allow_overlap
     allow_infeasible_solutions = results.allow_infeasible
     original_tesla = results.original_tesla
+    no_extensibility_optimization = results.no_extensibility_optimization
 
     if allow_infeasible_solutions:
         allow_overlap = True
@@ -208,7 +216,7 @@ def parse_arguments() -> Tuple[List[InputParameters], Path]:
     alpha = results.alpha
     Prmv = results.Prmv
     w = results.w
-    input_param_list.append(InputParameters(mode, timeouts, tc_path, extra_apps_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, original_tesla, k, a, b, Tstart, alpha, Prmv, w))
+    input_param_list.append(InputParameters(mode, timeouts, tc_path, extra_apps_path, visualize, aggregate, port, no_redundancy, no_security, allow_overlap, allow_infeasible_solutions, original_tesla, k, a, b, Tstart, alpha, Prmv, w, no_extensibility_optimization))
 
     return input_param_list, Path(results.testcase_path)
 

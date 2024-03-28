@@ -35,6 +35,7 @@ class CPSchedulingSolver:
         existing_schedule: schedule = None,
         do_security: bool = True,
         do_allow_infeasible_solutions: bool = False,
+        dont_optimize: bool = False
     ):
         self.tc: testcase = tc
 
@@ -66,7 +67,7 @@ class CPSchedulingSolver:
             if optimization_goal == EOptimizationGoal.MAXIMIZE_LAXITY_AND_EXTENSIBLITY:
                 scheduling_model_goals.maximize_laxity_and_extensibility(self)
             elif optimization_goal == EOptimizationGoal.MAXIMIZE_EXTENSIBILITY:
-                scheduling_model_goals.maximize_extensibility(self)
+                scheduling_model_goals.maximize_extensibility(self, dont_optimize)
             elif optimization_goal == EOptimizationGoal.MAXIMIZE_LAXITY:
                 scheduling_model_goals.maximize_laxity(self)
             else:
