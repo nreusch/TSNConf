@@ -7,7 +7,7 @@ hpc_wall_time = 10800
 
 tunerTimeout = 92000 # doesnt work for some reason
 
-for tc_name in [f"TC{i}.flex_network_description" for i in range(1, nr_tc+1)]:
+for tc_name in [f"TC{i}" for i in range(1, nr_tc+1)]:
     # Create folder
     try:
         os.mkdir(tc_name)
@@ -30,7 +30,7 @@ for tc_name in [f"TC{i}.flex_network_description" for i in range(1, nr_tc+1)]:
 ### -- specify that we need 2GB of memory per core/slot --
 #BSUB -R "rusage[mem=16GB] select[avx2]"
 ### -- specify that we want the job to get killed if it exceeds 3 GB per core/slot --
-#BSUB -M 32GB
+#BSUB -M 16GB
 ### -- set walltime limit: hh:mm --
 #BSUB -W {walltime}:00
 ### -- set the email address --
@@ -49,7 +49,7 @@ for tc_name in [f"TC{i}.flex_network_description" for i in range(1, nr_tc+1)]:
 module load python3/3.9.5
 cd ~/TSNConf_RAExt/TSNConf
 source ../.venv/bin/activate
-python -m main testcases/ra/journal/huawei/{tc_name}.flex_network_description --mode CP_ROUTING_CP_SCHEDULING_EXT --no_security --no_redundancy --timeout_routing 3600 --timeout_scheduling 3600 --aggregate results_raandext.csv
+python -m main testcases/ra/journal/generated/{tc_name}.flex_network_description --mode CP_ROUTING_CP_SCHEDULING_EXT --no_security --no_redundancy --timeout_routing 3600 --timeout_scheduling 3600 --aggregate results_raandext.csv
 """)
     f.close()
 

@@ -13,3 +13,5 @@ paramils-out/
 /testcases/synthetic3/
 /results/old/
 /.run/
+/testcases/ra/journal/*
+results_raandext.csv
