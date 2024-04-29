@@ -114,17 +114,23 @@ class CPSchedulingSolver:
 
 
     def optimize(
-        self, input_params, timing_object: TimingData
+        self, input_params, timing_object: TimingData, verbose=True
     ) -> Tuple[Testcase, EOptimizationStatus, schedule, int]:
         solver = CpSolver()
         solver.parameters.max_time_in_seconds = input_params.timeouts.timeout_scheduling
-        solver.parameters.random_seed = 10
-        print_model_stats(self.model.ModelStats())
+        #solver.parameters.random_seed = 10
+        solver.num_search_workers = 8
+        #print_model_stats(self.model.ModelStats())
 
         t = Timer()
         try:
             with t:
-
+                self.model.AddDecisionStrategy(
+                    list(self.o_t.values()),
+                    cp_model.CHOOSE_FIRST,
+                    cp_model.SELECT_LOWER_HALF,
+                )
+                ''' Probably better to avoid manual search strategy here for extensibility
                 for l_or_n_id in itertools.chain(self.tc.L.keys(), self.tc.N.keys()):
                     self.model.AddDecisionStrategy(
                         list(self.o_f[l_or_n_id].values()),
@@ -132,29 +138,28 @@ class CPSchedulingSolver:
                         cp_model.SELECT_MIN_VALUE,
                     )
 
-                ''' Probably better to avoid manual search strategy here for extensibility
-                self.model.AddDecisionStrategy(
-                    list(self.o_t.values()),
-                    cp_model.CHOOSE_LOWEST_MIN,
-                    cp_model.SELECT_MIN_VALUE,
-                )
-                '''
+                
+                
+                
 
                 self.model.AddDecisionStrategy(
                     list(self.phi_f.values()),
                     cp_model.CHOOSE_LOWEST_MIN,
                     cp_model.SELECT_MIN_VALUE,
                 )
+                '''
 
-                solution_printer = cp_model.ObjectiveSolutionPrinter()
-                solver_status = solver.SolveWithSolutionCallback(self.model, solution_printer)
+                #solution_printer = cp_model.ObjectiveSolutionPrinter()
+                #solver_status = solver.SolveWithSolutionCallback(self.model, solution_printer)
+                solver_status = solver.Solve(self.model)
                 # print("Solved!\n{}".format(solver.ResponseStats()))
         except Exception as e:
             report_exception(e)
             solver_status = -1
         timing_object.time_optimizing_scheduling = t.elapsed_time
 
-        print(solver.StatusName(solver_status))
+        if verbose:
+            print(solver.StatusName(solver_status))
         status = EOptimizationStatus.INFEASIBLE
 
         if solver_status == OPTIMAL:
@@ -172,7 +177,20 @@ class CPSchedulingSolver:
             status == EOptimizationStatus.FEASIBLE
             or status == EOptimizationStatus.OPTIMAL
         ):
-            debug_print(f"Total Cost: {solver.Value(self.cost)}")
+            if verbose:
+                print(f"Total Cost: {solver.Value(self.cost)}")
+
+            for es in self.tc.ES.values():
+                if es.is_edge_device() or es.is_prover():
+                    debug_print(f"{es.type} {es.id} Distances:")
+                    total_dist = 0
+                    for t in self.tc.T_g[es.id]:
+                        if t.id in self.actual_distances and t.id in self.inverse_distances:
+                            total_dist += solver.Value(self.inverse_distances[t.id])
+                            debug_print(f"Task {t.id}, Period {t.period} scheduled at [{solver.Value(self.o_t[t.id])}, {solver.Value(self.a_t[t.id])}] has inverse distance {solver.Value(self.inverse_distances[t.id])}")
+                    debug_print(f"Total Distance: {total_dist}")
+                    debug_print("")
+
             for app in self.tc.A.values():
                 debug_print(f"Cost {app.id} = {solver.Value(self.app_cost[app.id])}")
                 debug_print(f"MinStartTime {app.id} = {solver.Value(self.min_start_time[app.id])}")

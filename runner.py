@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from optimization.cp.models.routing.routing_model import CPRoutingSolver
+from optimization.cp.models.scheduling.sa_cp_scheduling_model import SACPSolver
 from optimization.sa.sa_routing_solver import SARoutingSolver
 from optimization.sa.sa_scheduling_solver import SASchedulingSolver, SAOptimizationMode
 from optimization.cp.models.scheduling.scheduling_model import CPSchedulingSolver, EOptimizationGoal
@@ -304,14 +305,109 @@ def _mode_2(timing_object: TimingData, input_params: InputParameters) -> Solutio
     solution_final = None
     # -------------------
 
+    print(f"Avg. maximum unattested time: {solution.ra_avg_max_unattested_time}")
+    print(f"Avg. time spent on attestation: {solution.ra_avg_time_spent_attesting}")
+
+    print(f"Avg. worst case response time: {solution.ext_avg_worst_case_resp_time}")
+    print(f"Avg. avg. response time: {solution.ext_avg_avg_case_resp_time}")
+
     # 7. Parse extra applications
     if input_params.extra_apps_path != "":
         print(solution.get_result_string())
-        print(f"Avg. maximum unattested time: {solution.ra_avg_max_unattested_time}")
-        print(f"Avg. time spent on attestation: {solution.ra_avg_time_spent_attesting}")
 
-        print(f"Avg. worst case response time: {solution.ext_avg_worst_case_resp_time}")
-        print(f"Avg. avg. response time: {solution.ext_avg_avg_case_resp_time}")
+    return solution
+
+def _mode_3(timing_object: TimingData, input_params: InputParameters) -> Solution:
+    """
+    Mode 3: CP Routing, CP Scheduling with SA metaheuristic, Security, Redundancy, Optimization (Optimize extensibility), Extra applications after scheduling
+    """
+    status_obj = StatusObject()
+    security = not input_params.no_security
+    redundancy = not input_params.no_redundancy
+    allow_overlap = input_params.allow_overlap
+    allow_infeasible_solutions = input_params.allow_infeasible_solutions
+    dont_optimize = input_params.no_extensibility_optimization
+
+    # 1. Parse the given testcase
+    t = Timer()
+    with t:
+        tc = parser.parse_to_model(input_params.tc_name, input_params.tc_path, redundancy, security)
+    timing_object.time_parsing = t.elapsed_time
+    print(
+        "-" * 20
+        + " Parsed testcase: {}, in {:.2f} ms".format(
+            input_params.tc_name, timing_object.time_parsing
+        )
+    )
+
+    # 2. Calculate Pint
+    if security:
+        pint_model = CPPintSolver(tc, timing_object)
+        tc, status = pint_model.optimize(input_params, timing_object)
+        print(
+            "-" * 20
+            + " Found Pint: {},  in {:.2f} ms".format(
+                tc.Pint, timing_object.time_optimizing_pint
+            )
+        )
+        status_obj.Pint_status = status
+    else:
+        tc.Pint = tc.hyperperiod
+        print(
+            "-" * 20
+            + "Skipping Pint optimization, because no security wanted"
+        )
+
+    # 3. Generate Security applications
+    if security:
+        tc = security_app_generator.run(tc, timing_object)
+        print(
+            "-" * 20
+            + " Created {} Security Applications,  in {:.2f} ms".format(
+                len(tc.A_sec), timing_object.time_creating_secapps
+            )
+        )
+    else:
+        print(
+            "-" * 20
+            + "Skipping generating security applications, because no security wanted"
+        )
+
+    # 5. Find routing & task mapping
+    routing_model = CPRoutingSolver(tc, timing_object, redundancy, allow_overlap, do_task_mapping=True)
+    tc, status, es_capacity_res, total_cost_routing = routing_model.optimize(input_params, timing_object)
+    print(
+        "-" * 20
+        + " Found Routing & Mapping, in {:.2f} ms".format(timing_object.time_optimizing_routing)
+    )
+    status_obj.Routing_status = status
+
+    # 6. Find scheduling
+    scheduling_model = SACPSolver(tc, timing_object, EOptimizationGoal.MAXIMIZE_EXTENSIBILITY, do_security=security, do_allow_infeasible_solutions=allow_infeasible_solutions, dont_optimize=dont_optimize)
+    tc, status, schdl, total_cost_scheduling = scheduling_model.optimize(input_params, timing_object)
+    tc.add_to_datastructures(schdl)
+    print(
+        "-" * 20
+        + " Found Schedule in {:.2f} ms".format(
+            timing_object.time_optimizing_scheduling
+        )
+    )
+    status_obj.Scheduling_status = status
+
+    # 7. Create solution object
+    solution = Solution(tc, input_params, status_obj, timing_object, security, redundancy, total_cost_routing, total_cost_scheduling)
+    solution_final = None
+    # -------------------
+
+    print(f"Avg. maximum unattested time: {solution.ra_avg_max_unattested_time}")
+    print(f"Avg. time spent on attestation: {solution.ra_avg_time_spent_attesting}")
+
+    print(f"Avg. worst case response time: {solution.ext_avg_worst_case_resp_time}")
+    print(f"Avg. avg. response time: {solution.ext_avg_avg_case_resp_time}")
+
+    # 7. Parse extra applications
+    if input_params.extra_apps_path != "":
+        print(solution.get_result_string())
 
     return solution
 
@@ -564,6 +660,8 @@ def run_mode(
         return _mode_1(timing_object, input_params)
     elif mode is EMode.CP_ROUTING_CP_SCHEDULING_EXT:
         return _mode_2(timing_object, input_params)
+    elif mode is EMode.CP_ROUTING_CPSA_SCHEDULING_EXT:
+        return _mode_3(timing_object, input_params)
     elif mode is EMode.SA_ROUTING_ASAP_SCHEDULING:
         return _mode_11(timing_object, input_params)
     elif mode is EMode.SA_ROUTING_SA_SCHEDULING:

@@ -29,6 +29,7 @@ class EMode(Enum):
     VIEW = 0
     CP_ROUTING_CP_SCHEDULING = 1
     CP_ROUTING_CP_SCHEDULING_EXT = 2
+    CP_ROUTING_CPSA_SCHEDULING_EXT = 3
     SA_ROUTING_ASAP_SCHEDULING = 11
     SA_ROUTING_SA_SCHEDULING = 12
     SA_ROUTING_SA_SCHEDULING_COMB = 13
@@ -40,7 +41,9 @@ class EMode(Enum):
         elif self.value == 1:
             return "Mode 1: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize laxity)"
         elif self.value == 2:
-            return "Mode 2: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize laxity + extensibility)"
+            return "Mode 2: CP Routing, CP Scheduling, Security, Redundancy, Optimization (Optimize extensibility)"
+        elif self.value == 3:
+            return "Mode 3: CP Routing, CP Scheduling with SA metaheuristic, Security, Redundancy, Optimization (Optimize extensibility)"
         elif self.value == 11:
             return "Mode 11: SA Routing, ASAP Scheduling, Security, Redundancy, Optimization"
         elif self.value == 12:
@@ -120,5 +123,6 @@ class InputParameters:
             f"Overlap allowed for CP: {self.allow_overlap}",
             f"Infeasible solutions allowed for CP: {self.allow_infeasible_solutions}",
             f"Original TESLA: {self.original_tesla}",
+            f"Ignore Extensibility: {self.no_extensibility_optimization}"
             "-" * 80
         )

@@ -51,7 +51,7 @@ class Solution:
             self.calculate_bandwidth()
             self.calculate_cpu()
 
-        if input_params.mode == EMode.CP_ROUTING_CP_SCHEDULING_EXT:
+        if input_params.mode == EMode.CP_ROUTING_CP_SCHEDULING_EXT or input_params.mode == EMode.CP_ROUTING_CPSA_SCHEDULING_EXT:
             self.calculate_ra_and_extensibility_metrics()
 
 

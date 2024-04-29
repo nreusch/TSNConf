@@ -22,6 +22,8 @@ class task:
     type: ETaskType
     allowed_assignments: List[str] # mapping tasks to a list of ES they can be mapped to task.id => [ES.id]
 
+    def __repr__(self):
+        return f"{self.id}"
     def xml_string(self):
         return '<task name="{}" node="{}" wcet="{}" period="{}" arrival_time="{}" type="{}"/>\n'.format(
             self.id,

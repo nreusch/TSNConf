@@ -17,7 +17,7 @@ from input.model.route import route
 
 PRINT_CONSTRAINT_DESCRIPTION = False
 PRINT_CONSTRAINT_VALUES = False
-DEBUG = True
+DEBUG = False
 
 
 OUTPUT_PATH = Path("testcases/output/")
@@ -75,8 +75,7 @@ def debug_print(s: str):
 
 
 def print_model_stats(model_stats_string: str):
-    if DEBUG:
-        print(model_stats_string)
+    print(model_stats_string)
     # nr_vars = model_stats_string.split("\n")[1].split(" ")[1]
 
     # print("Variables: {}; Constraints:\n {}".format(nr_vars, "\n".join(model_stats_string.split("\n")[6:])))
@@ -84,6 +83,18 @@ def print_model_stats(model_stats_string: str):
 
 def set_to_string(s: set):
     return ", ".join([str(x) for x in s])
+
+def longest_interval_in_list(iv_list: List[Interval]):
+    max_l = 0
+    index = -1
+
+    i = 0
+    for iv in iv_list:
+        if iv.length() > max_l:
+            max_l = iv.length()
+            index = i
+        i += 1
+    return index, max_l
 
 def sorted_complement(tree, f=None, start=None, end=None) -> List[Interval]:
     result = IntervalTree()
