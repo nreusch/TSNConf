@@ -173,6 +173,7 @@ class CPRoutingSolver:
                     if t.src_es_id != es_id:
                         raise ValueError("task should not be mapped to a new ES, if it was already mapped")
                 else:
+                    print(f"Mapped {t} to {es_id}")
                     t.src_es_id = es_id
                     self.tc.T_g[t.src_es_id].append(t)
 

@@ -23,11 +23,11 @@
 	<!-- period&wcet is in us, size in Byte-->
 	<application name="app_VLAN-0-Flow-0" period="4000" type="NORMAL">
 		<tasks>
-			<task name="t-app_VLAN-0-Flow-0-sender" node="node0-0-0-0" wcet="17" period="4000" arrival_time="0" type="NORMAL"/>
-			<task name="t-app_VLAN-0-Flow-0-receiver" node="node0-0-0-0" wcet="20" period="4000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app_VLAN-0-Flow-0-sender"  wcet="17" period="4000" arrival_time="0" type="NORMAL"/>
+			<task name="t-app_VLAN-0-Flow-0-receiver" wcet="20" period="4000" arrival_time="0" type="NORMAL"/>
 		</tasks>
 		<streams>
-			<stream name="VLAN-0-Flow-0" src="node0-0-0-0" dest="node0-0-0-0" sender_task="t-app_VLAN-0-Flow-0-sender" receiver_tasks="t-app_VLAN-0-Flow-0-receiver" size="55" period="4000" rl="1" secure="False" type="NORMAL" />
+			<stream name="VLAN-0-Flow-0"  sender_task="t-app_VLAN-0-Flow-0-sender" receiver_tasks="t-app_VLAN-0-Flow-0-receiver" size="55" period="4000" rl="1" secure="False" type="NORMAL" />
 		</streams>
 	</application>
 
